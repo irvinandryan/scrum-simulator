@@ -18,6 +18,7 @@ var SimConfigSchema = mongoose.Schema({
     plannedCost: Number,
     sprintLength: Number,
     plannedSprint: Number,
+    startDate: Date,
     productBacklog : [ProductBacklogSchema],
 });
 

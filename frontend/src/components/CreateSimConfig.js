@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+// import "../App.css"
 
 const CreateSimConfig = () => {
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -9,6 +12,7 @@ const CreateSimConfig = () => {
     const [plannedCost, setPlannedCost] = useState("");
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
+    const [startDate, setStartDate] = useState("");
     const [productBacklog, setProductBacklog] = useState([
         {
             pbId: String,
@@ -44,6 +48,7 @@ const CreateSimConfig = () => {
                 sprintLength,
                 plannedSprint,
                 productBacklog,
+                startDate,
             });
             navigate("/");
           } catch (error) {
@@ -165,6 +170,17 @@ const CreateSimConfig = () => {
                             placeholder="Planned Sprint"
                             value={plannedSprint}
                             onChange={(e) => setPlannedSprint(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group mt-2">
+                        <DatePicker
+                            popperPlacement="auto"
+                            placeholderText="Select start date"
+                            className="react-datepicker"
+                            dateFormat="dd/MM/yyyy"
+                            selected={startDate}
+                            onChange={(startDate) => new Date(setStartDate((startDate - (startDate.getTimezoneOffset() * 60000))))}
                             required
                         />
                     </div>

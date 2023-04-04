@@ -26,7 +26,7 @@ const SimConfigList = () => {
     return (
         <div className="columns if-full mt-5">
             <div className="column is-full">
-                <h1 className="title has-text-centered">List of Simulation Configuration</h1>
+                <h1 className="title has-text-centered">Simulation Configuration</h1>
                     <table className="table is-striped is-fullwidth mt-2">
                         <thead>
                             <tr>
@@ -51,7 +51,7 @@ const SimConfigList = () => {
                                     <td>{simConfig.productBacklog.reduce((prev,next) => prev + next.pbPoint,0)}</td>
                                     <td>
                                         <Link
-                                            to={`productbacklog/${simConfig._id}`} 
+                                            to={`selectsimconfig/${simConfig._id}`} 
                                             className="button is-info is-small mr-1">
                                             Select
                                         </Link>

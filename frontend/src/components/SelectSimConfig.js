@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const SelectSimConfig = () => {
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -31,23 +31,55 @@ const SelectSimConfig = () => {
 
     return (
         // display the selected sim config
-        <div>
-            <h1>Selected Sim Config</h1>
-            <h2>Scrum Team Size: {scrumTeamSize}</h2>
-            <h2>Scrum Team Rate: {scrumTeamRate}</h2>
-            <h2>Scrum Team Hour: {scrumTeamHour}</h2>
-            <h2>Planned Cost: {plannedCost}</h2>
-            <h2>Sprint Length: {sprintLength}</h2>
-            <h2>Planned Sprint: {plannedSprint}</h2>
-            <h2>Start Date: {startDate.split('T')[0]}</h2>
-            <h2>Product Backlog: 
-                {productBacklog.map((pb) => (
-                    <div>
-                        <h3>id: {pb.pbId}</h3>
-                        <h3>Story Point: {pb.pbPoint}</h3>
+        <div className="hero is-fullheight">
+            <div className="hero-body">
+                <div className="container">
+                {/* <h2 className="subtitle has-text-centered">Selected</h2> */}
+                    <div className="columns mt-5 has-background-white-ter">
+                        <div className="column is-one-half has-text-centered">
+                            <div className="column is-one-half has-text-centered">
+                                <h2 className="subtitle">Scrum Team Size: {scrumTeamSize}</h2>
+                                <h2 className="subtitle">Rate per Hour: {scrumTeamRate}</h2>
+                                <h2 className="subtitle">Work Hour per Day: {scrumTeamHour}</h2>
+                                <h2 className="subtitle">Planned Cost: {plannedCost}</h2>
+                                <h2 className="subtitle">Sprint Length: {sprintLength}</h2>
+                                <h2 className="subtitle">Days per Sprint: {plannedSprint}</h2>
+                                <h2 className="subtitle">Start Date: {startDate.split('T')[0]}</h2>
+                            </div>
+                        </div>
+                        <div className="column is-one-half">
+                            <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Story Point</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {productBacklog.map((pb) => (
+                                        <tr>
+                                            <td>{pb.pbId}</td>
+                                            <td>{pb.pbPoint}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                ))}
-            </h2>
+                    <div className="columns">
+                        <div className="column is-one-half has-text-centered">
+                            <Link to={`/`}  className="button is-danger is-fullwidth">
+                                Back
+                            </Link>
+                        </div>
+                        <div className="column is-one-half has-text-centered">
+                            <Link to={`/`} className="button is-info is-fullwidth">
+                                Continue
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

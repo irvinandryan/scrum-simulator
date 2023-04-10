@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const SelectSimConfig = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
     const [scrumTeamHour, setScrumTeamHour] = useState("");
@@ -11,7 +13,7 @@ const SelectSimConfig = () => {
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
     const [productBacklog, setProductBacklog] = useState([]);
-    const { id } = useParams();
+    // const [currentSprint, setCurrentSprint] = useState("");
 
     const getSimConfigById = async () => {
         const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
@@ -23,6 +25,7 @@ const SelectSimConfig = () => {
         setPlannedSprint(response.data.plannedSprint);
         setStartDate(response.data.startDate);
         setProductBacklog(response.data.productBacklog);
+        // setCurrentSprint(response.data.currentSprint);
     };
 
     useEffect(() => {
@@ -39,12 +42,13 @@ const SelectSimConfig = () => {
                         <div className="column is-one-half has-text-centered">
                             <div className="column is-one-half has-text-centered">
                                 <h2 className="subtitle">Scrum Team Size: {scrumTeamSize}</h2>
-                                <h2 className="subtitle">Rate per Hour: {scrumTeamRate}</h2>
-                                <h2 className="subtitle">Work Hour per Day: {scrumTeamHour}</h2>
+                                <h2 className="subtitle">Rate / Hour: {scrumTeamRate}</h2>
+                                <h2 className="subtitle">Work Hour / Day: {scrumTeamHour}</h2>
                                 <h2 className="subtitle">Planned Cost: {plannedCost}</h2>
                                 <h2 className="subtitle">Sprint Length: {sprintLength}</h2>
                                 <h2 className="subtitle">Days per Sprint: {plannedSprint}</h2>
                                 <h2 className="subtitle">Start Date: {startDate.split('T')[0]}</h2>
+                                {/* <h2 className="subtitle">Current Sprint: {currentSprint + 1}</h2> */}
                             </div>
                         </div>
                         <div className="column is-one-half">
@@ -69,12 +73,12 @@ const SelectSimConfig = () => {
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
                             <Link to={`/`}  className="button is-danger is-fullwidth">
-                                Back
+                                <strong>Cancel</strong>
                             </Link>
                         </div>
                         <div className="column is-one-half has-text-centered">
-                            <Link to={`/`} className="button is-info is-fullwidth">
-                                Continue
+                            <Link to={`simulation`} className="button is-info is-fullwidth">
+                                <strong>Continue</strong>
                             </Link>
                         </div>
                     </div>

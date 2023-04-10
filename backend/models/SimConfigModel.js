@@ -1,14 +1,26 @@
 import mongoose from "mongoose";
 
-var SprintBacklogSchema = mongoose.Schema({
-    sbId: String,
-    sbHour: Number,
-});
-
 var ProductBacklogSchema = mongoose.Schema({
     pbId: String,
     pbPoint: Number,
-    sprintBacklog: [SprintBacklogSchema]
+    isPbDone: Boolean,
+});
+
+var SprintBacklogItemSchema = mongoose.Schema({
+    sbId: String,
+    sbHour: Number,
+    relatedPbId: String,
+    isSbDone: Boolean,
+});
+
+var ReleaseBacklogSchema = mongoose.Schema({
+    rbId: String,
+});
+
+var SprintBacklogSchema = mongoose.Schema({
+    sprintId: Number,
+    releaseBacklog: [ReleaseBacklogSchema],
+    sprintBacklogItem: [SprintBacklogItemSchema],
 });
 
 var SimConfigSchema = mongoose.Schema({
@@ -20,6 +32,7 @@ var SimConfigSchema = mongoose.Schema({
     plannedSprint: Number,
     startDate: Date,
     productBacklog : [ProductBacklogSchema],
+    sprintBacklog: [SprintBacklogSchema],
 });
 
 export default mongoose.model('SimConfigModel', SimConfigSchema);

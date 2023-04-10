@@ -3,9 +3,9 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import "../App.css"
 
 const CreateSimConfig = () => {
+    const navigate = useNavigate();
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
     const [scrumTeamHour, setScrumTeamHour] = useState("");
@@ -13,30 +13,55 @@ const CreateSimConfig = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
+
     const [productBacklog, setProductBacklog] = useState([
         {
             pbId: String,
             pbPoint: Number,
+            isPbDone: false,
         },
     ]);
+
+    const [sprintBacklog, setSprintBacklog] = useState([
+        {
+            sprintId: String,
+            releaseBacklog: [
+                {
+                    rbId: String,
+                },
+            ],
+            sprintBacklogItem: [
+                {
+                    sbId: String,
+                    sbHour: Number,
+                    relatedPbId: String,
+                    isSbDone: false,
+                },
+            ],
+        },
+    ]);
+
     const addProductbacklog = () => {
         let object = {
             pbId: "",
             pbPoint: "Story Point",
+            isPbDone: false,
         }
         setProductBacklog([...productBacklog, object]);
     };
+
     const removeProductbacklog = (index) => {
         let data = [...productBacklog];
         data.splice(index, 1);
         setProductBacklog(data);
     };
+
     const handleProductbacklog = (e, index) => {
         let data = [...productBacklog];
         data[index][e.target.name] = e.target.value;
         setProductBacklog(data);
     };
-    const navigate = useNavigate();
+
     const saveSimConfig = async (e) => {
         e.preventDefault();
         try {
@@ -48,12 +73,25 @@ const CreateSimConfig = () => {
                 sprintLength,
                 plannedSprint,
                 productBacklog,
+                sprintBacklog,
                 startDate,
             });
             navigate("/");
           } catch (error) {
             console.log(error);
           }
+    };
+    
+    const generateSprintBacklog = (plannedSprint) => {
+        let sprintBacklog = [];
+        for (let i = 0; i < plannedSprint; i++) {
+            let sprintBacklogItem = {
+                sprintId: i.toString(),
+                sprintBacklog: [],
+            };
+            sprintBacklog.push(sprintBacklogItem);
+        }
+        return sprintBacklog;
     };
 
     return (
@@ -69,7 +107,8 @@ const CreateSimConfig = () => {
                                         <div className="form-group mt-2">
                                             <input 
                                                 readOnly
-                                                className="input is-small is-inline mb-1"
+                                                size={5}
+                                                className="input is-static has-text-centered is-small is-inline mb-1"
                                                 name="pbId"
                                                 value={form.pbId=`PB-${index + 1}`}
                                                 required
@@ -89,7 +128,7 @@ const CreateSimConfig = () => {
                                             {(productBacklog.length!==1)?
                                                 <button
                                                     onClick={() => removeProductbacklog(index)}
-                                                    className="button is-danger is-fullwidth is-inline is-small mb-1">
+                                                    className="button is-danger is-inline is-small mb-1">
                                                     Delete
                                                 </button>:''
                                             }
@@ -130,7 +169,7 @@ const CreateSimConfig = () => {
                                 <div className="form-group mt-2">
                                     <input
                                         type="number"
-                                        min="0"
+                                        min="1"
                                         max="24"
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
@@ -172,7 +211,7 @@ const CreateSimConfig = () => {
                                         className="input is-small is-inline ml-1"
                                         placeholder="Planned Sprint"
                                         value={plannedSprint}
-                                        onChange={(e) => setPlannedSprint(e.target.value)}
+                                        onChange={(e) => {setPlannedSprint(e.target.value); setSprintBacklog(generateSprintBacklog(e.target.value))}}
                                         required
                                     />
                                 </div>
@@ -188,10 +227,10 @@ const CreateSimConfig = () => {
                                     />
                                 </div>
                                 <Link to={`/`}  className="button is-danger mt-4 mr-4">
-                                    Back
+                                    <strong>Back</strong>
                                 </Link>
                                 <button type="submit" className="button is-success mt-4">
-                                    Save
+                                    <strong>Save</strong>
                                 </button>
                             </form>
                         </div>

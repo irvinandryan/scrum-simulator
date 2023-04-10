@@ -31,8 +31,8 @@ const SimConfigList = () => {
                         <thead>
                             <tr>
                                 <th>Scrum Team Size</th>
-                                <th>Rate per Hour</th>
-                                <th>Work Hour per Day</th>
+                                <th>Rate / Hour</th>
+                                <th>Work Hour / Day</th>
                                 <th>Planned Cost</th>
                                 <th>Days per Sprint</th>
                                 <th>Planned Sprint</th>
@@ -53,12 +53,12 @@ const SimConfigList = () => {
                                         <Link
                                             to={`selectsimconfig/${simConfig._id}`} 
                                             className="button is-info is-small mr-1">
-                                            Select
+                                            <strong>Select</strong>
                                         </Link>
                                         <button
                                             onClick={() => deleteSimConfig(simConfig._id)}
                                             className="button is-danger is-small">
-                                            Delete
+                                            <strong>Delete</strong>
                                         </button>
                                     </td>
                                 </tr>
@@ -67,7 +67,7 @@ const SimConfigList = () => {
                 </table>
                 <div className="has-text-centered">
                     <Link to="create" className="button has-text-centered is-success">
-                        Create New
+                        <strong>Create New</strong>
                     </Link>
                 </div>
             </div>

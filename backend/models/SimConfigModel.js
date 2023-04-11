@@ -15,6 +15,7 @@ var SprintBacklogItemSchema = mongoose.Schema({
 
 var ReleaseBacklogSchema = mongoose.Schema({
     rbId: String,
+    isRbDone: Boolean,    
 });
 
 var SprintBacklogSchema = mongoose.Schema({

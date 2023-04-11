@@ -51,7 +51,7 @@ const SimConfigList = () => {
                                     <td>{simConfig.productBacklog.reduce((prev,next) => prev + next.pbPoint,0)}</td>
                                     <td>
                                         <Link
-                                            to={`selectsimconfig/${simConfig._id}`} 
+                                            to={`simulation/${simConfig._id}`} 
                                             className="button is-info is-small mr-1">
                                             <strong>Select</strong>
                                         </Link>
@@ -64,7 +64,7 @@ const SimConfigList = () => {
                                 </tr>
                             ))}
                         </tbody>
-                </table>
+                    </table>
                 <div className="has-text-centered">
                     <Link to="create" className="button has-text-centered is-success">
                         <strong>Create New</strong>

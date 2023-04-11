@@ -77,7 +77,7 @@ const SelectSimConfig = () => {
                             </Link>
                         </div>
                         <div className="column is-one-half has-text-centered">
-                            <Link to={`simulation`} className="button is-info is-fullwidth">
+                            <Link to={`sprintplanning`} className="button is-info is-fullwidth">
                                 <strong>Continue</strong>
                             </Link>
                         </div>

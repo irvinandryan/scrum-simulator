@@ -70,7 +70,7 @@ const EditSimConfig = () => {
                                     />
                                 </div>
                                 <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Rate per Hou</label>
+                                    <label className="label has-text-centered">Rate per Hour</label>
                                     <input
                                         type="number"
                                         min="0"
@@ -140,8 +140,8 @@ const EditSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                <button className="button is-danger mt-5 mr-2" onClick={() => navigate(-1)}><strong>Cancel</strong></button>
-                                <button className="button is-success mt-5 ml-2"><strong>Save Change</strong></button>
+                                {/* <button className="button is-danger mt-5 mr-2" onClick={() => navigate(-1)}><strong>Cancel</strong></button> */}
+                                <button className="button is-success mt-5 ml-2"><strong>Save</strong></button>
                             </form>
                         </div>
                     </div>            

@@ -5,6 +5,7 @@ import SelectSimConfig from "./components/SelectSimConfig";
 import SprintPlanning from "./components/SprintPlanning";
 import EditSimConfig from "./components/EditSimConfig";
 import SprintReview from "./components/SprintReview";
+import SprintExecution from "./components/SprintExecution";
 
 function App() {
     return (
@@ -13,10 +14,12 @@ function App() {
             <Routes>
             <Route path="/" element={<SimConfigList />} />
             <Route path="create" element={<CreateSimConfig />} />
-            <Route path="selectsimconfig/:id" element={<SelectSimConfig />} />
-            <Route path="selectsimconfig/:id/simulation" element={<SprintPlanning />} />
-            <Route path="selectsimconfig/:id/simulation/editsimconfig" element={<EditSimConfig />} />
-            <Route path="selectsimconfig/:id/simulation/sprintreview" element={<SprintReview />} />
+            <Route path="simulation/:id" element={<SelectSimConfig />} />
+            <Route path="simulation/:id/sprintplanning" element={<SprintPlanning />} />
+            <Route path="simulation/:id/sprintplanning/editsimconfig" element={<EditSimConfig />} />
+            <Route path="simulation/:id/sprintexecution/editsimconfig" element={<EditSimConfig />} />
+            <Route path="simulation/:id/sprintexecution" element={<SprintExecution />} />
+            <Route path="simulation/:id/sprintreview" element={<SprintReview />} />
             </Routes>
         </div>
         </BrowserRouter>

@@ -28,6 +28,7 @@ const CreateSimConfig = () => {
             releaseBacklog: [
                 {
                     rbId: String,
+                    isRbDone: false,
                 },
             ],
             sprintBacklogItem: [

@@ -34,6 +34,7 @@ const SprintPlanning = () => {
     const [releaseBacklog, setReleaseBacklog] = useState([
         {
             rbId: String,
+            isRbDone: false,
         },
     ]);
 
@@ -72,7 +73,7 @@ const SprintPlanning = () => {
         sprintBacklogItem.forEach((item) => {
             sum += parseInt(item.sbHour);
         });
-        if (sum > (scrumTeamHour * sprintLength)) {
+        if (sum > (scrumTeamSize * scrumTeamHour * sprintLength)) {
             alert("Total hours of sprint backlog items cannot be greater than total work hours per sprint");
             return;
         }
@@ -89,18 +90,18 @@ const SprintPlanning = () => {
 
         try {
             await axios.patch(`http://localhost:5000/simConfigs/${id}`, {
-                // scrumTeamSize,
-                // scrumTeamRate,
-                // scrumTeamHour,
-                // plannedCost,
-                // sprintLength,
-                // plannedSprint,
-                // startDate,
-                // productBacklog,
+                scrumTeamSize,
+                scrumTeamRate,
+                scrumTeamHour,
+                plannedCost,
+                sprintLength,
+                plannedSprint,
+                startDate,
+                productBacklog,
                 sprintBacklog,
                 releaseBacklog,
             });
-            navigate(`sprintreview`);
+            navigate(`/simulation/${id}/sprintexecution`);
             // navigate(`/selectsimconfig/${id}/simulation`);
         } catch (error) {
             console.log(error);
@@ -136,6 +137,7 @@ const SprintPlanning = () => {
     const addReleaseBacklog = () => {
         let object = {
             rbId: String,
+            isRbDone: false,
         };
         setReleaseBacklog([...releaseBacklog, object]);
     };
@@ -212,7 +214,10 @@ const SprintPlanning = () => {
                                             className="basic-multi-select"
                                             onChange={(e) => handleReleaseBacklog(e.map((rb) => {
                                                 return (
-                                                    {rbId: rb.value}
+                                                    {
+                                                        rbId: rb.value,
+                                                        isRbDone: false
+                                                    }
                                                 );
                                             }))}
                                         />
@@ -283,7 +288,7 @@ const SprintPlanning = () => {
                                         className="input is-small is-static has-text-centered is-inline mr-1 ml-1 mb-1 mt-2"
                                         name="totalHour"
                                         min="0"
-                                        max={parseInt(sprintLength * scrumTeamHour)}
+                                        max={parseInt(scrumTeamSize * scrumTeamHour * sprintLength)}
                                         value={sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0)}
                                         required
                                     />
@@ -296,7 +301,7 @@ const SprintPlanning = () => {
                                     </button>
                                     <div>
                                         <button type="submit" className="button is-fullwidth is-info mt-4">
-                                            <strong>Execute</strong>
+                                            <strong>Continue</strong>
                                         </button>
                                     </div>
                                 </form>

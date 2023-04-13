@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Select from "react-select";
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -34,6 +33,7 @@ const SprintExecution = () => {
     const [releaseBacklog, setReleaseBacklog] = useState([
         {
             rbId: String,
+            isRbDone: false,
         },
     ]);
 
@@ -45,22 +45,28 @@ const SprintExecution = () => {
         },
     ]);
 
-    const getSimConfigById = async () => {
-        const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
-        setScrumTeamSize(response.data.scrumTeamSize);
-        setScrumTeamRate(response.data.scrumTeamRate);
-        setScrumTeamHour(response.data.scrumTeamHour);
-        setPlannedCost(response.data.plannedCost);
-        setSprintLength(response.data.sprintLength);
-        setPlannedSprint(response.data.plannedSprint);
-        setStartDate(response.data.startDate);
-        setProductBacklog(response.data.productBacklog);
-        setSprintBacklog(response.data.sprintBacklog);
-    }
-
     useEffect(() => {
         getSimConfigById();
     }, []);
+
+    const getSimConfigById = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+            setScrumTeamSize(response.data.scrumTeamSize);
+            setScrumTeamRate(response.data.scrumTeamRate);
+            setScrumTeamHour(response.data.scrumTeamHour);
+            setPlannedCost(response.data.plannedCost);
+            setSprintLength(response.data.sprintLength);
+            setPlannedSprint(response.data.plannedSprint);
+            setStartDate(response.data.startDate);
+            setProductBacklog(response.data.productBacklog);
+            setSprintBacklog(response.data.sprintBacklog);
+        }
+        catch (error) {
+            console.log(error);
+            navigate("/*")
+        }
+    }
 
     const getCurrentSprint = () => {
         for (let i = 0; i < sprintBacklog.length; i++) {
@@ -83,7 +89,7 @@ const SprintExecution = () => {
         return (scrumTeamSize * scrumTeamHour * sprintLength);
     }
 
-    const handleSprintExecution = async () => {
+    const markItemDone = () => {
         let totalScrumTeamWorkHour = getTotalScrumTeamWorkHour();
         for (let i = 0; i < sprintBacklog[getCurrentSprint()].sprintBacklogItem.length; i++) {
             if ((sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].isSbDone === false) && (totalScrumTeamWorkHour >= sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].sbHour)) {
@@ -94,19 +100,22 @@ const SprintExecution = () => {
         }
         for (let i = 0; i < productBacklog.length; i++) {
             let isProductBacklogDone = true;
+            let isExist = false;
             for (let j = 0; j < sprintBacklog[getCurrentSprint()].sprintBacklogItem.length; j++) {
                 if (productBacklog[i].pbId === sprintBacklog[getCurrentSprint()].sprintBacklogItem[j].relatedPbId) {
+                    isExist = true;
                     if (sprintBacklog[getCurrentSprint()].sprintBacklogItem[j].isSbDone === false) {
                         isProductBacklogDone = false;
                         break;
                     }
                 }
             }
-            if (isProductBacklogDone === true) {
-                productBacklog[i].isPbDone = true;
-                setProductBacklog(productBacklog);
+            if (isProductBacklogDone === true && isExist === true) {
                 for (let k = 0; k < sprintBacklog[getCurrentSprint()].releaseBacklog.length; k++) {
                     if (sprintBacklog[getCurrentSprint()].releaseBacklog[k].rbId === productBacklog[i].pbId) {
+                        alert(productBacklog[i].pbId)
+                        productBacklog[i].isPbDone = true;
+                        setProductBacklog(productBacklog);
                         sprintBacklog[getCurrentSprint()].releaseBacklog[k].isRbDone = true;
                         setSprintBacklog(sprintBacklog);
                         break;
@@ -114,7 +123,10 @@ const SprintExecution = () => {
                 }
             }
         }
-        
+    }
+
+    const handleSprintExecution = async () => {
+        markItemDone();
         try {
             await axios.patch(`http://localhost:5000/simConfigs/${id}`, {
                 scrumTeamSize,
@@ -128,8 +140,7 @@ const SprintExecution = () => {
                 sprintBacklog,
                 releaseBacklog,
             });
-            navigate(`/simulation/${id}/sprintexecution`);
-            // navigate(`/selectsimconfig/${id}/simulation`);
+            navigate(`/simulation/${id}/sprintreview`);
         } catch (error) {
             console.log(error);
         }

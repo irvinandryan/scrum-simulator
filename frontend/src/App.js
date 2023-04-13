@@ -6,6 +6,7 @@ import SprintPlanning from "./components/SprintPlanning";
 import EditSimConfig from "./components/EditSimConfig";
 import SprintReview from "./components/SprintReview";
 import SprintExecution from "./components/SprintExecution";
+import NotFound from "./components/NotFound";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="simulation/:id/sprintexecution/editsimconfig" element={<EditSimConfig />} />
             <Route path="simulation/:id/sprintexecution" element={<SprintExecution />} />
             <Route path="simulation/:id/sprintreview" element={<SprintReview />} />
+            <Route path="*" element={<NotFound />} />
             </Routes>
         </div>
         </BrowserRouter>

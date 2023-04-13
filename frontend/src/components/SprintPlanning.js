@@ -14,6 +14,14 @@ const SprintPlanning = () => {
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
 
+    const [notDoneProductBacklog, setNotDoneProductBacklog] = useState([
+        {
+            pbId: String,
+            pbPoint: Number,
+            isPbDone: false,
+        },
+    ]);
+
     const [productBacklog, setProductBacklog] = useState([
         {
             pbId: String,
@@ -46,26 +54,38 @@ const SprintPlanning = () => {
         },
     ]);
 
+    useEffect(() => {
+        getSimConfigById();
+    }, []);
+
     const getSimConfigById = async () => {
-        const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
-        setScrumTeamSize(response.data.scrumTeamSize);
-        setScrumTeamRate(response.data.scrumTeamRate);
-        setScrumTeamHour(response.data.scrumTeamHour);
-        setPlannedCost(response.data.plannedCost);
-        setSprintLength(response.data.sprintLength);
-        setPlannedSprint(response.data.plannedSprint);
-        setStartDate(response.data.startDate);
-        setProductBacklog(response.data.productBacklog);
-        setSprintBacklog(response.data.sprintBacklog);
+        try {
+            const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+            setScrumTeamSize(response.data.scrumTeamSize);
+            setScrumTeamRate(response.data.scrumTeamRate);
+            setScrumTeamHour(response.data.scrumTeamHour);
+            setPlannedCost(response.data.plannedCost);
+            setSprintLength(response.data.sprintLength);
+            setPlannedSprint(response.data.plannedSprint);
+            setStartDate(response.data.startDate);
+            setProductBacklog(response.data.productBacklog);
+            setSprintBacklog(response.data.sprintBacklog);
+            setNotDoneProductBacklog(response.data.productBacklog.filter((pb) => pb.isPbDone === false))
+        }
+        catch (error) {
+            console.log(error);
+            navigate("/*");
+        }
     };
 
     const getCurrentSprint = () => {
         for (let i = 0; i < sprintBacklog.length; i++) {
             if (sprintBacklog[i].sprintBacklogItem.length === 0) {
-                return i;
+                return (i-1);
             }
         }
-    };
+        return (sprintBacklog.length-1);
+    }
 
     const updateSimConfig = async (e) => {
         e.preventDefault();
@@ -102,15 +122,10 @@ const SprintPlanning = () => {
                 releaseBacklog,
             });
             navigate(`/simulation/${id}/sprintexecution`);
-            // navigate(`/selectsimconfig/${id}/simulation`);
         } catch (error) {
             console.log(error);
         }
     };
-
-    useEffect(() => {
-        getSimConfigById();
-    }, []);
         
     const addSprintBacklogItem = () => {
         let object = {
@@ -194,7 +209,7 @@ const SprintPlanning = () => {
 
             <div className="hero-body">
                 <div className="container">
-                <h2 className="subtitle has-text-centered">Sprint Planning {getCurrentSprint() + 1}</h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint() + 1}</strong></h2>
                     <div className="columns is-full mt-5 has-background-white-ter">
                         <div className="column has-text-centered">
                             <div className="form-group">
@@ -206,7 +221,7 @@ const SprintPlanning = () => {
                                             required
                                             placeholder="Select Release Backlog"
                                             isMulti
-                                            options={productBacklog.map((pb) => {
+                                            options={notDoneProductBacklog.map((pb) => {
                                                 return (
                                                     {value: pb.pbId, label: pb.pbId}
                                                 );
@@ -255,7 +270,7 @@ const SprintPlanning = () => {
                                                     <option value="" disabled>
                                                         Related Product Backlog
                                                     </option>
-                                                    {productBacklog.map((pb) => {
+                                                    {notDoneProductBacklog.map((pb) => {
                                                         return (
                                                             <option value={pb.pbId}>
                                                                 {pb.pbId}
@@ -308,13 +323,6 @@ const SprintPlanning = () => {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="columns">
-                        <div className="column is-one-half has-text-centered">
-                            <button to={`simulation`} className="button is-info is-fullwidth">
-                                <strong>Next</strong>
-                            </button>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </div>

@@ -39,8 +39,6 @@ const EditSimConfig = () => {
                 sprintLength,
                 plannedSprint
             });
-            // navigate(Router.);
-            // navigate to previous page
             navigate(-1);
             
         } catch (error) {
@@ -140,7 +138,6 @@ const EditSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                {/* <button className="button is-danger mt-5 mr-2" onClick={() => navigate(-1)}><strong>Cancel</strong></button> */}
                                 <button className="button is-success mt-5 ml-2"><strong>Save</strong></button>
                             </form>
                         </div>

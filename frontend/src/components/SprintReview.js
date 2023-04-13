@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Select from "react-select";
 
-const SprintReview = () => {
+const SprintExecution = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -13,130 +12,276 @@ const SprintReview = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
-    const [productBacklog, setProductBacklog] = useState([]);
-    const [sprintBacklog, setSprintBacklog] = useState([]);
 
-    const getSimConfigById = async () => {
-        const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
-        setScrumTeamSize(response.data.scrumTeamSize);
-        setScrumTeamRate(response.data.scrumTeamRate);
-        setScrumTeamHour(response.data.scrumTeamHour);
-        setPlannedCost(response.data.plannedCost);
-        setSprintLength(response.data.sprintLength);
-        setPlannedSprint(response.data.plannedSprint);
-        setStartDate(response.data.startDate);
-        setProductBacklog(response.data.productBacklog);
-        setSprintBacklog(response.data.sprintBacklog);
-    };
+    const [productBacklog, setProductBacklog] = useState([
+        {
+            pbId: String,
+            pbPoint: Number,
+            isPbDone: false,
+        },
+    ]);
+
+    const [sprintBacklogItem, setSprintBacklogItem] = useState([
+        {
+            sbId: String,
+            sbHour: Number,
+            relatedPbId: String,
+            isSbDone: false,
+        },
+    ]);
+
+    const [releaseBacklog, setReleaseBacklog] = useState([
+        {
+            rbId: String,
+            isRbDone: false,
+        },
+    ]);
+
+    const [sprintBacklog, setSprintBacklog] = useState([
+        {
+            sprintId: String,
+            releaseBacklog: [releaseBacklog],
+            sprintBacklogItem: [sprintBacklogItem],
+        },
+    ]);
 
     useEffect(() => {
         getSimConfigById();
     }, []);
 
-    const handleSprintReview = async () => {
-        const response = await axios.post(`http://localhost:5000/simConfigs/${id}/sprintreview`);
-        navigate(`/sprintreview/${id}`);
+    const getSimConfigById = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+            setScrumTeamSize(response.data.scrumTeamSize);
+            setScrumTeamRate(response.data.scrumTeamRate);
+            setScrumTeamHour(response.data.scrumTeamHour);
+            setPlannedCost(response.data.plannedCost);
+            setSprintLength(response.data.sprintLength);
+            setPlannedSprint(response.data.plannedSprint);
+            setStartDate(response.data.startDate);
+            setProductBacklog(response.data.productBacklog);
+            setSprintBacklog(response.data.sprintBacklog);
+        }
+        catch (error) {
+            console.log(error);
+            navigate("/*")
+        }
     }
 
+    const getCurrentSprint = () => {
+        for (let i = 0; i < sprintBacklog.length; i++) {
+            if (sprintBacklog[i].sprintBacklogItem.length === 0) {
+                return (i-1);
+            }
+        }
+        return (sprintBacklog.length-1);
+    }
+
+    const getTotalWorkHour = () => {
+        let totalWorkHour = 0;
+        for (let i = 0; i < sprintBacklog[getCurrentSprint()].sprintBacklogItem.length; i++) {
+            totalWorkHour += sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].sbHour;        
+        }
+        return totalWorkHour;
+    }
+
+    const getTotalScrumTeamWorkHour = () => {
+        return (scrumTeamSize * scrumTeamHour * sprintLength);
+    }
+
+    const getTotalWorkHourOfPb = (pbId) => {
+        let totalWorkHour = 0;
+        for (let i = 0; i < sprintBacklog.length; i++) {
+            for (let j = 0; j < sprintBacklog[i].sprintBacklogItem.length; j++) {
+                if (sprintBacklog[i].sprintBacklogItem[j].relatedPbId === pbId) {
+                    totalWorkHour += sprintBacklog[i].sprintBacklogItem[j].sbHour;
+                }
+            }
+        }
+        return totalWorkHour;
+    }
+
+    const getTotalCostOfPb = (pbId) => {
+        return (getTotalWorkHourOfPb(pbId) * scrumTeamRate);
+    }
+
+    const handleNextSprint = async () => {
+        try {
+            // await axios.patch(`http://localhost:5000/simConfigs/${id}`, {
+            //     scrumTeamSize,
+            //     scrumTeamRate,
+            //     scrumTeamHour,
+            //     plannedCost,
+            //     sprintLength,
+            //     plannedSprint,
+            //     startDate,
+            //     productBacklog,
+            //     sprintBacklog,
+            //     releaseBacklog,
+            // });
+            if ((getCurrentSprint() === parseInt(plannedSprint - 1))) {
+                // navigate(`/simulation/${id}/report`);
+                navigate(`/`)
+            } else {
+                navigate(`/simulation/${id}/sprintplanning`);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
-        <div className="columns is-full mt-5">
-            <div className="column is-full">
-                <h1 className="title has-text-centered">Sprint Review</h1>
-                <div className="columns is-full mt-5">
-                    <div className="column is-full">
-                        <h1 className="title has-text-centered">Sprint Backlog</h1>
-                        <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
-                            <thead>
-                                <tr>
-                                    <th>Story Point</th>
-                                    <th>Story</th>
-                                    <th>Task</th>
-                                    <th>Task Point</th>
-                                    <th>Task Hour</th>
-                                    <th>Task Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sprintBacklog.map((sprintBacklog) => (
-                                    <tr className="has-text-left" key={sprintBacklog._id}>
-                                        <td>{sprintBacklog.pbPoint}</td>
-                                        <td>{sprintBacklog.pbStory}</td>
-                                        <td>{sprintBacklog.pbTask}</td>
-                                        <td>{sprintBacklog.pbTaskPoint}</td>
-                                        <td>{sprintBacklog.pbTaskHour}</td>
-                                        <td>{sprintBacklog.pbTaskCost}</td>
+        <div className="hero is-fullheight">
+            <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
+                <div id="navbar-info" className="navbar-menu">
+                    <div className="navbar-start ml-2">
+                        <h3 className="navbar-item">
+                            Team Size: {scrumTeamSize}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Rate / Hour: {scrumTeamRate}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Work Hour / Day: {scrumTeamHour}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Planned Cost: {plannedCost}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Num of Sprint: {plannedSprint}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Days per Sprint: {sprintLength}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Start Date: {startDate.split('T')[0]}
+                        </h3>
+                    </div>
+                    <div className="navbar-end mr-2">
+                        <div className="navbar-item">
+                            <button
+                                onClick={() => navigate(`editsimconfig`)}
+                                className="button has-background-grey-lighter is-small">
+                                <strong>Edit</strong>
+                            </button>
+                        </div>
+                        <div className="navbar-item">
+                            <button
+                                onClick={() => navigate("/")}
+                                className="button is-danger is-small">
+                                <strong>Exit Simulation</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div className="hero-body">
+                <div className="container">
+                <h2 className="subtitle has-text-centered"><strong>Sprint Review {getCurrentSprint()+1}</strong></h2>
+                    <div className="columns mt-5 mb-5 is-full has-background-white-ter">
+                        <div className="column is-one-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Release Backlog ID</th>
+                                        <th>Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div className="columns is-full mt-5">
-                    <div className="column is-full">
-                        <h1 className="title has-text-centered">Product Backlog</h1>
-                        <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
-                            <thead>
-                                <tr>
-                                    <th>Story Point</th>
-                                    <th>Story</th>
-                                    <th>Task</th>
-                                    <th>Task Point</th>
-                                    <th>Task Hour</th>
-                                    <th>Task Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {productBacklog.map((productBacklog) => (
-                                    <tr className="has-text-left" key={productBacklog._id}>
-                                        <td>{productBacklog.pbPoint}</td>
-                                        <td>{productBacklog.pbStory}</td>
-                                        <td>{productBacklog.pbTask}</td>
-                                        <td>{productBacklog.pbTaskPoint}</td>
-                                        <td>{productBacklog.pbTaskHour}</td>
-                                        <td>{productBacklog.pbTaskCost}</td>
+                                </thead>
+                                <tbody>
+                                    {sprintBacklog[getCurrentSprint()].releaseBacklog.map((releaseBacklog) => (
+                                        <tr>
+                                            <td>{releaseBacklog.rbId}</td>
+                                            <td>{releaseBacklog.isRbDone ? "Done" : "Not Done"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="column is-two-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Sprint Backlog ID</th>
+                                        <th>Hour Needed</th>
+                                        <th>Related Product Backlog</th>
+                                        <th>Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    
+                                    {sprintBacklog[getCurrentSprint()].sprintBacklogItem.map((sprintBacklogItem) => (
+                                        <tr>
+                                            <td>{sprintBacklogItem.sbId}</td>
+                                            <td>{sprintBacklogItem.sbHour}</td>
+                                            <td>{sprintBacklogItem.relatedPbId}</td>
+                                            <td>{sprintBacklogItem.isSbDone ? "Done" : "Not Done"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div className="columns is-full mt-5">
-                    <div className="column is-full">
-                        <h1 className="title has-text-centered">Sprint Review</h1>
-                        <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
-                            <thead>
-                                <tr>
-                                    <th>Scrum Team Size</th>
-                                    <th>Scrum Team Rate</th>
-                                    <th>Scrum Team Hour</th>
-                                    <th>Planned Cost</th>
-                                    <th>Sprint Length</th>
-                                    <th>Planned Sprint</th>
-                                    <th>Start Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className="has-text-left">
-                                    <td>{scrumTeamSize}</td>
-                                    <td>{scrumTeamRate}</td>
-                                    <td>{scrumTeamHour}</td>
-                                    <td>{plannedCost}</td>
-                                    <td>{sprintLength}</td>
-                                    <td>{plannedSprint}</td>
-                                    <td>{startDate}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <h2 className="subtitle has-text-centered"><strong>Product Backlog Summary</strong></h2>
+                    <div className="columns mt-5 is-full has-background-white-ter">
+                        <div className="column is-one-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Product Backlog ID</th>
+                                        <th>Story Point</th>
+                                        <th>Status</th>
+                                        <th>Work Hour</th>
+                                        <th>Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {productBacklog.map((productBacklog) => (
+                                        <tr>
+                                            <td>{productBacklog.pbId}</td>
+                                            <td>{productBacklog.pbPoint}</td>
+                                            <td>{productBacklog.isPbDone ? "Done" : "Not Done"}</td>
+                                            <td>{getTotalWorkHourOfPb(productBacklog.pbId)}</td>
+                                            <td>{getTotalCostOfPb(productBacklog.pbId)}</td>
+
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/* <div className="column is-two-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Sprint Backlog ID</th>
+                                        <th>Hour Needed</th>
+                                        <th>Related Product Backlog</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sprintBacklog[getCurrentSprint()].sprintBacklogItem.map((sprintBacklogItem) => (
+                                        <tr>
+                                            <td>{sprintBacklogItem.sbId}</td>
+                                            <td>{sprintBacklogItem.sbHour}</td>
+                                            <td>{sprintBacklogItem.relatedPbId}</td>
+                                            <td>{sprintBacklogItem.isSbDone ? "Done" : "Not Done"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div> */}
                     </div>
-                </div>
-                <div className="columns is-full mt-5">
-                    <div className="column is-full">
-                        <button className="button is-primary is-fullwidth" onClick={handleSprintReview}>Sprint Review</button>
+                    <div className="columns">
+                        <div className="column is-one-half has-text-centered">
+                            <button type="submit" className="button is-fullwidth is-info" onClick={() => handleNextSprint()}>
+                                <strong>Next</strong>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
-};
+}
 
-export default SprintReview;
+export default SprintExecution;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { getCurrentSprint } from "../utils/Utils";
 
 const SelectSimConfig = () => {
     const { id } = useParams();
@@ -53,7 +54,7 @@ const SelectSimConfig = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
             setScrumTeamHour(response.data.scrumTeamHour);
@@ -70,15 +71,6 @@ const SelectSimConfig = () => {
         }
     };
 
-    const getCurrentSprint = () => {
-        for (let i = 0; i < sprintBacklog.length; i++) {
-            if (sprintBacklog[i].sprintBacklogItem.length === 0) {
-                return (i-1);
-            }
-        }
-        return (sprintBacklog.length-1);
-    }
-
     const isAllPbDone = () => {
         for (let i = 0; i < productBacklog.length; i++) {
             if (productBacklog[i].isPbDone === false) {
@@ -89,7 +81,7 @@ const SelectSimConfig = () => {
     }
 
     const handleContinue = () => {
-        if ((getCurrentSprint() === parseInt(sprintBacklog.length - 1)) || isAllPbDone()) {
+        if ((getCurrentSprint(sprintBacklog) === parseInt(sprintBacklog.length - 1)) || isAllPbDone()) {
             alert("This simulation has been completed.");
             navigate(`/simulation/${id}/sprintreview`);
         } else {
@@ -140,9 +132,6 @@ const SelectSimConfig = () => {
                             </Link>
                         </div>
                         <div className="column is-one-half has-text-centered">
-                            {/* <Link to={`sprintplanning`} className="button is-info is-fullwidth">
-                                <strong>Continue</strong>
-                            </Link> */}
                             <button className="button is-info is-fullwidth" onClick={handleContinue}>
                                 <strong>Continue</strong>
                             </button>

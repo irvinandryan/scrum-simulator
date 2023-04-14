@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
+import { getCurrentSprint } from "../utils/Utils.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();
@@ -60,7 +61,7 @@ const SprintPlanning = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
             setScrumTeamHour(response.data.scrumTeamHour);
@@ -77,15 +78,6 @@ const SprintPlanning = () => {
             navigate("/*");
         }
     };
-
-    const getCurrentSprint = () => {
-        for (let i = 0; i < sprintBacklog.length; i++) {
-            if (sprintBacklog[i].sprintBacklogItem.length === 0) {
-                return (i-1);
-            }
-        }
-        return (sprintBacklog.length-1);
-    }
 
     const updateSimConfig = async (e) => {
         e.preventDefault();
@@ -109,7 +101,7 @@ const SprintPlanning = () => {
         }
 
         try {
-            await axios.patch(`http://localhost:5000/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,
@@ -209,7 +201,7 @@ const SprintPlanning = () => {
 
             <div className="hero-body">
                 <div className="container">
-                <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint() + 1}</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint(sprintBacklog) + 2}</strong></h2>
                     <div className="columns is-full mt-5 has-background-white-ter">
                         <div className="column has-text-centered">
                             <div className="form-group">

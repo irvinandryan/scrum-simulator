@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { getCurrentSprint, getTotalWorkHourOfPb, getTotalCostOfPb } from "../utils/Utils";
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -51,7 +52,7 @@ const SprintExecution = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
             setScrumTeamHour(response.data.scrumTeamHour);
@@ -68,46 +69,9 @@ const SprintExecution = () => {
         }
     }
 
-    const getCurrentSprint = () => {
-        for (let i = 0; i < sprintBacklog.length; i++) {
-            if (sprintBacklog[i].sprintBacklogItem.length === 0) {
-                return (i-1);
-            }
-        }
-        return (sprintBacklog.length-1);
-    }
-
-    const getTotalWorkHour = () => {
-        let totalWorkHour = 0;
-        for (let i = 0; i < sprintBacklog[getCurrentSprint()].sprintBacklogItem.length; i++) {
-            totalWorkHour += sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].sbHour;        
-        }
-        return totalWorkHour;
-    }
-
-    const getTotalScrumTeamWorkHour = () => {
-        return (scrumTeamSize * scrumTeamHour * sprintLength);
-    }
-
-    const getTotalWorkHourOfPb = (pbId) => {
-        let totalWorkHour = 0;
-        for (let i = 0; i < sprintBacklog.length; i++) {
-            for (let j = 0; j < sprintBacklog[i].sprintBacklogItem.length; j++) {
-                if (sprintBacklog[i].sprintBacklogItem[j].relatedPbId === pbId) {
-                    totalWorkHour += sprintBacklog[i].sprintBacklogItem[j].sbHour;
-                }
-            }
-        }
-        return totalWorkHour;
-    }
-
-    const getTotalCostOfPb = (pbId) => {
-        return (getTotalWorkHourOfPb(pbId) * scrumTeamRate);
-    }
-
     const handleNextSprint = async () => {
         try {
-            // await axios.patch(`http://localhost:5000/simConfigs/${id}`, {
+            // await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
             //     scrumTeamSize,
             //     scrumTeamRate,
             //     scrumTeamHour,
@@ -119,7 +83,7 @@ const SprintExecution = () => {
             //     sprintBacklog,
             //     releaseBacklog,
             // });
-            if ((getCurrentSprint() === parseInt(plannedSprint - 1))) {
+            if ((getCurrentSprint(sprintBacklog) === parseInt(plannedSprint - 1))) {
                 // navigate(`/simulation/${id}/report`);
                 navigate(`/`)
             } else {
@@ -177,7 +141,7 @@ const SprintExecution = () => {
             </nav>
             <div className="hero-body">
                 <div className="container">
-                <h2 className="subtitle has-text-centered"><strong>Sprint Review {getCurrentSprint()+1}</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Review {getCurrentSprint(sprintBacklog)+1}</strong></h2>
                     <div className="columns mt-5 mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
@@ -188,7 +152,7 @@ const SprintExecution = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[getCurrentSprint()].releaseBacklog.map((releaseBacklog) => (
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.map((releaseBacklog) => (
                                         <tr>
                                             <td>{releaseBacklog.rbId}</td>
                                             <td>{releaseBacklog.isRbDone ? "Done" : "Not Done"}</td>
@@ -209,7 +173,7 @@ const SprintExecution = () => {
                                 </thead>
                                 <tbody>
                                     
-                                    {sprintBacklog[getCurrentSprint()].sprintBacklogItem.map((sprintBacklogItem) => (
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
                                             <td>{sprintBacklogItem.sbHour}</td>
@@ -240,8 +204,8 @@ const SprintExecution = () => {
                                             <td>{productBacklog.pbId}</td>
                                             <td>{productBacklog.pbPoint}</td>
                                             <td>{productBacklog.isPbDone ? "Done" : "Not Done"}</td>
-                                            <td>{getTotalWorkHourOfPb(productBacklog.pbId)}</td>
-                                            <td>{getTotalCostOfPb(productBacklog.pbId)}</td>
+                                            <td>{getTotalWorkHourOfPb(productBacklog.pbId, sprintBacklog)}</td>
+                                            <td>{getTotalCostOfPb(productBacklog.pbId, sprintBacklog, scrumTeamRate)}</td>
 
                                         </tr>
                                     ))}
@@ -259,7 +223,7 @@ const SprintExecution = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[getCurrentSprint()].sprintBacklogItem.map((sprintBacklogItem) => (
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
                                             <td>{sprintBacklogItem.sbHour}</td>

@@ -19,7 +19,7 @@ const EditSimConfig = () => {
     , []);
 
     const getSimConfigById = async () => {
-        const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+        const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
         setScrumTeamSize(response.data.scrumTeamSize);
         setScrumTeamRate(response.data.scrumTeamRate);
         setScrumTeamHour(response.data.scrumTeamHour);
@@ -31,7 +31,7 @@ const EditSimConfig = () => {
     const updateSimConfig = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:5000/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,

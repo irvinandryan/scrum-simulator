@@ -10,13 +10,13 @@ const SimConfigList = () => {
     }, []);
 
     const getSimConfig = async () => {
-        const response = await axios.get("http://localhost:5000/simConfigs");
+        const response = await axios.get(process.env.REACT_APP_API + "/simConfigs")
         setSimConfig(response.data);
     }
     
     const deleteSimConfig = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/simConfigs/${id}`);
+            await axios.delete(process.env.REACT_APP_API + `/simConfigs/${id}`)
             getSimConfig();
         } catch (error) {
             console.log(error);

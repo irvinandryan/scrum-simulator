@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { getCurrentSprint, getTotalScrumTeamWorkHour } from "../utils/Utils";
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -51,7 +52,7 @@ const SprintExecution = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/simConfigs/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
             setScrumTeamHour(response.data.scrumTeamHour);
@@ -68,55 +69,34 @@ const SprintExecution = () => {
         }
     }
 
-    const getCurrentSprint = () => {
-        for (let i = 0; i < sprintBacklog.length; i++) {
-            if (sprintBacklog[i].sprintBacklogItem.length === 0) {
-                return (i-1);
-            }
-        }
-        return (sprintBacklog.length-1);
-    }
-
-    const getTotalWorkHour = () => {
-        let totalWorkHour = 0;
-        for (let i = 0; i < sprintBacklog[getCurrentSprint()].sprintBacklogItem.length; i++) {
-            totalWorkHour += sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].sbHour;        
-        }
-        return totalWorkHour;
-    }
-
-    const getTotalScrumTeamWorkHour = () => {
-        return (scrumTeamSize * scrumTeamHour * sprintLength);
-    }
-
     const markItemDone = () => {
-        let totalScrumTeamWorkHour = getTotalScrumTeamWorkHour();
-        for (let i = 0; i < sprintBacklog[getCurrentSprint()].sprintBacklogItem.length; i++) {
-            if ((sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].isSbDone === false) && (totalScrumTeamWorkHour >= sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].sbHour)) {
-                sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].isSbDone = true;
-                totalScrumTeamWorkHour -= sprintBacklog[getCurrentSprint()].sprintBacklogItem[i].sbHour;
+        let totalScrumTeamWorkHour = getTotalScrumTeamWorkHour(scrumTeamSize, scrumTeamHour, sprintLength);
+        for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
+            if ((sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone === false) && (totalScrumTeamWorkHour >= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour)) {
+                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone = true;
+                totalScrumTeamWorkHour -= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;
                 setSprintBacklog(sprintBacklog);
             }
         }
         for (let i = 0; i < productBacklog.length; i++) {
             let isProductBacklogDone = true;
             let isExist = false;
-            for (let j = 0; j < sprintBacklog[getCurrentSprint()].sprintBacklogItem.length; j++) {
-                if (productBacklog[i].pbId === sprintBacklog[getCurrentSprint()].sprintBacklogItem[j].relatedPbId) {
+            for (let j = 0; j < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; j++) {
+                if (productBacklog[i].pbId === sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[j].relatedPbId) {
                     isExist = true;
-                    if (sprintBacklog[getCurrentSprint()].sprintBacklogItem[j].isSbDone === false) {
+                    if (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[j].isSbDone === false) {
                         isProductBacklogDone = false;
                         break;
                     }
                 }
             }
             if (isProductBacklogDone === true && isExist === true) {
-                for (let k = 0; k < sprintBacklog[getCurrentSprint()].releaseBacklog.length; k++) {
-                    if (sprintBacklog[getCurrentSprint()].releaseBacklog[k].rbId === productBacklog[i].pbId) {
+                for (let k = 0; k < sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.length; k++) {
+                    if (sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog[k].rbId === productBacklog[i].pbId) {
                         alert(productBacklog[i].pbId)
                         productBacklog[i].isPbDone = true;
                         setProductBacklog(productBacklog);
-                        sprintBacklog[getCurrentSprint()].releaseBacklog[k].isRbDone = true;
+                        sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog[k].isRbDone = true;
                         setSprintBacklog(sprintBacklog);
                         break;
                     }
@@ -128,7 +108,7 @@ const SprintExecution = () => {
     const handleSprintExecution = async () => {
         markItemDone();
         try {
-            await axios.patch(`http://localhost:5000/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,
@@ -194,7 +174,7 @@ const SprintExecution = () => {
             </nav>
             <div className="hero-body">
                 <div className="container">
-                <h2 className="subtitle has-text-centered"><strong>Sprint {getCurrentSprint()+1}</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint {getCurrentSprint(sprintBacklog)+1}</strong></h2>
                     <div className="columns mt-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
@@ -205,7 +185,7 @@ const SprintExecution = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[getCurrentSprint()].releaseBacklog.map((releaseBacklog) => (
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.map((releaseBacklog) => (
                                         <tr>
                                             <td>{releaseBacklog.rbId}</td>
                                             <td>{releaseBacklog.isRbDone ? "Done" : "Not Done"}</td>
@@ -225,7 +205,7 @@ const SprintExecution = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[getCurrentSprint()].sprintBacklogItem.map((sprintBacklogItem) => (
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
                                             <td>{sprintBacklogItem.sbHour}</td>

@@ -1,4 +1,4 @@
-import SimConfigModel from "../models/SimConfigModel.js";
+import SimConfigModel from "../models/SimModel.js";
 
 export const getSimConfigs = async (req, res) => {
     try {

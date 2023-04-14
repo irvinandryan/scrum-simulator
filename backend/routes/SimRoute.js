@@ -5,7 +5,7 @@ import {
     saveSimConfig,
     updateSimConfig,
     deleteSimConfig
-} from "../controllers/SimConfigController.js"; // import the controller functions
+} from "../controllers/SimController.js"; // import the controller functions
 
 const router = express.Router();
 

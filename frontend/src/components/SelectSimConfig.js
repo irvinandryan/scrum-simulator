@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint } from "../utils/Utils";
+import { isSimulationDone } from "../utils/Utils";
 
 const SelectSimConfig = () => {
     const { id } = useParams();
@@ -13,8 +13,6 @@ const SelectSimConfig = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
-    // const [productBacklog, setProductBacklog] = useState([]);
-    // const [sprintBacklog, setSprintBacklog] = useState([]);
 
     useEffect(() => {
         getSimConfigById();
@@ -49,6 +47,8 @@ const SelectSimConfig = () => {
             sprintId: String,
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
+            sprintCost: Number,
+            isSprintDone: false,
         },
     ]);
 
@@ -71,17 +71,8 @@ const SelectSimConfig = () => {
         }
     };
 
-    const isAllPbDone = () => {
-        for (let i = 0; i < productBacklog.length; i++) {
-            if (productBacklog[i].isPbDone === false) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     const handleContinue = () => {
-        if ((getCurrentSprint(sprintBacklog) === parseInt(sprintBacklog.length - 1)) || isAllPbDone()) {
+        if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
             alert("This simulation has been completed.");
             navigate(`/simulation/${id}/sprintreview`);
         } else {

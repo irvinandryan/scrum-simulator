@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getTotalWorkHourOfPb, getTotalCostOfPb } from "../utils/Utils";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCurrentSprint, getTotalWorkHourOfPb, isSimulationDone } from "../utils/Utils";
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -43,6 +43,8 @@ const SprintExecution = () => {
             sprintId: String,
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
+            sprintCost: Number,
+            isSprintDone: false,
         },
     ]);
 
@@ -71,19 +73,7 @@ const SprintExecution = () => {
 
     const handleNextSprint = async () => {
         try {
-            // await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
-            //     scrumTeamSize,
-            //     scrumTeamRate,
-            //     scrumTeamHour,
-            //     plannedCost,
-            //     sprintLength,
-            //     plannedSprint,
-            //     startDate,
-            //     productBacklog,
-            //     sprintBacklog,
-            //     releaseBacklog,
-            // });
-            if ((getCurrentSprint(sprintBacklog) === parseInt(plannedSprint - 1))) {
+            if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
                 // navigate(`/simulation/${id}/report`);
                 navigate(`/`)
             } else {
@@ -140,7 +130,7 @@ const SprintExecution = () => {
                 </div>
             </nav>
             <div className="hero-body">
-                <div className="container">
+                <div className="container mt-5">
                 <h2 className="subtitle has-text-centered"><strong>Sprint Review {getCurrentSprint(sprintBacklog)+1}</strong></h2>
                     <div className="columns mt-5 mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
@@ -194,8 +184,7 @@ const SprintExecution = () => {
                                         <th>Product Backlog ID</th>
                                         <th>Story Point</th>
                                         <th>Status</th>
-                                        <th>Work Hour</th>
-                                        <th>Cost</th>
+                                        <th>Time Spent</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -205,8 +194,6 @@ const SprintExecution = () => {
                                             <td>{productBacklog.pbPoint}</td>
                                             <td>{productBacklog.isPbDone ? "Done" : "Not Done"}</td>
                                             <td>{getTotalWorkHourOfPb(productBacklog.pbId, sprintBacklog)}</td>
-                                            <td>{getTotalCostOfPb(productBacklog.pbId, sprintBacklog, scrumTeamRate)}</td>
-
                                         </tr>
                                     ))}
                                 </tbody>

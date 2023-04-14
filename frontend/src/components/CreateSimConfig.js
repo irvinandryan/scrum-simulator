@@ -89,6 +89,8 @@ const CreateSimConfig = () => {
             let sprintBacklogItem = {
                 sprintId: i.toString(),
                 sprintBacklog: [],
+                sprintCost: 0,
+                isSprintDone: false,
             };
             sprintBacklog.push(sprintBacklogItem);
         }

@@ -22,6 +22,8 @@ var SprintBacklogSchema = mongoose.Schema({
     sprintId: Number,
     releaseBacklog: [ReleaseBacklogSchema],
     sprintBacklogItem: [SprintBacklogItemSchema],
+    sprintCost: Number,
+    isSprintDone: Boolean,
 });
 
 var SimConfigSchema = mongoose.Schema({

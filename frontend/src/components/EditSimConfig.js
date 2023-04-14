@@ -3,15 +3,14 @@ import axios from "axios";
 import { Router, useNavigate, useParams } from "react-router-dom";
 
 const EditSimConfig = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
     const [scrumTeamHour, setScrumTeamHour] = useState("");
     const [plannedCost, setPlannedCost] = useState("");
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
-
-    const navigate = useNavigate();
-    const { id } = useParams();
 
     useEffect(() => {
         getSimConfigById();

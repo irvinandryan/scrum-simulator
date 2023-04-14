@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { getCurrentSprint } from "../utils/Utils.js";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending } from "../utils/Utils.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();
@@ -52,6 +52,8 @@ const SprintPlanning = () => {
             sprintId: String,
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
+            sprintCost: Number,
+            isSprintDone: false,
         },
     ]);
 
@@ -86,7 +88,12 @@ const SprintPlanning = () => {
             sum += parseInt(item.sbHour);
         });
         if (sum > (scrumTeamSize * scrumTeamHour * sprintLength)) {
-            alert("Total hours of sprint backlog items cannot be greater than total work hours per sprint");
+            alert("Total work hours of sprint backlog items cannot be greater than total work hours per sprint");
+            return;
+        }
+
+        if ((plannedCost - getTotalSpending(sprintBacklog)) < (sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate)) {
+            alert("Total spending cannot be greater than remaining cost");
             return;
         }
 
@@ -141,17 +148,9 @@ const SprintPlanning = () => {
         setSprintBacklogItem(data);
     };
 
-    const addReleaseBacklog = () => {
-        let object = {
-            rbId: String,
-            isRbDone: false,
-        };
-        setReleaseBacklog([...releaseBacklog, object]);
-    };
-
     const handleReleaseBacklog = (e) => {
         setReleaseBacklog(e);
-    };        
+    };
 
     return (
         <div className="hero is-fullheight">
@@ -200,7 +199,7 @@ const SprintPlanning = () => {
             </nav>
 
             <div className="hero-body">
-                <div className="container">
+                <div className="container mt-5">
                 <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint(sprintBacklog) + 2}</strong></h2>
                     <div className="columns is-full mt-5 has-background-white-ter">
                         <div className="column has-text-centered">
@@ -295,8 +294,27 @@ const SprintPlanning = () => {
                                         className="input is-small is-static has-text-centered is-inline mr-1 ml-1 mb-1 mt-2"
                                         name="totalHour"
                                         min="0"
-                                        max={parseInt(scrumTeamSize * scrumTeamHour * sprintLength)}
+                                        max={getMaxScrumTeamWorkHour(scrumTeamSize, scrumTeamHour, sprintLength)}
                                         value={sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0)}
+                                        required
+                                    />
+                                    <input
+                                        readOnly
+                                        size={8}
+                                        className="input is-small is-static has-text-centered is-inline mr-1 ml-1 mb-1 mt-2"
+                                        name="totalCostLabel"
+                                        placeholder="Total Cost"
+                                        value={"Total Cost"}
+                                        required
+                                    />
+                                    <input
+                                        readOnly
+                                        size={7}
+                                        className="input is-small is-static has-text-centered is-inline mr-1 ml-1 mb-1 mt-2"
+                                        name="totalHour"
+                                        min="0"
+                                        max={plannedCost - getTotalSpending(sprintBacklog)}
+                                        value={sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate}
                                         required
                                     />
                                     <button

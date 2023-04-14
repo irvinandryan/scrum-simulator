@@ -1,4 +1,4 @@
-export const getCurrentSprint = (sprintBacklog) => {
+export const getCurrentSprint = (sprintBacklog) => { // get the current sprint
     for (let i = 0; i < sprintBacklog.length; i++) {
         if (sprintBacklog[i].sprintBacklogItem.length === 0) {
             return (i-1);
@@ -7,19 +7,11 @@ export const getCurrentSprint = (sprintBacklog) => {
     return (sprintBacklog.length-1);
 }
 
-export const getTotalScrumTeamWorkHour = (scrumTeamSize, scrumTeamHour, sprintLength) => {
+export const getMaxScrumTeamWorkHour = (scrumTeamSize, scrumTeamHour, sprintLength) => { // get the max work hour of a scrum team
     return (scrumTeamSize * scrumTeamHour * sprintLength);
 }
 
-export const getTotalWorkHour = (sprintBacklog) => {
-    let totalWorkHour = 0;
-    for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
-        totalWorkHour += sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;        
-    }
-    return totalWorkHour;
-}
-
-export const getTotalWorkHourOfPb = (pbId, sprintBacklog) => {
+export const getTotalWorkHourOfPb = (pbId, sprintBacklog) => { // get the total work hour of a product backlog item
     let totalWorkHour = 0;
     for (let i = 0; i < sprintBacklog.length; i++) {
         for (let j = 0; j < sprintBacklog[i].sprintBacklogItem.length; j++) {
@@ -31,6 +23,39 @@ export const getTotalWorkHourOfPb = (pbId, sprintBacklog) => {
     return totalWorkHour;
 }
 
-export const getTotalCostOfPb = (pbId, sprintBacklog, scrumTeamRate) => {
+export const getTotalCostOfPb = (pbId, sprintBacklog, scrumTeamRate) => { // get the total cost of a product backlog item
     return (getTotalWorkHourOfPb(pbId, sprintBacklog) * scrumTeamRate);
+}
+
+export const getTotalSpendingThisSprint = (sprintBacklog, scrumTeamRate) => { // get the total spending of the current sprint
+    let totalSpentCost = 0;
+    for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
+        totalSpentCost += (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour * scrumTeamRate);
+    }
+    return totalSpentCost;
+}
+
+export const getTotalSpending = (sprintBacklog) => { // get the total spending of the project
+    let totalSpentCost = 0;
+    for (let i = 0; i < sprintBacklog.length; i++) {
+        totalSpentCost += sprintBacklog[i].sprintCost;
+    }
+    return totalSpentCost;
+}
+
+export const isAllPbDone = (productBacklog) => { // check if all product backlog items are done
+    for (let i = 0; i < productBacklog.length; i++) {
+        if (productBacklog[i].isPbDone === false) {
+            return false;
+        }
+    }
+    return true;
+}
+
+export const isRunOutOfCash = (sprintBacklog, plannedCost) => { // check if the remaining cost is enough to finish the project
+    return (getTotalSpending(sprintBacklog) >= plannedCost);
+}
+
+export const isSimulationDone = (productBacklog, sprintBacklog, plannedCost) => { // check if the simulation is done
+    return (isAllPbDone(productBacklog) || isRunOutOfCash(sprintBacklog, plannedCost) || (getCurrentSprint(sprintBacklog) === parseInt(sprintBacklog.length - 1)));
 }

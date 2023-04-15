@@ -1,7 +1,7 @@
 export const getCurrentSprint = (sprintBacklog) => { // get the current sprint
     for (let i = 0; i < sprintBacklog.length; i++) {
-        if (sprintBacklog[i].sprintBacklogItem.length === 0) {
-            return (i-1);
+        if (sprintBacklog[i].isSprintDone === false) {
+            return i;
         }
     }
     return (sprintBacklog.length-1);
@@ -57,5 +57,5 @@ export const isRunOutOfCash = (sprintBacklog, plannedCost) => { // check if the 
 }
 
 export const isSimulationDone = (productBacklog, sprintBacklog, plannedCost) => { // check if the simulation is done
-    return (isAllPbDone(productBacklog) || isRunOutOfCash(sprintBacklog, plannedCost) || (getCurrentSprint(sprintBacklog) === parseInt(sprintBacklog.length - 1)));
+    return (isAllPbDone(productBacklog) || isRunOutOfCash(sprintBacklog, plannedCost) || (getCurrentSprint(sprintBacklog) === parseInt(sprintBacklog.length)));
 }

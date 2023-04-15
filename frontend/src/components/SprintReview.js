@@ -13,6 +13,7 @@ const SprintExecution = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
+    const [currentSprint, setCurrentSprint] = useState(0);
 
     const [productBacklog, setProductBacklog] = useState([
         {
@@ -64,6 +65,7 @@ const SprintExecution = () => {
             setStartDate(response.data.startDate);
             setProductBacklog(response.data.productBacklog);
             setSprintBacklog(response.data.sprintBacklog);
+            setCurrentSprint(getCurrentSprint(response.data.sprintBacklog)-1);
         }
         catch (error) {
             console.log(error);
@@ -131,7 +133,7 @@ const SprintExecution = () => {
             </nav>
             <div className="hero-body">
                 <div className="container mt-5">
-                <h2 className="subtitle has-text-centered"><strong>Sprint Review {getCurrentSprint(sprintBacklog)+1}</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Review {currentSprint+1}</strong></h2>
                     <div className="columns mt-5 mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
@@ -142,7 +144,7 @@ const SprintExecution = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.map((releaseBacklog) => (
+                                    {sprintBacklog[currentSprint].releaseBacklog.map((releaseBacklog) => (
                                         <tr>
                                             <td>{releaseBacklog.rbId}</td>
                                             <td>{releaseBacklog.isRbDone ? "Done" : "Not Done"}</td>
@@ -162,8 +164,7 @@ const SprintExecution = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
-                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
+                                    {sprintBacklog[currentSprint].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
                                             <td>{sprintBacklogItem.sbHour}</td>

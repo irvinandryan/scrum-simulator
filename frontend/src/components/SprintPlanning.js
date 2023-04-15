@@ -91,12 +91,10 @@ const SprintPlanning = () => {
             alert("Total work hours of sprint backlog items cannot be greater than total work hours per sprint");
             return;
         }
-
         if ((plannedCost - getTotalSpending(sprintBacklog)) < (sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate)) {
             alert("Total spending cannot be greater than remaining cost");
             return;
         }
-
         for (let i = 0; i < sprintBacklog.length; i++) {
             if (sprintBacklog[i].sprintBacklogItem.length === 0) {
                 sprintBacklog[i].sprintBacklogItem = sprintBacklogItem;
@@ -106,7 +104,6 @@ const SprintPlanning = () => {
                 break;
             }
         }
-
         try {
             await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,
@@ -200,7 +197,7 @@ const SprintPlanning = () => {
 
             <div className="hero-body">
                 <div className="container mt-5">
-                <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint(sprintBacklog) + 2}</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint(sprintBacklog) + 1}</strong></h2>
                     <div className="columns is-full mt-5 has-background-white-ter">
                         <div className="column has-text-centered">
                             <div className="form-group">
@@ -271,6 +268,7 @@ const SprintPlanning = () => {
                                                 </select>
                                                 {(sprintBacklogItem.length!==1)?
                                                     <button
+                                                        type="button"
                                                         onClick={() => removeSprintBacklogItem(index)}
                                                         className="button is-danger is-inline is-small mb-1">
                                                         Delete
@@ -318,6 +316,7 @@ const SprintPlanning = () => {
                                         required
                                     />
                                     <button
+                                        type="button"
                                         onClick={() =>
                                             addSprintBacklogItem()
                                         }

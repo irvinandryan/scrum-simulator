@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { isSimulationDone } from "../utils/Utils";
+import { isSimulationDone, getCurrentSprint } from "../utils/Utils";
 
 const SelectSimConfig = () => {
     const { id } = useParams();
@@ -71,12 +71,22 @@ const SelectSimConfig = () => {
         }
     };
 
+    // if issprintdone is false but releasebacklog is not empty then navigate to sprintexecution
     const handleContinue = () => {
         if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
             alert("This simulation has been completed.");
             navigate(`/simulation/${id}/sprintreview`);
         } else {
-            navigate(`/simulation/${id}/sprintplanning`);
+            if (sprintBacklog[getCurrentSprint(sprintBacklog)].isSprintDone === true) {
+                navigate(`/simulation/${id}/sprintreview`);
+            } else {
+                // if current sprint is not done but releasebacklog is not empty navigate to sprintexecution
+                if (sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.length > 0) {
+                    navigate(`/simulation/${id}/sprintexecution`);
+                } else {
+                    navigate(`/simulation/${id}/sprintplanning`);
+                }
+            }
         }
     };
 

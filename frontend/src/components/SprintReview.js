@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getTotalWorkHourOfPb, isSimulationDone } from "../utils/Utils";
+import { getCurrentSprint, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost } from "../utils/Utils";
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
+
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -200,28 +202,6 @@ const SprintExecution = () => {
                                 </tbody>
                             </table>
                         </div>
-                        {/* <div className="column is-two-thirds">
-                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
-                                <thead>
-                                    <tr>
-                                        <th>Sprint Backlog ID</th>
-                                        <th>Hour Needed</th>
-                                        <th>Related Product Backlog</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
-                                        <tr>
-                                            <td>{sprintBacklogItem.sbId}</td>
-                                            <td>{sprintBacklogItem.sbHour}</td>
-                                            <td>{sprintBacklogItem.relatedPbId}</td>
-                                            <td>{sprintBacklogItem.isSbDone ? "Done" : "Not Done"}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div> */}
                     </div>
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
@@ -232,6 +212,24 @@ const SprintExecution = () => {
                     </div>
                 </div>
             </div>
+            <nav className="navbar is-fixed-bottom has-background-dark is-dark is-transparent" aria-label="main navigation">
+                <div id="navbar-info" className="navbar-menu">
+                    <div className="navbar-brand m-auto">
+                        <h3 className="navbar-item">
+                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(5)}-{getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(5)}-{getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Release Date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Remaining Cash: {getRemainingCost(plannedCost, sprintBacklog)}
+                        </h3>
+                    </div>
+                </div>
+            </nav>
         </div>
     );
 }

@@ -82,7 +82,7 @@ const CreateSimConfig = () => {
             console.log(error);
           }
     };
-    
+
     const generateSprintBacklog = (plannedSprint) => {
         let sprintBacklog = [];
         for (let i = 0; i < plannedSprint; i++) {
@@ -130,6 +130,7 @@ const CreateSimConfig = () => {
                                             />
                                             {(productBacklog.length!==1)?
                                                 <button
+                                                    type="button"
                                                     onClick={() => removeProductbacklog(index)}
                                                     className="button is-danger is-inline is-small mb-1">
                                                     Delete

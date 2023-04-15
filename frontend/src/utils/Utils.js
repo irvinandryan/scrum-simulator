@@ -43,6 +43,10 @@ export const getTotalSpending = (sprintBacklog) => { // get the total spending o
     return totalSpentCost;
 }
 
+export const getRemainingCost = (plannedCost, sprintBacklog) => { // get the remaining cost of the project
+    return (plannedCost - getTotalSpending(sprintBacklog));
+}
+
 export const isAllPbDone = (productBacklog) => { // check if all product backlog items are done
     for (let i = 0; i < productBacklog.length; i++) {
         if (productBacklog[i].isPbDone === false) {

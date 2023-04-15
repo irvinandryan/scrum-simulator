@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending } from "../utils/Utils.js";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getRemainingCost, getTotalSpending } from "../utils/Utils.js";
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();
@@ -194,7 +195,6 @@ const SprintPlanning = () => {
                     </div>
                 </div>
             </nav>
-
             <div className="hero-body">
                 <div className="container mt-5">
                 <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint(sprintBacklog) + 1}</strong></h2>
@@ -334,6 +334,24 @@ const SprintPlanning = () => {
                     </div>
                 </div>
             </div>
+            <nav className="navbar is-fixed-bottom has-background-dark is-dark is-transparent" aria-label="main navigation">
+                <div id="navbar-info" className="navbar-menu">
+                    <div className="navbar-brand m-auto">
+                        <h3 className="navbar-item">
+                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(5)}-{getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(5)}-{getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Release Date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Remaining Cash: {getRemainingCost(plannedCost, sprintBacklog)}
+                        </h3>
+                    </div>
+                </div>
+            </nav>
         </div>
     );
 }

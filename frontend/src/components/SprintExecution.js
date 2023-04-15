@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint } from "../utils/Utils";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost } from "../utils/Utils";
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -234,6 +235,24 @@ const SprintExecution = () => {
                     </div>
                 </div>
             </div>
+            <nav className="navbar is-fixed-bottom has-background-dark is-dark is-transparent" aria-label="main navigation">
+                <div id="navbar-info" className="navbar-menu">
+                    <div className="navbar-brand m-auto">
+                        <h3 className="navbar-item">
+                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(5)}-{getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(5)}-{getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Release Date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
+                        </h3>
+                        <h3 className="navbar-item">
+                            Remaining Cash: {getRemainingCost(plannedCost, sprintBacklog)}
+                        </h3>
+                    </div>
+                </div>
+            </nav>
         </div>
     );
 }

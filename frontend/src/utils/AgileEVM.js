@@ -92,6 +92,38 @@ export const addWorkingDays = (date, days) => {
             days--;
         }
     }
+    // format result to yyyy-mm-dd
+    let dd = result.getDate();
+    let mm = result.getMonth() + 1;
+    let yyyy = result.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    result = yyyy + '-' + mm + '-' + dd;
     return result;
 }
 
+export const getBudgetStatus = (productBacklog, sprintBacklog, plannedCost) => {
+    let CPI = getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost);
+    if (CPI < 1) {
+        return "Over Planned Cost";
+    } else if (CPI > 1) {
+        return "Under Planned Cost";
+    } else {
+        return "On Planned Cost";
+    }
+}
+
+export const getScheduleStatus = (productBacklog, sprintBacklog, plannedSprint, plannedCost) => {
+    let SPI = getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost);
+    if (SPI < 1) {
+        return "Behind Schedule";
+    } else if (SPI > 1) {
+        return "Ahead of Schedule";
+    } else {
+        return "On Schedule";
+    }
+}

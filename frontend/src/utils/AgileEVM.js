@@ -82,8 +82,6 @@ export const getReleaseDate = (productBacklog, sprintBacklog, plannedCost, start
     return addWorkingDays(SD, temp);
 }
 
-// add working days to a date
-// https://stackoverflow.com/questions/4413590/javascript-get-array-of-dates-between-2-dates
 export const addWorkingDays = (date, days) => {
     var result = new Date(date);
     while (days > 0) {
@@ -92,7 +90,6 @@ export const addWorkingDays = (date, days) => {
             days--;
         }
     }
-    // format result to yyyy-mm-dd
     let dd = result.getDate();
     let mm = result.getMonth() + 1;
     let yyyy = result.getFullYear();

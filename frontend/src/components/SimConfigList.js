@@ -67,7 +67,7 @@ const SimConfigList = () => {
                     </table>
                 <div className="has-text-centered">
                     <Link to="create" className="button has-text-centered is-success">
-                        <strong>Create new</strong>
+                        <strong>New simulation</strong>
                     </Link>
                 </div>
             </div>

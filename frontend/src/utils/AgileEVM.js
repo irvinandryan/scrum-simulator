@@ -106,21 +106,21 @@ export const addWorkingDays = (date, days) => {
 export const getBudgetStatus = (productBacklog, sprintBacklog, plannedCost) => {
     let CPI = getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost);
     if (CPI < 1) {
-        return "Over Planned Cost";
+        return "Over planned cost";
     } else if (CPI > 1) {
-        return "Under Planned Cost";
+        return "Under planned cost";
     } else {
-        return "On Planned Cost";
+        return "On planned cost";
     }
 }
 
 export const getScheduleStatus = (productBacklog, sprintBacklog, plannedSprint, plannedCost) => {
     let SPI = getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost);
     if (SPI < 1) {
-        return "Behind Schedule";
+        return "Behind schedule";
     } else if (SPI > 1) {
-        return "Ahead of Schedule";
+        return "Ahead of schedule";
     } else {
-        return "On Schedule";
+        return "On schedule";
     }
 }

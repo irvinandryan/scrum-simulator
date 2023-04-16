@@ -239,16 +239,16 @@ const SprintExecution = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-brand m-auto">
                         <h3 className="navbar-item">
-                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(5)}-{getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
+                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(5)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
-                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(5)}-{getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
+                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(5)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
-                            Release Date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
+                            Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
                         </h3>
                         <h3 className="navbar-item">
-                            Remaining Cash: {getRemainingCost(plannedCost, sprintBacklog)}
+                            Remaining cash: {getRemainingCost(plannedCost, sprintBacklog)}
                         </h3>
                     </div>
                 </div>

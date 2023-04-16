@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost } from "../utils/Utils";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost } from "../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 
 
@@ -67,7 +67,7 @@ const SprintExecution = () => {
             setStartDate(response.data.startDate);
             setProductBacklog(response.data.productBacklog);
             setSprintBacklog(response.data.sprintBacklog);
-            setCurrentSprint(getCurrentSprint(response.data.sprintBacklog)-1);
+            setCurrentSprint(getCurrentSprintReview(response.data.sprintBacklog)-1);
         }
         catch (error) {
             console.log(error);

@@ -1,10 +1,19 @@
-export const getCurrentSprint = (sprintBacklog) => { // get the current sprint
+export const getCurrentSprint = (sprintBacklog) => { // get the current sprint before sprint executed
     for (let i = 0; i < sprintBacklog.length; i++) {
         if (sprintBacklog[i].isSprintDone === false) {
             return i;
         }
     }
     return (sprintBacklog.length-1);
+}
+
+export const getCurrentSprintReview = (sprintBacklog) => { // get the current sprint after sprint executed
+    for (let i = 0; i < sprintBacklog.length; i++) {
+        if (sprintBacklog[i].isSprintDone === false) {
+            return i;
+        }
+    }
+    return (sprintBacklog.length);
 }
 
 export const getMaxScrumTeamWorkHour = (scrumTeamSize, scrumTeamHour, sprintLength) => { // get the max work hour of a scrum team

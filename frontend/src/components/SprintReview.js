@@ -5,7 +5,7 @@ import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRema
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 
 
-const SprintExecution = () => {
+const SprintReview = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -234,4 +234,4 @@ const SprintExecution = () => {
     );
 }
 
-export default SprintExecution;
+export default SprintReview;

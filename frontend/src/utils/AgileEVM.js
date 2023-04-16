@@ -57,11 +57,19 @@ export const getScheduleVariance = (productBacklog, sprintBacklog, plannedSprint
 }
 
 export const getCostPerformanceIndex = (productBacklog, sprintBacklog, plannedCost) => {
-    return (getEarnedValue(productBacklog, plannedCost) / getActualCost(sprintBacklog));
+    let CPI = getEarnedValue(productBacklog, plannedCost) / getActualCost(sprintBacklog)
+    if (isNaN(CPI)) {
+        return 1;
+    }
+    return CPI;
 }
 
 export const getSchedulePerformanceIndex = (productBacklog, sprintBacklog, plannedSprint, plannedCost) => {
-    return (getEarnedValue(productBacklog, plannedCost) / getPlannedValue(sprintBacklog, plannedSprint, plannedCost));
+    let SPI = getEarnedValue(productBacklog, plannedCost) / getPlannedValue(sprintBacklog, plannedSprint, plannedCost);
+    if (isNaN(SPI)) {
+        return 1;
+    }
+    return SPI;
 }
 
 export const getEstimateToCompleteion = (productBacklog, sprintBacklog, plannedCost) => {

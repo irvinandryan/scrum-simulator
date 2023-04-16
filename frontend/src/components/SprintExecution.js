@@ -136,6 +136,10 @@ const SprintExecution = () => {
 
     };
 
+    window.onpopstate = () => {
+        navigate(`/`);
+    };
+
     return (
         <div className="hero is-fullheight">
             <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
@@ -239,10 +243,10 @@ const SprintExecution = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-brand m-auto">
                         <h3 className="navbar-item">
-                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(5)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
+                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
-                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(5)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
+                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
                             Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}

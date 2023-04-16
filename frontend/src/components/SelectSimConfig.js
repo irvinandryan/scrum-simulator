@@ -98,13 +98,13 @@ const SelectSimConfig = () => {
                     <div className="columns mt-5 has-background-white-ter">
                         <div className="column is-one-half has-text-centered">
                             <div className="column is-one-half has-text-centered">
-                                <h2 className="subtitle">Scrum Team Size: {scrumTeamSize}</h2>
-                                <h2 className="subtitle">Rate / Hour: {scrumTeamRate}</h2>
-                                <h2 className="subtitle">Work Hour / Day: {scrumTeamHour}</h2>
-                                <h2 className="subtitle">Planned Cost: {plannedCost}</h2>
-                                <h2 className="subtitle">Sprint Length: {sprintLength}</h2>
-                                <h2 className="subtitle">Days per Sprint: {plannedSprint}</h2>
-                                <h2 className="subtitle">Start Date: {startDate.split('T')[0]}</h2>
+                                <h2 className="subtitle">Team size: {scrumTeamSize}</h2>
+                                <h2 className="subtitle">Rate / hour: {scrumTeamRate}</h2>
+                                <h2 className="subtitle">Work hour / day: {scrumTeamHour}</h2>
+                                <h2 className="subtitle">Planned cost: {plannedCost}</h2>
+                                <h2 className="subtitle">Sprint length: {sprintLength}</h2>
+                                <h2 className="subtitle">Days per sprint: {plannedSprint}</h2>
+                                <h2 className="subtitle">Start date: {startDate.split('T')[0]}</h2>
                             </div>
                         </div>
                         <div className="column is-one-half">
@@ -112,7 +112,7 @@ const SelectSimConfig = () => {
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Story Point</th>
+                                        <th>Story point</th>
                                     </tr>
                                 </thead>
                                 <tbody>

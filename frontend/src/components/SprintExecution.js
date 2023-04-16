@@ -142,25 +142,25 @@ const SprintExecution = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-start ml-2">
                         <h3 className="navbar-item">
-                            Team Size: {scrumTeamSize}
+                            Team size: {scrumTeamSize}
                         </h3>
                         <h3 className="navbar-item">
-                            Rate / Hour: {scrumTeamRate}
+                            Rate / hour: {scrumTeamRate}
                         </h3>
                         <h3 className="navbar-item">
-                            Work Hour / Day: {scrumTeamHour}
+                            Work hour / day: {scrumTeamHour}
                         </h3>
                         <h3 className="navbar-item">
-                            Planned Cost: {plannedCost}
+                            Planned cost: {plannedCost}
                         </h3>
                         <h3 className="navbar-item">
-                            Num of Sprint: {plannedSprint}
+                            Num of sprint: {plannedSprint}
                         </h3>
                         <h3 className="navbar-item">
-                            Days per Sprint: {sprintLength}
+                            Days per sprint: {sprintLength}
                         </h3>
                         <h3 className="navbar-item">
-                            Start Date: {startDate.split('T')[0]}
+                            Start date: {startDate.split('T')[0]}
                         </h3>
                     </div>
                     <div className="navbar-end mr-2">
@@ -175,7 +175,7 @@ const SprintExecution = () => {
                             <button
                                 onClick={() => navigate("/")}
                                 className="button is-danger is-small">
-                                <strong>Exit Simulation</strong>
+                                <strong>Exit simulation</strong>
                             </button>
                         </div>
                     </div>
@@ -189,7 +189,7 @@ const SprintExecution = () => {
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
                                 <thead>
                                     <tr>
-                                        <th>Release Backlog ID</th>
+                                        <th>Release backlog ID</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -197,7 +197,7 @@ const SprintExecution = () => {
                                     {sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.map((releaseBacklog) => (
                                         <tr>
                                             <td>{releaseBacklog.rbId}</td>
-                                            <td>{releaseBacklog.isRbDone ? "Done" : "Not Done"}</td>
+                                            <td>{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -207,9 +207,9 @@ const SprintExecution = () => {
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
                                 <thead>
                                     <tr>
-                                        <th>Sprint Backlog ID</th>
-                                        <th>Hour Needed</th>
-                                        <th>Related Product Backlog</th>
+                                        <th>Sprint backlog ID</th>
+                                        <th>Hour needed</th>
+                                        <th>Related product backlog</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -219,7 +219,7 @@ const SprintExecution = () => {
                                             <td>{sprintBacklogItem.sbId}</td>
                                             <td>{sprintBacklogItem.sbHour}</td>
                                             <td>{sprintBacklogItem.relatedPbId}</td>
-                                            <td>{sprintBacklogItem.isSbDone ? "Done" : "Not Done"}</td>
+                                            <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
                                         </tr>
                                     ))}
                                 </tbody>

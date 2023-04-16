@@ -156,25 +156,25 @@ const SprintPlanning = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-start ml-2">
                         <h3 className="navbar-item">
-                            Team Size: {scrumTeamSize}
+                            Team size: {scrumTeamSize}
                         </h3>
                         <h3 className="navbar-item">
-                            Rate / Hour: {scrumTeamRate}
+                            Rate / hour: {scrumTeamRate}
                         </h3>
                         <h3 className="navbar-item">
-                            Work Hour / Day: {scrumTeamHour}
+                            Work hour / day: {scrumTeamHour}
                         </h3>
                         <h3 className="navbar-item">
-                            Planned Cost: {plannedCost}
+                            Planned cost: {plannedCost}
                         </h3>
                         <h3 className="navbar-item">
-                            Num of Sprint: {plannedSprint}
+                            Num of sprint: {plannedSprint}
                         </h3>
                         <h3 className="navbar-item">
-                            Days per Sprint: {sprintLength}
+                            Days per sprint: {sprintLength}
                         </h3>
                         <h3 className="navbar-item">
-                            Start Date: {startDate.split('T')[0]}
+                            Start date: {startDate.split('T')[0]}
                         </h3>
                     </div>
                     <div className="navbar-end mr-2">
@@ -189,7 +189,7 @@ const SprintPlanning = () => {
                             <button
                                 onClick={() => navigate("/")}
                                 className="button is-danger is-small">
-                                <strong>Exit Simulation</strong>
+                                <strong>Exit simulation</strong>
                             </button>
                         </div>
                     </div>
@@ -207,7 +207,7 @@ const SprintPlanning = () => {
                                         <Select
                                             name="rbId"
                                             required
-                                            placeholder="Select Release Backlog"
+                                            placeholder="Select release backlog"
                                             isMulti
                                             options={notDoneProductBacklog.map((pb) => {
                                                 return (
@@ -244,7 +244,7 @@ const SprintPlanning = () => {
                                                     oninput="validity.valid||(value='')"
                                                     className="input is-small is-inline mr-1 ml-1 mb-1"
                                                     name="sbHour"
-                                                    placeholder="Hour Needed"
+                                                    placeholder="Hour needed"
                                                     value={form.sbHour}
                                                     required
                                                     onChange={(e) => handleSprintBacklogItem(e, index)}
@@ -256,7 +256,7 @@ const SprintPlanning = () => {
                                                     required
                                                     onChange={(e) => handleSprintBacklogItem(e, index)}>
                                                     <option value="" disabled>
-                                                        Related Product Backlog
+                                                        Related product backlog
                                                     </option>
                                                     {notDoneProductBacklog.map((pb) => {
                                                         return (
@@ -271,7 +271,7 @@ const SprintPlanning = () => {
                                                         type="button"
                                                         onClick={() => removeSprintBacklogItem(index)}
                                                         className="button is-danger is-inline is-small mb-1">
-                                                        Delete
+                                                        <strong>Delete</strong>
                                                     </button>:''
                                                 }
                                             </div>
@@ -282,8 +282,8 @@ const SprintPlanning = () => {
                                         size={8}
                                         className="input is-small is-static has-text-centered is-inline mr-1 ml-1 mb-1 mt-2"
                                         name="totalHourLabel"
-                                        placeholder="Total Hour"
-                                        value={"Total Hour"}
+                                        placeholder="Total hour"
+                                        value={"Total hour"}
                                         required
                                     />
                                     <input
@@ -301,8 +301,8 @@ const SprintPlanning = () => {
                                         size={8}
                                         className="input is-small is-static has-text-centered is-inline mr-1 ml-1 mb-1 mt-2"
                                         name="totalCostLabel"
-                                        placeholder="Total Cost"
-                                        value={"Total Cost"}
+                                        placeholder="Total cost"
+                                        value={"Total cost"}
                                         required
                                     />
                                     <input
@@ -321,7 +321,7 @@ const SprintPlanning = () => {
                                             addSprintBacklogItem()
                                         }
                                         className="button is-info is-small mr-1 ml-1 mb-1 mt-2">
-                                        Add Sprint Backlog
+                                        <strong>Add sprint backlog</strong>
                                     </button>
                                     <div>
                                         <button type="submit" className="button is-fullwidth is-info mt-4">

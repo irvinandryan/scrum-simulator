@@ -30,13 +30,13 @@ const SimConfigList = () => {
                     <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
                         <thead>
                             <tr>
-                                <th>Scrum Team Size</th>
-                                <th>Rate / Hour</th>
-                                <th>Work Hour / Day</th>
-                                <th>Planned Cost</th>
-                                <th>Days per Sprint</th>
-                                <th>Planned Sprint</th>
-                                <th>Release Point</th>
+                                <th>Team size</th>
+                                <th>Rate / hour</th>
+                                <th>Work hour / day</th>
+                                <th>Planned cost</th>
+                                <th>Days per sprint</th>
+                                <th>Planned sprint</th>
+                                <th>Release point</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,7 +67,7 @@ const SimConfigList = () => {
                     </table>
                 <div className="has-text-centered">
                     <Link to="create" className="button has-text-centered is-success">
-                        <strong>Create New</strong>
+                        <strong>Create new</strong>
                     </Link>
                 </div>
             </div>

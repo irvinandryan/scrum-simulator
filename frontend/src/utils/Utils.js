@@ -72,3 +72,8 @@ export const isRunOutOfCash = (sprintBacklog, plannedCost) => { // check if the 
 export const isSimulationDone = (productBacklog, sprintBacklog, plannedCost) => { // check if the simulation is done
     return (isAllPbDone(productBacklog) || isRunOutOfCash(sprintBacklog, plannedCost) || (getCurrentSprint(sprintBacklog) === parseInt(sprintBacklog.length)));
 }
+
+export const isWeekday = (date) => { // check if the date is a weekday
+    const day = date.getDay();
+    return day !== 0 && day !== 6;
+}

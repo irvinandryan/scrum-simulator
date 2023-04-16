@@ -53,7 +53,7 @@ const EditSimConfig = () => {
                         <div className="column has-text-centered">
                             <form onSubmit={updateSimConfig}>
                                 <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Scrum Team Size</label>
+                                    <label className="label has-text-centered">Team size</label>
                                     <input
                                         type="number"
                                         min="1" 
@@ -67,7 +67,7 @@ const EditSimConfig = () => {
                                     />
                                 </div>
                                 <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Rate per Hour</label>
+                                    <label className="label has-text-centered">Rate per hour</label>
                                     <input
                                         type="number"
                                         min="0"
@@ -81,7 +81,7 @@ const EditSimConfig = () => {
                                     />
                                 </div>
                                 <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Work Hours per Day</label>
+                                    <label className="label has-text-centered">Work hours per day</label>
                                     <input
                                         type="number"
                                         min="1"
@@ -96,7 +96,7 @@ const EditSimConfig = () => {
                                     />
                                 </div>
                                 <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Planned Cost</label>
+                                    <label className="label has-text-centered">Planned cost</label>
                                     <input
                                         type="number"
                                         min="0"
@@ -110,7 +110,7 @@ const EditSimConfig = () => {
                                     />
                                 </div>
                                 <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Days per Sprint</label>
+                                    <label className="label has-text-centered">Days per sprint</label>
                                     <input
                                         type="number"
                                         min="1"
@@ -124,7 +124,7 @@ const EditSimConfig = () => {
                                     />
                                 </div>
                                 <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Planned Sprint</label>
+                                    <label className="label has-text-centered">Planned sprint</label>
                                     <input
                                         type="number"
                                         min="1"

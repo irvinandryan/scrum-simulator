@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { isWeekday } from "../utils/Utils";
 
 const CreateSimConfig = () => {
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ const CreateSimConfig = () => {
     const addProductbacklog = () => {
         let object = {
             pbId: "",
-            pbPoint: "Story Point",
+            pbPoint: "Story point",
             isPbDone: false,
         }
         setProductBacklog([...productBacklog, object]);
@@ -103,7 +104,7 @@ const CreateSimConfig = () => {
                 <div className="container">
                     <div className="columns mt-5 has-text-centered has-background-white-ter">
                         <div className="column is-one-half ml-2">
-                            <h1 className="has-text-centered subtitle">New Configuration</h1>
+                            <h1 className="has-text-centered subtitle">Simulation Configuration</h1>
                             <form onSubmit={saveSimConfig}>
                                 {productBacklog.map((form,index) => {
                                     return (
@@ -123,7 +124,7 @@ const CreateSimConfig = () => {
                                                 oninput="validity.valid||(value='')"
                                                 className="input is-small is-inline mr-1 ml-1 mb-1"
                                                 name="pbPoint"
-                                                placeholder="Story Point"
+                                                placeholder="Story point"
                                                 value={form.pbPoint}
                                                 required
                                                 onChange={(e) => handleProductbacklog(e, index)}
@@ -133,7 +134,7 @@ const CreateSimConfig = () => {
                                                     type="button"
                                                     onClick={() => removeProductbacklog(index)}
                                                     className="button is-danger is-inline is-small mb-1">
-                                                    Delete
+                                                    <strong>Delete</strong>
                                                 </button>:''
                                             }
                                         </div>
@@ -144,7 +145,7 @@ const CreateSimConfig = () => {
                                         addProductbacklog()
                                     }
                                     className="button is-info is-small mt-2">
-                                    Add Product Backlog
+                                    <strong>Add product backlog</strong>
                                 </button>
                                 <div className="form-group mt-2">
                                     <input
@@ -153,7 +154,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline mr-1"
-                                        placeholder="Scrum Team Size"
+                                        placeholder="Team size"
                                         value={scrumTeamSize}
                                         onChange={(e) => setScrumTeamSize(e.target.value)}
                                         required
@@ -164,7 +165,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline ml-1"
-                                        placeholder="Rate per Hour"
+                                        placeholder="Rate per hour"
                                         value={scrumTeamRate}
                                         onChange={(e) => setScrumTeamRate(e.target.value)}
                                         required
@@ -178,7 +179,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline mr-1"
-                                        placeholder="Work Hours per Day"
+                                        placeholder="Work hours per day"
                                         value={scrumTeamHour}
                                         onChange={(e) => setScrumTeamHour(e.target.value)}
                                         required
@@ -189,7 +190,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline ml-1"
-                                        placeholder="Planned Cost"
+                                        placeholder="Planned cost"
                                         value={plannedCost}
                                         onChange={(e) => setPlannedCost(e.target.value)}
                                         required
@@ -202,7 +203,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline mr-1"
-                                        placeholder="Days per Sprint"
+                                        placeholder="Days per sprint"
                                         value={sprintLength}
                                         onChange={(e) => setSprintLength(e.target.value)}
                                         required
@@ -213,7 +214,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline ml-1"
-                                        placeholder="Planned Sprint"
+                                        placeholder="Planned sprint"
                                         value={plannedSprint}
                                         onChange={(e) => {setPlannedSprint(e.target.value); setSprintBacklog(generateSprintBacklog(e.target.value))}}
                                         required
@@ -222,10 +223,11 @@ const CreateSimConfig = () => {
                                 <div className="form-group mt-2">
                                     <DatePicker
                                         popperPlacement="auto"
-                                        placeholderText="Select start date"
+                                        placeholderText="Pick a start date"
                                         className="react-datepicker"
                                         dateFormat="dd/MM/yyyy"
                                         selected={startDate}
+                                        filterDate={isWeekday}
                                         onChange={(startDate) => new Date(setStartDate((startDate - (startDate.getTimezoneOffset() * 60000))))}
                                         required
                                     />

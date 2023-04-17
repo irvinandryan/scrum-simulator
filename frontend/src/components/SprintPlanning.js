@@ -150,6 +150,20 @@ const SprintPlanning = () => {
         setReleaseBacklog(e);
     };
 
+    const getInputHour = (sprintBacklogItem) => {
+        if (isNaN(sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0))) {
+            return '-';
+        }
+        return sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0);
+    };
+
+    const getInputCost = (sprintBacklogItem) => {
+        if (isNaN(sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0))) {
+            return '-';
+        }
+        return sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate;
+    };
+
     window.onpopstate = () => {
         navigate(`/`);
     };
@@ -297,7 +311,7 @@ const SprintPlanning = () => {
                                         name="totalHour"
                                         min="0"
                                         max={getMaxScrumTeamWorkHour(scrumTeamSize, scrumTeamHour, sprintLength)}
-                                        value={sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0)}
+                                        value={getInputHour(sprintBacklogItem)}
                                         required
                                     />
                                     <input
@@ -316,7 +330,7 @@ const SprintPlanning = () => {
                                         name="totalHour"
                                         min="0"
                                         max={plannedCost - getTotalSpending(sprintBacklog)}
-                                        value={sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate}
+                                        value={getInputCost(sprintBacklogItem, scrumTeamRate)}
                                         required
                                     />
                                     <button

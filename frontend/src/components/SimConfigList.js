@@ -26,7 +26,7 @@ const SimConfigList = () => {
     return (
         <div className="columns if-full mt-5">
             <div className="column is-full">
-                <h1 className="title has-text-centered">Simulation Configuration</h1>
+                <h1 className="title has-text-centered">Project List</h1>
                     <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
                         <thead>
                             <tr>

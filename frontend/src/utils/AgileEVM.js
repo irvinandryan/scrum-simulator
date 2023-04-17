@@ -6,7 +6,7 @@ export const getPlannedReleasePoint = (productBacklog) => {
         plannedPbPoints += productBacklog[i].pbPoint;
     }
     return plannedPbPoints;
-}
+};
 
 export const getReleasePointCompleted = (productBacklog) => {
     let completedPbPoints = 0;
@@ -16,11 +16,11 @@ export const getReleasePointCompleted = (productBacklog) => {
         }
     }
     return completedPbPoints;
-}
+};
 
 export const getActualPercentCompleted = (productBacklog) => {
     return (getReleasePointCompleted(productBacklog) / getPlannedReleasePoint(productBacklog));
-}
+};
 
 export const getPlannedPercentCompleted = (sprintBacklog, plannedSprint) => {
     let completedSprint = 0;
@@ -30,7 +30,7 @@ export const getPlannedPercentCompleted = (sprintBacklog, plannedSprint) => {
         }
     }
     return (completedSprint / plannedSprint);
-}
+};
 
 export const getActualCost = (sprintBacklog) => {
     let totalCost = 0;
@@ -38,23 +38,23 @@ export const getActualCost = (sprintBacklog) => {
         totalCost += sprintBacklog[i].sprintCost;
     }
     return totalCost;
-}
+};
 
 export const getPlannedValue = (sprintBacklog, plannedSprint, plannedCost) => {
     return (getPlannedPercentCompleted(sprintBacklog, plannedSprint) * plannedCost);
-}
+};
 
 export const getEarnedValue = (productBacklog, plannedCost) => {
     return (getActualPercentCompleted(productBacklog) * plannedCost);
-}
+};
 
 export const getCostVariance = (productBacklog, sprintBacklog, plannedCost) => {
     return (getEarnedValue(productBacklog, plannedCost) - getActualCost(sprintBacklog));
-}
+};
 
 export const getScheduleVariance = (productBacklog, sprintBacklog, plannedSprint, plannedCost) => {
     return (getEarnedValue(productBacklog, plannedCost) - getPlannedValue(sprintBacklog, plannedSprint, plannedCost));
-}
+};
 
 export const getCostPerformanceIndex = (productBacklog, sprintBacklog, plannedCost) => {
     let CPI = getEarnedValue(productBacklog, plannedCost) / getActualCost(sprintBacklog)
@@ -62,7 +62,7 @@ export const getCostPerformanceIndex = (productBacklog, sprintBacklog, plannedCo
         return 1;
     }
     return CPI;
-}
+};
 
 export const getSchedulePerformanceIndex = (productBacklog, sprintBacklog, plannedSprint, plannedCost) => {
     let SPI = getEarnedValue(productBacklog, plannedCost) / getPlannedValue(sprintBacklog, plannedSprint, plannedCost);
@@ -70,15 +70,15 @@ export const getSchedulePerformanceIndex = (productBacklog, sprintBacklog, plann
         return 1;
     }
     return SPI;
-}
+};
 
 export const getEstimateToCompleteion = (productBacklog, sprintBacklog, plannedCost) => {
     return ((plannedCost - getEarnedValue(productBacklog, plannedCost)) / getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost));
-}
+};
 
 export const getEstimateAtCompletion = (productBacklog, sprintBacklog, plannedCost) => {
     return (getActualCost(sprintBacklog) + getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost));
-}
+};
 
 export const getReleaseDate = (productBacklog, sprintBacklog, plannedCost, startDate, sprintLength) => {
     let SD = new Date(startDate);
@@ -88,7 +88,7 @@ export const getReleaseDate = (productBacklog, sprintBacklog, plannedCost, start
     let AC = getActualCost(sprintBacklog);
     let temp = L * (n * (EAC / AC));
     return addWorkingDays(SD, temp);
-}
+};
 
 export const addWorkingDays = (date, days) => {
     var result = new Date(date);
@@ -109,7 +109,7 @@ export const addWorkingDays = (date, days) => {
     }
     result = yyyy + '-' + mm + '-' + dd;
     return result;
-}
+};
 
 export const getBudgetStatus = (productBacklog, sprintBacklog, plannedCost) => {
     let CPI = getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost);
@@ -120,7 +120,7 @@ export const getBudgetStatus = (productBacklog, sprintBacklog, plannedCost) => {
     } else {
         return "On planned cost";
     }
-}
+};
 
 export const getScheduleStatus = (productBacklog, sprintBacklog, plannedSprint, plannedCost) => {
     let SPI = getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost);
@@ -131,4 +131,4 @@ export const getScheduleStatus = (productBacklog, sprintBacklog, plannedSprint, 
     } else {
         return "On schedule";
     }
-}
+};

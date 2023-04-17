@@ -8,6 +8,7 @@ import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getRelease
 const SprintPlanning = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
     const [scrumTeamHour, setScrumTeamHour] = useState("");
@@ -65,6 +66,7 @@ const SprintPlanning = () => {
     const getSimConfigById = async () => {
         try {
             const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
+            setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
             setScrumTeamHour(response.data.scrumTeamHour);
@@ -118,7 +120,7 @@ const SprintPlanning = () => {
                 sprintBacklog,
                 releaseBacklog,
             });
-            navigate(`/simulation/${id}/sprintexecution`);
+            navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
         } catch (error) {
             console.log(error);
         }
@@ -165,7 +167,7 @@ const SprintPlanning = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/`);
+        navigate(`/simconfigslist`);
     };
 
     return (

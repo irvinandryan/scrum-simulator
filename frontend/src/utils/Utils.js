@@ -1,3 +1,5 @@
+import jwt_decode from "jwt-decode";
+
 export const getCurrentSprint = (sprintBacklog) => { // get the current sprint before sprint executed
     for (let i = 0; i < sprintBacklog.length; i++) {
         if (sprintBacklog[i].isSprintDone === false) {
@@ -84,4 +86,10 @@ export const getAveragePbPoint = (productBacklog) => {
         totalPbPoint += productBacklog[i].pbPoint;
     }
     return (totalPbPoint / productBacklog.length);
+};
+
+export const getSessionUsername = () => {
+    const token = localStorage.getItem("authToken");
+    const decoded = jwt_decode(token);
+    return decoded.username;
 };

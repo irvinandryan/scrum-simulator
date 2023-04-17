@@ -6,6 +6,7 @@ import { isSimulationDone, getCurrentSprint } from "../utils/Utils";
 const SelectSimConfig = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
     const [scrumTeamHour, setScrumTeamHour] = useState("");
@@ -55,6 +56,7 @@ const SelectSimConfig = () => {
     const getSimConfigById = async () => {
         try {
             const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
+            setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
             setScrumTeamHour(response.data.scrumTeamHour);
@@ -75,16 +77,16 @@ const SelectSimConfig = () => {
     const handleContinue = () => {
         if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
             alert("This simulation has been completed.");
-            navigate(`/simulation/${id}/sprintreview`);
+            navigate(`/simconfigslist/simulation/${id}/sprintreview`);
         } else {
             if (sprintBacklog[getCurrentSprint(sprintBacklog)].isSprintDone === true) {
-                navigate(`/simulation/${id}/sprintreview`);
+                navigate(`/simconfigslist/simulation/${id}/sprintreview`);
             } else {
                 // if current sprint is not done but releasebacklog is not empty navigate to sprintexecution
                 if (sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.length > 0) {
-                    navigate(`/simulation/${id}/sprintexecution`);
+                    navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
                 } else {
-                    navigate(`/simulation/${id}/sprintplanning`);
+                    navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
                 }
             }
         }

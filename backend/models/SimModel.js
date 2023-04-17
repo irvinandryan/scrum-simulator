@@ -27,6 +27,7 @@ var SprintBacklogSchema = mongoose.Schema({
 });
 
 var SimConfigSchema = mongoose.Schema({
+    creator: String,
     scrumTeamSize: Number,
     scrumTeamRate: Number,
     scrumTeamHour: Number,

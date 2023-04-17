@@ -5,6 +5,8 @@ import SimRoute from "./routes/SimRoute.js";
 import UserRoute from "./routes/UserRoute.js";
 import dotenv from "dotenv";
 
+dotenv.config();
+
 const app = express();
 mongoose.connect('mongodb://localhost:27017/scrum_db',{
     useNewUrlParser: true,

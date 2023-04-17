@@ -3,10 +3,11 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { isWeekday } from "../utils/Utils";
+import { getSessionUsername, isWeekday } from "../utils/Utils";
 
 const CreateSimConfig = () => {
     const navigate = useNavigate();
+    const [creator, setCreator] = useState(getSessionUsername());
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
     const [scrumTeamHour, setScrumTeamHour] = useState("");
@@ -68,6 +69,7 @@ const CreateSimConfig = () => {
         e.preventDefault();
         try {
             await axios.post(process.env.REACT_APP_API + "/simConfigs", {
+                creator,
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,
@@ -78,7 +80,7 @@ const CreateSimConfig = () => {
                 sprintBacklog,
                 startDate,
             });
-            navigate("/");
+            navigate("/simconfigslist");
           } catch (error) {
             console.log(error);
           }
@@ -232,7 +234,7 @@ const CreateSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                <Link to={`/`}  className="button is-danger mt-4 mr-4">
+                                <Link to={`/simconfigslist`}  className="button is-danger mt-4 mr-4">
                                     <strong>Back</strong>
                                 </Link>
                                 <button type="submit" className="button is-success mt-4">

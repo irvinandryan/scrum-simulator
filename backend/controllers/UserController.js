@@ -44,7 +44,7 @@ export const login = async (req, res) => {
         }
         const isUserAlready = await UserModel.findOne({username: req.body.username});
         if (!isUserAlready) {
-            return res.status(400).json({message: "Username not found"});
+            return res.status(400).json({message: "Username or password is incorrect"});
         }
         const validPassword = await bcrypt.compare(req.body.password, isUserAlready.password);
         if (!validPassword) {

@@ -7,7 +7,6 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { id } = useParams();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -15,9 +14,11 @@ const Login = () => {
             await axios.post(process.env.REACT_APP_API + "/login", {
                 username,
                 password,
+            }).then(response => {
+                const token = response.data.token;
+                localStorage.setItem("authToken", token);
+                navigate(`/simconfigslist`);
             });
-            localStorage.setItem("authToken", username.token);
-            navigate(`/simconfigslist`);
         } catch (error) {
             if (
                 error.response &&

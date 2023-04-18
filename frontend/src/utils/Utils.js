@@ -89,7 +89,11 @@ export const getAveragePbPoint = (productBacklog) => {
 };
 
 export const getSessionUsername = () => {
-    const token = localStorage.getItem("authToken");
-    const decoded = jwt_decode(token);
-    return decoded.username;
+    try {
+        const token = localStorage.getItem("authToken");
+        const decoded = jwt_decode(token);
+        return decoded.username;
+    } catch (error) {
+        return error;
+    }
 };

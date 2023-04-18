@@ -16,6 +16,7 @@ const SprintPlanning = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
+    const [eventProbability, setEventProbability] = useState("");
 
     const [notDoneProductBacklog, setNotDoneProductBacklog] = useState([
         {
@@ -77,6 +78,7 @@ const SprintPlanning = () => {
             setProductBacklog(response.data.productBacklog);
             setSprintBacklog(response.data.sprintBacklog);
             setNotDoneProductBacklog(response.data.productBacklog.filter((pb) => pb.isPbDone === false))
+            setEventProbability(response.data.eventProbability);
         }
         catch (error) {
             console.log(error);
@@ -119,6 +121,7 @@ const SprintPlanning = () => {
                 productBacklog,
                 sprintBacklog,
                 releaseBacklog,
+                eventProbability,
             });
             navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
         } catch (error) {
@@ -367,7 +370,7 @@ const SprintPlanning = () => {
                             Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
                         </h3>
                         <h3 className="navbar-item">
-                            Remaining cash: {getRemainingCost(plannedCost, sprintBacklog)}
+                            Remaining cash: {(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
                         </h3>
                     </div>
                 </div>

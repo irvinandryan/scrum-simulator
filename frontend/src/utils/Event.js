@@ -4,18 +4,14 @@ import { getAveragePbPoint, getCurrentSprint, getCurrentSprintReview, getRandomB
 // randomly choose a sprint backlog item in current sprint and make isSbDone false
 export const rejectSb = (sprintBacklog, productBacklog) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
-    const randomSbIndex = Math.floor(Math.random() * sprintBacklog[currentSprint].sprintBacklogItem.length);
+    const randomSbIndex = Math.floor(Math.random() * (sprintBacklog[currentSprint].sprintBacklogItem.length-1));
     sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].isSbDone = false;
-    for (let i = 0; i < sprintBacklog[currentSprint].releaseBacklog.length; i++) {
-        if (sprintBacklog[currentSprint].releaseBacklog[i].rbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId) {
-            sprintBacklog[currentSprint].releaseBacklog[i].isRbDone = false;
-        }
-    }
-    for (let i = 0; i < productBacklog.length; i++) {
-        if (productBacklog[i].pbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId) {
-            productBacklog[i].isPbDone = false;
-        }
-    }
+    const rbIndex = sprintBacklog[currentSprint].releaseBacklog.findIndex(rb => rb.rbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId);
+    sprintBacklog[currentSprint].releaseBacklog[rbIndex].isRbDone = false;
+    const pbIndex = productBacklog.findIndex(pb => pb.pbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId);
+    productBacklog[pbIndex].isPbDone = false;
+    const message = "Sprint backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].sbId + " cannot be completed";
+    alert(message);
     return {sprintBacklog, productBacklog};
 };
 
@@ -23,13 +19,12 @@ export const rejectSb = (sprintBacklog, productBacklog) => {
 // randomly choose a release backlog in current sprint and make isRbDone false
 export const rejectRb = (sprintBacklog, productBacklog) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
-    const randomRbIndex = Math.floor(Math.random() * sprintBacklog[currentSprint].releaseBacklog.length);
+    const randomRbIndex = Math.floor(Math.random() * (sprintBacklog[currentSprint].sprintBacklogItem.length-1));
     sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].isRbDone = false;
-    for (let i = 0; i < productBacklog.length; i++) {
-        if (productBacklog[i].pbId === sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].rbId) {
-            productBacklog[i].isPbDone = false;
-        }
-    }
+    const pbIndex = productBacklog.findIndex(pb => pb.pbId === sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].rbId);
+    productBacklog[pbIndex].isPbDone = false;
+    const message = "Release backlog " + sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].rbId + " is rejected";
+    alert(message);
     return sprintBacklog;
 };
 
@@ -49,7 +44,12 @@ export const addPb = (productBacklog) => {
 // randomly add sprint cost to the current sprint
 export const addSprintCost = (sprintBacklog) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
-    sprintBacklog[currentSprint].sprintCost += Math.floor(getRandomBetween(0, 0.25) * sprintBacklog[currentSprint].sprintCost);
+    const increasePercent = getRandomBetween(0, 0.25).toFixed(2);
+    sprintBacklog[currentSprint].sprintCost += increasePercent * sprintBacklog[currentSprint].sprintCost;
+    if (increasePercent > 0) {
+        const message = "Sprint cost is increased by " + increasePercent * 100 + "%";
+        alert(message)
+    }
     // handle the case when sprint cost is more than remaining budget
     // if (sprintBacklog[currentSprint].sprintCost > getRemainingCost(plannedCost, sprintBacklog)) {
     //     sprintBacklog[currentSprint].sprintCost = getRemainingCost(plannedCost, sprintBacklog);

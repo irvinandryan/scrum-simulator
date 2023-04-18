@@ -17,6 +17,7 @@ const SprintReview = () => {
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
     const [currentSprint, setCurrentSprint] = useState(0);
+    const [eventProbability, setEventProbability] = useState("");
 
     const [productBacklog, setProductBacklog] = useState([
         {
@@ -70,6 +71,7 @@ const SprintReview = () => {
             setProductBacklog(response.data.productBacklog);
             setSprintBacklog(response.data.sprintBacklog);
             setCurrentSprint(getCurrentSprintReview(response.data.sprintBacklog)-1);
+            setEventProbability(response.data.eventProbability);
         }
         catch (error) {
             console.log(error);
@@ -122,13 +124,13 @@ const SprintReview = () => {
                         </h3>
                     </div>
                     <div className="navbar-end mr-2">
-                        <div className="navbar-item">
+                        {/* <div className="navbar-item">
                             <button
                                 onClick={() => navigate(`editsimconfig`)}
                                 className="button has-background-grey-lighter is-small">
                                 <strong>Edit</strong>
                             </button>
-                        </div>
+                        </div> */}
                         <div className="navbar-item">
                             <button
                                 onClick={() => navigate(`/simconfigslist`)}
@@ -231,7 +233,7 @@ const SprintReview = () => {
                             Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
                         </h3>
                         <h3 className="navbar-item">
-                            Remaining cash: {getRemainingCost(plannedCost, sprintBacklog)}
+                            Remaining cash: {(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
                         </h3>
                     </div>
                 </div>

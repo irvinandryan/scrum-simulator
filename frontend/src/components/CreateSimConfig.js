@@ -15,6 +15,7 @@ const CreateSimConfig = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
+    const [eventProbability, setEventProbability] = useState("");
 
     const [productBacklog, setProductBacklog] = useState([
         {
@@ -79,6 +80,7 @@ const CreateSimConfig = () => {
                 productBacklog,
                 sprintBacklog,
                 startDate,
+                eventProbability,
             });
             navigate("/simconfigslist");
           } catch (error) {
@@ -257,11 +259,26 @@ const CreateSimConfig = () => {
                                         required
                                     />
                                 </div>
+                                <div className="form-group mt-2">
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        min="0"
+                                        max="1"
+                                        style={{width: "170px"}}
+                                        oninput="validity.valid||(value='')"
+                                        className="input is-small is-inline mt-2"
+                                        placeholder="Event probability"
+                                        value={eventProbability}
+                                        onChange={(e) => {setEventProbability(e.target.value)}}
+                                        required
+                                    />
+                                </div>
                                 <Link to={`/simconfigslist`}  className="button is-danger mt-4 mr-4">
-                                    <strong>Back</strong>
+                                    <strong>Cancel</strong>
                                 </Link>
                                 <button type="submit" className="button is-success mt-4">
-                                    <strong>Save</strong>
+                                    <strong>Save Configuration</strong>
                                 </button>
                             </form>
                         </div>

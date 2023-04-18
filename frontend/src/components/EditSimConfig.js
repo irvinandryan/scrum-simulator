@@ -12,6 +12,7 @@ const EditSimConfig = () => {
     const [plannedCost, setPlannedCost] = useState("");
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
+    const [eventProbability, setEventProbability] = useState("");
 
     useEffect(() => {
         getSimConfigById();
@@ -27,6 +28,7 @@ const EditSimConfig = () => {
         setPlannedCost(response.data.plannedCost);
         setSprintLength(response.data.sprintLength);
         setPlannedSprint(response.data.plannedSprint);
+        setEventProbability(response.data.eventProbability);
     }
 
     const updateSimConfig = async (e) => {
@@ -39,7 +41,8 @@ const EditSimConfig = () => {
                 scrumTeamHour,
                 plannedCost,
                 sprintLength,
-                plannedSprint
+                plannedSprint,
+                eventProbability
             });
             navigate(-1);
             
@@ -137,6 +140,22 @@ const EditSimConfig = () => {
                                         placeholder="Planned Sprint"
                                         value={plannedSprint}
                                         onChange={(e) => {setPlannedSprint(e.target.value)}}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group mt-2">
+                                    <label className="label has-text-centered">Event probability</label>
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        min="0"
+                                        max="1"
+                                        style={{width: "35%"}}
+                                        oninput="validity.valid||(value='')"
+                                        className="input is-small"
+                                        placeholder="Planned Sprint"
+                                        value={eventProbability}
+                                        onChange={(e) => {setEventProbability(e.target.value)}}
                                         required
                                     />
                                 </div>

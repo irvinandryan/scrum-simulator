@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean } from "../utils/Utils";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getCurrentSprintReview } from "../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 import { rejectSb, rejectRb, addSprintCost } from "../utils/Event";
 
@@ -16,6 +16,7 @@ const SprintExecution = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
+    const [eventProbability, setEventProbability] = useState("");
 
     const [productBacklog, setProductBacklog] = useState([
         {
@@ -68,6 +69,7 @@ const SprintExecution = () => {
             setStartDate(response.data.startDate);
             setProductBacklog(response.data.productBacklog);
             setSprintBacklog(response.data.sprintBacklog);
+            setEventProbability(response.data.eventProbability);
         }
         catch (error) {
             console.log(error);
@@ -118,21 +120,18 @@ const SprintExecution = () => {
     }
 
     const doEventSprintReview = (sprintBacklog, productBacklog, scrumTeamSize) => {
-        // if (getRandomBoolean(0.5) === true) {
-        //     const eventResult = rejectSb(sprintBacklog, productBacklog)
-        //     setSprintBacklog(eventResult.sprintBacklog)
-        //     setProductBacklog(eventResult.productBacklog)
-        //     alert("Sprint Backlog Item Rejected")
-        // }
-        // if (getRandomBoolean(0.5) === true) {
-        //     const eventResult = rejectRb(sprintBacklog, productBacklog)
-        //     setSprintBacklog(eventResult)
-        //     alert("Release Backlog Item Rejected")
-        // }
-        if (getRandomBoolean(0.5) === true) {
+        if (getRandomBoolean(eventProbability) === true) {
+            const eventResult = rejectSb(sprintBacklog, productBacklog)
+            setSprintBacklog(eventResult.sprintBacklog)
+            setProductBacklog(eventResult.productBacklog)
+        }
+        if (getRandomBoolean(eventProbability) === true) {
+            const eventResult = rejectRb(sprintBacklog, productBacklog)
+            setSprintBacklog(eventResult)
+        }
+        if (getRandomBoolean(eventProbability) === true) {
             const eventResult = addSprintCost(sprintBacklog, scrumTeamSize)
             setSprintBacklog(eventResult)
-            alert("Sprint Cost Increased")
         }
     }
 
@@ -275,7 +274,7 @@ const SprintExecution = () => {
                             Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
                         </h3>
                         <h3 className="navbar-item">
-                            Remaining cash: {getRemainingCost(plannedCost, sprintBacklog)}
+                            Remaining cash: {(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
                         </h3>
                     </div>
                 </div>

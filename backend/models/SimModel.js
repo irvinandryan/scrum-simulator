@@ -37,6 +37,7 @@ var SimConfigSchema = mongoose.Schema({
     startDate: Date,
     productBacklog : [ProductBacklogSchema],
     sprintBacklog: [SprintBacklogSchema],
+    eventProbability: Number,
 });
 
 export default mongoose.model('SimConfigModel', SimConfigSchema);

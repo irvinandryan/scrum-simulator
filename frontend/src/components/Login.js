@@ -43,6 +43,7 @@ const Login = () => {
         <div className="hero is-fullheight">
             <div className="hero-body">
                 <div className="container">
+                <h1 className="title has-text-centered">Scrum Simulation</h1>
                     <div className="columns is-full mt-5 has-background-white-ter">
                         <div className="column has-text-centered">
                             <form onSubmit={handleLogin}>

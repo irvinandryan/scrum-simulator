@@ -35,6 +35,10 @@ const Login = () => {
         navigate(`/register`);
     };
 
+    window.onpopstate = function(event) {
+        navigate(`/`);
+    };
+
     return (
         <div className="hero is-fullheight">
             <div className="hero-body">

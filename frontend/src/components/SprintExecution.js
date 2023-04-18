@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost } from "../utils/Utils";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean } from "../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
+import { rejectSb, rejectRb, addSprintCost } from "../utils/Event";
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -116,8 +117,28 @@ const SprintExecution = () => {
         setSprintBacklog(sprintBacklog);
     }
 
+    const doEventSprintReview = (sprintBacklog, productBacklog, scrumTeamSize) => {
+        // if (getRandomBoolean(0.5) === true) {
+        //     const eventResult = rejectSb(sprintBacklog, productBacklog)
+        //     setSprintBacklog(eventResult.sprintBacklog)
+        //     setProductBacklog(eventResult.productBacklog)
+        //     alert("Sprint Backlog Item Rejected")
+        // }
+        // if (getRandomBoolean(0.5) === true) {
+        //     const eventResult = rejectRb(sprintBacklog, productBacklog)
+        //     setSprintBacklog(eventResult)
+        //     alert("Release Backlog Item Rejected")
+        // }
+        if (getRandomBoolean(0.5) === true) {
+            const eventResult = addSprintCost(sprintBacklog, scrumTeamSize)
+            setSprintBacklog(eventResult)
+            alert("Sprint Cost Increased")
+        }
+    }
+
     const handleSprintExecution = async () => {
         markItemDone();
+        doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
         try {
             await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,

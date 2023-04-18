@@ -100,8 +100,31 @@ const CreateSimConfig = () => {
         return sprintBacklog;
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate(`/`);
+    };
+
     return (
         <div className="hero is-fullheight">
+            <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
+                <div id="navbar-info" className="navbar-menu">
+                    <div className="navbar-start ml-2">
+                        <h3 className="navbar-item">
+                            Welcome {getSessionUsername()}
+                        </h3>
+                    </div>
+                    <div className="navbar-end mr-2">
+                        <div className="navbar-item">
+                            <button
+                                onClick={handleLogout}
+                                className="button is-danger is-small">
+                                <strong>Logout</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
             <div className="hero-body">
                 <div className="container">
                     <div className="columns mt-5 has-text-centered has-background-white-ter">

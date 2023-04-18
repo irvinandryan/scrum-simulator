@@ -15,7 +15,6 @@ function App() {
         <BrowserRouter>
         <div className="container">
             <Routes>
-            {/* <Route path="/" element={<SimConfigList />} /> */}
             <Route path="/" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="simconfigslist" element={<SimConfigList />} />

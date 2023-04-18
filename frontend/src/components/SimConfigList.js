@@ -44,11 +44,6 @@ const SimConfigList = () => {
                             Welcome {getSessionUsername()}
                         </h3>
                     </div>
-                    <div className="navbar-brand m-auto">
-                        <h3 className="navbar-item">
-                            Scrum Simulator
-                        </h3>
-                    </div>
                     <div className="navbar-end mr-2">
                         <div className="navbar-item">
                             <button

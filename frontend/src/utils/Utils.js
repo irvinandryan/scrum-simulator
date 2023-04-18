@@ -97,3 +97,12 @@ export const getSessionUsername = () => {
         return error;
     }
 };
+
+export const getRandomBoolean = (probability) => {
+    const random = Math.random();
+    return (random <= probability);
+}
+
+export const getRandomBetween = (min, max) => {
+    return (Math.random() * (max - min) + min);
+}

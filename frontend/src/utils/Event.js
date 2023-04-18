@@ -1,9 +1,9 @@
-import { getAveragePbPoint, getCurrentSprint } from './Utils';
+import { getAveragePbPoint, getCurrentSprint, getCurrentSprintReview, getRandomBetween, getRemainingCost } from './Utils';
 
 // E-01
 // randomly choose a sprint backlog item in current sprint and make isSbDone false
 export const rejectSb = (sprintBacklog, productBacklog) => {
-    const currentSprint = getCurrentSprint(sprintBacklog);
+    const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
     const randomSbIndex = Math.floor(Math.random() * sprintBacklog[currentSprint].sprintBacklogItem.length);
     sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].isSbDone = false;
     for (let i = 0; i < sprintBacklog[currentSprint].releaseBacklog.length; i++) {
@@ -16,13 +16,13 @@ export const rejectSb = (sprintBacklog, productBacklog) => {
             productBacklog[i].isPbDone = false;
         }
     }
-    return sprintBacklog;
+    return {sprintBacklog, productBacklog};
 };
 
 // E-02
 // randomly choose a release backlog in current sprint and make isRbDone false
 export const rejectRb = (sprintBacklog, productBacklog) => {
-    const currentSprint = getCurrentSprint(sprintBacklog);
+    const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
     const randomRbIndex = Math.floor(Math.random() * sprintBacklog[currentSprint].releaseBacklog.length);
     sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].isRbDone = false;
     for (let i = 0; i < productBacklog.length; i++) {
@@ -47,9 +47,13 @@ export const addPb = (productBacklog) => {
 
 // E-04
 // randomly add sprint cost to the current sprint
-export const addSprintCost = (sprintBacklog, scrumTeamRate) => {
-    const currentSprint = getCurrentSprint(sprintBacklog);
-    sprintBacklog[currentSprint].sprintCost += Math.floor(Math.random() * scrumTeamRate);
+export const addSprintCost = (sprintBacklog) => {
+    const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
+    sprintBacklog[currentSprint].sprintCost += Math.floor(getRandomBetween(0, 0.25) * sprintBacklog[currentSprint].sprintCost);
+    // handle the case when sprint cost is more than remaining budget
+    // if (sprintBacklog[currentSprint].sprintCost > getRemainingCost(plannedCost, sprintBacklog)) {
+    //     sprintBacklog[currentSprint].sprintCost = getRemainingCost(plannedCost, sprintBacklog);
+    // }
     return sprintBacklog;
 };
 

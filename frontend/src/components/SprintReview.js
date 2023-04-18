@@ -131,7 +131,7 @@ const SprintReview = () => {
                         </div>
                         <div className="navbar-item">
                             <button
-                                onClick={() => navigate("/")}
+                                onClick={() => navigate(`/simconfigslist`)}
                                 className="button is-danger is-small">
                                 <strong>Exit simulation</strong>
                             </button>

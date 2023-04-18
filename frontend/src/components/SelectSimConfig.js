@@ -130,7 +130,7 @@ const SelectSimConfig = () => {
                     </div>
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
-                            <Link to={`/`}  className="button is-danger is-fullwidth">
+                            <Link to={`/simconfigslist`}  className="button is-danger is-fullwidth">
                                 <strong>Cancel</strong>
                             </Link>
                         </div>

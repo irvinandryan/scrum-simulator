@@ -72,9 +72,16 @@ const Login = () => {
                                 </div>
                                 <button className="button is-success mt-5"><strong>Login</strong></button>
                             </form>
-                            <button className="button is-info is-small mt-5" onClick={handleRegister}>
-                                <strong>Create account</strong>
-                            </button>
+                            <div className="columns mt-5">
+                                <div className="column is-one-half has-text-right">
+                                    <h3 className="has-text-centered is-inline">Don't have an account?</h3>
+                                </div>
+                                <div className="column is-one-half has-text-left">
+                                    <button className="button is-info is-small" onClick={handleRegister}>
+                                        <strong>Create account</strong>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>            
                 </div>

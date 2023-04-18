@@ -32,7 +32,7 @@ const SimConfigList = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("authToken");
-        navigate("/");
+        navigate(`/`);
     };
 
     return (

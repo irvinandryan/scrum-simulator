@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Router, useNavigate, useParams } from "react-router-dom";
+import { Link, Router, useNavigate, useParams } from "react-router-dom";
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -15,7 +15,8 @@ const Register = () => {
                 username,
                 password
             });
-            navigate("/");
+            alert("Account created successfully!");
+            navigate(`/`);
         } catch (error) {
             if (
                 error.response &&
@@ -61,7 +62,8 @@ const Register = () => {
                                         required
                                     />
                                 </div>
-                                <button className="button is-success mt-5"><strong>Create account</strong></button>
+                                <Link to="/" className="button is-danger mt-5 mr-2"><strong>Cancel</strong></Link>
+                                <button className="button is-success mt-5 ml-2"><strong>Create account</strong></button>
                             </form>
                         </div>
                     </div>            

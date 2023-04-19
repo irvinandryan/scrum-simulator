@@ -23,6 +23,7 @@ var SprintBacklogSchema = mongoose.Schema({
     releaseBacklog: [ReleaseBacklogSchema],
     sprintBacklogItem: [SprintBacklogItemSchema],
     sprintCost: Number,
+    sprintTimeSpent: Number,
     isSprintDone: Boolean,
 });
 

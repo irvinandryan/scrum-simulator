@@ -34,6 +34,15 @@ export const getTotalWorkHourOfPb = (pbId, sprintBacklog) => { // get the total 
     return totalWorkHour;
 };
 
+// get total work hour of a sprint
+export const getTotalWorkHourOfSprint = (sprintBacklog) => {
+    let totalWorkHour = 0;
+    for (let i = 0; i < sprintBacklog[getCurrentSprintReview(sprintBacklog)].sprintBacklogItem.length; i++) {
+        totalWorkHour += sprintBacklog[getCurrentSprintReview(sprintBacklog)].sprintBacklogItem[i].sbHour;
+    }
+    return totalWorkHour;
+};
+
 export const getTotalCostOfPb = (pbId, sprintBacklog, scrumTeamRate) => { // get the total cost of a product backlog item
     return (getTotalWorkHourOfPb(pbId, sprintBacklog) * scrumTeamRate);
 };
@@ -105,4 +114,15 @@ export const getRandomBoolean = (probability) => {
 
 export const getRandomBetween = (min, max) => {
     return (Math.random() * (max - min) + min);
+}
+
+// get project status, wether it is completed or not
+export const getProjectStatus = (productBacklog, sprintBacklog, plannedCost) => {
+    if (isAllPbDone(productBacklog)) {
+        return "Completed";
+    } else if (isRunOutOfCash(sprintBacklog, plannedCost)) {
+        return "Run out of cash";
+    } else {
+        return "Cannot be completed on time";
+    }
 }

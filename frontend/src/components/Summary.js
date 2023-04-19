@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost } from "../utils/Utils";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost, getSessionUsername, getTotalSpending, getProjectStatus } from "../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 
-
-const SprintReview = () => {
+const Summary = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
@@ -83,7 +82,7 @@ const SprintReview = () => {
     const handleNextSprint = async () => {
         try {
             if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
-                navigate(`/simconfigslist/simulation/${id}/summary`);
+                navigate(`/simconfigslist`)
             } else {
                 navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
             }
@@ -102,38 +101,13 @@ const SprintReview = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-start ml-2">
                         <h3 className="navbar-item">
-                            Team size: {scrumTeamSize}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Rate / hour: {scrumTeamRate}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Work hour / day: {scrumTeamHour}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Planned cost: {plannedCost}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Num of sprint: {plannedSprint}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Days per sprint: {sprintLength}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Start date: {startDate.split('T')[0]}
+                            Welcome {getSessionUsername()}
                         </h3>
                     </div>
                     <div className="navbar-end mr-2">
-                        {/* <div className="navbar-item">
-                            <button
-                                onClick={() => navigate(`editsimconfig`)}
-                                className="button has-background-grey-lighter is-small">
-                                <strong>Edit</strong>
-                            </button>
-                        </div> */}
                         <div className="navbar-item">
                             <button
-                                onClick={() => navigate(`/simconfigslist`)}
+                                onClick={handleNextSprint}
                                 className="button is-danger is-small">
                                 <strong>Exit simulation</strong>
                             </button>
@@ -143,61 +117,32 @@ const SprintReview = () => {
             </nav>
             <div className="hero-body">
                 <div className="container mt-5 mb-5">
-                <h2 className="subtitle has-text-centered"><strong>Sprint Backlog</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Project Summary</strong></h2>
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
-                                    <tr>
-                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {currentSprint+1}</th>
-                                    </tr>
-                                    <tr>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Cost</th>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time spent</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colSpan={2}>{parseFloat(sprintBacklog[currentSprint].sprintCost).toFixed(2)}</td>
-                                        <td colSpan={2}>{parseFloat(sprintBacklog[currentSprint].sprintTimeSpent)}</td>
-                                    </tr>
-                                </tbody>
-                                <thead>
-                                    <tr>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Release backlog ID</th>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Status</th>
+                                    <tr style={{backgroundColor: `lightsteelblue`}}>
+                                        <th>Project cost</th>
+                                        <th>CPI</th>
+                                        <th>SPI</th>
+                                        <th>Release date</th>
+                                        <th>Project status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[currentSprint].releaseBacklog.map((releaseBacklog) => (
-                                        <tr>
-                                            <td colSpan="2">{releaseBacklog.rbId}</td>
-                                            <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                <thead>
-                                    <tr style={{backgroundColor: `lightgray`}}>
-                                        <th>Sprint backlog ID</th>
-                                        <th>Time needed</th>
-                                        <th>Related release backlog</th>
-                                        <th>Status</th>
+                                    <tr>
+                                        <td>{parseFloat(getTotalSpending(sprintBacklog)).toFixed(2)}</td>
+                                        <td>{parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}</td>
+                                        <td>{(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}</td>
+                                        <td>{getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}</td>
+                                        <td>{getProjectStatus(productBacklog, sprintBacklog, plannedCost)}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {sprintBacklog[currentSprint].sprintBacklogItem.map((sprintBacklogItem) => (
-                                        <tr>
-                                            <td>{sprintBacklogItem.sbId}</td>
-                                            <td>{sprintBacklogItem.sbHour}</td>
-                                            <td>{sprintBacklogItem.relatedPbId}</td>
-                                            <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
-                                        </tr>
-                                    ))}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                <h2 className="subtitle has-text-centered"><strong>Product Backlog</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Product Backlog Summary</strong></h2>
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
@@ -222,35 +167,73 @@ const SprintReview = () => {
                             </table>
                         </div>
                     </div>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Backlog Summary</strong></h2>
+                    <div className="columns mb-5 is-full has-background-white-ter">
+                        <div className="column is-one-thirds">
+                            {sprintBacklog.map((sprint) => (
+                                <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {sprint.sprintId+1}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colSpan="2" style={{backgroundColor: `lightgray`}}>Cost</th>
+                                            <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time spent</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colSpan="2">{parseFloat(sprint.sprintCost).toFixed(2)}</td>
+                                            <td colSpan="2">{sprint.sprintTimeSpent}</td>
+                                        </tr>
+                                    </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="2" style={{backgroundColor: `lightgray`}}>Release backlog ID</th>
+                                            <th colSpan="2" style={{backgroundColor: `lightgray`}}>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sprint.releaseBacklog.map((releaseBacklog) => (
+                                            <tr>
+                                                <td colSpan="2">{releaseBacklog.rbId}</td>
+                                                <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                    <thead>
+                                        <tr style={{backgroundColor: `lightgray`}}>
+                                            <th>Sprint backlog ID</th>
+                                            <th>Time spent</th>
+                                            <th>Related release backlog</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sprint.sprintBacklogItem.map((sprintBacklogItem) => (
+                                            <tr>
+                                                <td>{sprintBacklogItem.sbId}</td>
+                                                <td>{sprintBacklogItem.sbHour}</td>
+                                                <td>{sprintBacklogItem.relatedPbId}</td>
+                                                <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ))}
+                        </div>
+                    </div>
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
                             <button type="submit" className="button is-fullwidth is-info" onClick={() => handleNextSprint()}>
-                                <strong>Next</strong>
+                                <strong>Close</strong>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <nav className="navbar is-fixed-bottom has-background-dark is-dark is-transparent" aria-label="main navigation">
-                <div id="navbar-info" className="navbar-menu">
-                    <div className="navbar-brand m-auto">
-                        <h3 className="navbar-item">
-                            CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
-                        </h3>
-                        <h3 className="navbar-item">
-                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
-                        </h3>
-                        <h3 className="navbar-item">
-                            Remaining cash: {(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
-                        </h3>
-                    </div>
-                </div>
-            </nav>
         </div>
     );
 }
 
-export default SprintReview;
+export default Summary;

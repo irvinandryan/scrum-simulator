@@ -56,6 +56,7 @@ const SprintPlanning = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            sprintTimeSpent: Number,
             isSprintDone: false,
         },
     ]);

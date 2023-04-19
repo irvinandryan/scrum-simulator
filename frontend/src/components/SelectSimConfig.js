@@ -49,6 +49,7 @@ const SelectSimConfig = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            sprintTimeSpent: Number,
             isSprintDone: false,
         },
     ]);
@@ -82,7 +83,7 @@ const SelectSimConfig = () => {
     const handleContinue = () => {
         if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
             alert("This simulation has been completed.");
-            navigate(`/simconfigslist/simulation/${id}/sprintreview`);
+            navigate(`/simconfigslist/simulation/${id}/summary`);
         } else {
             if (sprintBacklog[getCurrentSprint(sprintBacklog)].isSprintDone === true) {
                 navigate(`/simconfigslist/simulation/${id}/sprintreview`);

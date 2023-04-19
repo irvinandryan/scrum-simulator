@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getCurrentSprintReview } from "../utils/Utils";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getCurrentSprintReview, getTotalWorkHourOfSprint } from "../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 import { rejectSb, rejectRb, addSprintCost } from "../utils/Event";
 
@@ -48,6 +48,7 @@ const SprintExecution = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            sprintTimeSpent: Number,
             isSprintDone: false,
         },
     ]);
@@ -88,6 +89,8 @@ const SprintExecution = () => {
                 maxScrumTeamWorkHour -= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;
                 setSprintBacklog(sprintBacklog);
                 sprintBacklog[getCurrentSprint(sprintBacklog)].sprintCost = getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate);
+                setSprintBacklog(sprintBacklog);
+                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintTimeSpent = getTotalWorkHourOfSprint(sprintBacklog);
                 setSprintBacklog(sprintBacklog);
             }
         }
@@ -208,34 +211,45 @@ const SprintExecution = () => {
                 </div>
             </nav>
             <div className="hero-body">
-                <div className="container mt-5">
-                <h2 className="subtitle has-text-centered"><strong>Sprint {getCurrentSprint(sprintBacklog)+1}</strong></h2>
-                    <div className="columns mt-5 is-full has-background-white-ter">
+                <div className="container mt-5 mb-5">
+                <h2 className="subtitle has-text-centered"><strong>Sprint Backlog</strong></h2>
+                    <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
-                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr>
-                                        <th>Release backlog ID</th>
-                                        <th>Status</th>
+                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {getCurrentSprint(sprintBacklog)+1}</th>
+                                    </tr>
+                                    <tr>
+                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Planned cost</th>
+                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time needed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colSpan={2}>{parseFloat(getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate)).toFixed(2)}</td>
+                                        <td colSpan={2}>{parseFloat(getTotalWorkHourOfSprint(sprintBacklog))}</td>
+                                    </tr>
+                                </tbody>
+                                <thead>
+                                    <tr>
+                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Release backlog ID</th>
+                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.map((releaseBacklog) => (
                                         <tr>
-                                            <td>{releaseBacklog.rbId}</td>
-                                            <td>{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
+                                            <td colSpan="2">{releaseBacklog.rbId}</td>
+                                            <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
-                        </div>
-                        <div className="column is-two-thirds">
-                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth">
                                 <thead>
-                                    <tr>
+                                    <tr style={{backgroundColor: `lightgray`}}>
                                         <th>Sprint backlog ID</th>
-                                        <th>Hour needed</th>
-                                        <th>Related product backlog</th>
+                                        <th>Time needed</th>
+                                        <th>Related release backlog</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

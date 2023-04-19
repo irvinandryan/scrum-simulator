@@ -37,8 +37,8 @@ export const getTotalWorkHourOfPb = (pbId, sprintBacklog) => { // get the total 
 // get total work hour of a sprint
 export const getTotalWorkHourOfSprint = (sprintBacklog) => {
     let totalWorkHour = 0;
-    for (let i = 0; i < sprintBacklog[getCurrentSprintReview(sprintBacklog)].sprintBacklogItem.length; i++) {
-        totalWorkHour += sprintBacklog[getCurrentSprintReview(sprintBacklog)].sprintBacklogItem[i].sbHour;
+    for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
+        totalWorkHour += sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;
     }
     return totalWorkHour;
 };

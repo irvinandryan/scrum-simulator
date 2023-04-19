@@ -180,7 +180,7 @@ const SprintReview = () => {
                                     <tr style={{backgroundColor: `lightgray`}}>
                                         <th>Sprint backlog ID</th>
                                         <th>Time needed</th>
-                                        <th>Related release backlog</th>
+                                        <th>Related product backlog</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

@@ -79,7 +79,6 @@ const SelectSimConfig = () => {
         navigate(`/`);
     };
 
-    // if issprintdone is false but releasebacklog is not empty then navigate to sprintexecution
     const handleContinue = () => {
         if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
             alert("This simulation has been completed.");
@@ -88,7 +87,6 @@ const SelectSimConfig = () => {
             if (sprintBacklog[getCurrentSprint(sprintBacklog)].isSprintDone === true) {
                 navigate(`/simconfigslist/simulation/${id}/sprintreview`);
             } else {
-                // if current sprint is not done but releasebacklog is not empty navigate to sprintexecution
                 if (sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.length > 0) {
                     navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
                 } else {
@@ -121,7 +119,7 @@ const SelectSimConfig = () => {
             <div className="hero-body">
                 <div className="container mt-5 mb-5">
                 {/* <h2 className="subtitle has-text-centered"><strong>Project Information</strong></h2> */}
-                    <div className="columns mb-5 is-full has-background-white-ter">
+                    <div className="columns mt-5 mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>

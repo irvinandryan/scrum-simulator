@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getCurrentSprintReview, getTotalWorkHourOfSprint } from "../utils/Utils";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint } from "../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 import { rejectSb, rejectRb, addSprintCost } from "../utils/Event";
 
@@ -87,10 +87,8 @@ const SprintExecution = () => {
                 && (remainingCost >= (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour * scrumTeamRate))) {
                 sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone = true;
                 maxScrumTeamWorkHour -= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;
-                setSprintBacklog(sprintBacklog);
                 sprintBacklog[getCurrentSprint(sprintBacklog)].sprintCost = getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate);
-                setSprintBacklog(sprintBacklog);
-                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintTimeSpent = getTotalWorkHourOfSprint(sprintBacklog);
+                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintTimeSpent =  getTotalWorkHourOfSprint(sprintBacklog);;
                 setSprintBacklog(sprintBacklog);
             }
         }
@@ -249,7 +247,7 @@ const SprintExecution = () => {
                                     <tr style={{backgroundColor: `lightgray`}}>
                                         <th>Sprint backlog ID</th>
                                         <th>Time needed</th>
-                                        <th>Related release backlog</th>
+                                        <th>Related product backlog</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

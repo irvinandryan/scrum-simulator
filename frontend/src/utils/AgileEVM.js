@@ -1,4 +1,4 @@
-import { getCurrentSprint } from "./Utils";
+import { getCurrentSprint, isAllPbDone } from "./Utils";
 
 export const getPlannedReleasePoint = (productBacklog) => {
     let plannedPbPoints = 0;
@@ -87,6 +87,9 @@ export const getReleaseDate = (productBacklog, sprintBacklog, plannedCost, start
     let EAC = getEstimateAtCompletion(productBacklog, sprintBacklog, plannedCost);
     let AC = getActualCost(sprintBacklog);
     let temp = L * (n * (EAC / AC));
+    if (isAllPbDone(productBacklog) === true) {
+        return addWorkingDays(SD, temp + L);
+    }
     return addWorkingDays(SD, temp);
 };
 

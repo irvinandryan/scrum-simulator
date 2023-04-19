@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost, getSessionUsername, getTotalSpending, getProjectStatus } from "../utils/Utils";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getSessionUsername, getTotalSpending, getProjectStatus } from "../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
 
 const Summary = () => {
@@ -205,7 +205,7 @@ const Summary = () => {
                                         <tr style={{backgroundColor: `lightgray`}}>
                                             <th>Sprint backlog ID</th>
                                             <th>Time spent</th>
-                                            <th>Related release backlog</th>
+                                            <th>Related product backlog</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>

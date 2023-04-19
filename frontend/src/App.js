@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import CreateSimConfig from "./components/CreateSimConfig";
 import SimConfigList from "./components/SimConfigList";
+import CreateSimConfig from "./components/CreateSimConfig";
 import SelectSimConfig from "./components/SelectSimConfig";
-import SprintPlanning from "./components/SprintPlanning";
+import SprintPlanning from "./components/SprintPlanning"
 import EditSimConfig from "./components/EditSimConfig";
 import SprintReview from "./components/SprintReview";
 import SprintExecution from "./components/SprintExecution";

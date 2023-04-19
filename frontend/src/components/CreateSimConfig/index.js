@@ -3,7 +3,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { getSessionUsername, isWeekday } from "../utils/Utils";
+import { getSessionUsername, isWeekday } from "../../utils/Utils";
+import "./CreateSimConfigStyle.css";
 
 const CreateSimConfig = () => {
     const navigate = useNavigate();
@@ -65,6 +66,15 @@ const CreateSimConfig = () => {
         data[index][e.target.name] = e.target.value;
         setProductBacklog(data);
     };
+
+    const handleStartDate = (startDate) => {
+        try {
+            new Date(setStartDate(startDate - (startDate.getTimezoneOffset() * 60000)));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     const saveSimConfig = async (e) => {
         e.preventDefault();
@@ -251,12 +261,15 @@ const CreateSimConfig = () => {
                                 <div className="form-group mt-2">
                                     <DatePicker
                                         popperPlacement="auto"
+                                        calendarContainer="auto"
                                         placeholderText="Pick a start date"
-                                        className="react-datepicker"
+                                        className="datePicker"
                                         dateFormat="dd/MM/yyyy"
                                         selected={startDate}
                                         filterDate={isWeekday}
-                                        onChange={(startDate) => new Date(setStartDate((startDate - (startDate.getTimezoneOffset() * 60000))))}
+                                        onChange={(startDate) => handleStartDate(startDate)}
+                                        wrapperClassName="w-full"
+                                        
                                         required
                                     />
                                 </div>

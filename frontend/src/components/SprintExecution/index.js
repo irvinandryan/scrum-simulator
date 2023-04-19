@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost } from "../utils/Utils";
-import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../utils/AgileEVM.js";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint } from "../../utils/Utils";
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../../utils/AgileEVM.js";
+import { rejectSb, rejectRb, addSprintCost } from "../../utils/Event";
 
-
-const SprintReview = () => {
+const SprintExecution = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
@@ -16,7 +16,6 @@ const SprintReview = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
-    const [currentSprint, setCurrentSprint] = useState(0);
     const [eventProbability, setEventProbability] = useState("");
 
     const [productBacklog, setProductBacklog] = useState([
@@ -71,7 +70,6 @@ const SprintReview = () => {
             setStartDate(response.data.startDate);
             setProductBacklog(response.data.productBacklog);
             setSprintBacklog(response.data.sprintBacklog);
-            setCurrentSprint(getCurrentSprintReview(response.data.sprintBacklog)-1);
             setEventProbability(response.data.eventProbability);
         }
         catch (error) {
@@ -80,16 +78,85 @@ const SprintReview = () => {
         }
     }
 
-    const handleNextSprint = async () => {
-        try {
-            if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
-                navigate(`/simconfigslist/simulation/${id}/summary`);
-            } else {
-                navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
+    const markItemDone = () => {
+        let remainingCost = plannedCost - getTotalSpending(sprintBacklog);
+        let maxScrumTeamWorkHour = getMaxScrumTeamWorkHour(scrumTeamSize, scrumTeamHour, sprintLength);
+        for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
+            if ((sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone === false) 
+                && (maxScrumTeamWorkHour >= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour)
+                && (remainingCost >= (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour * scrumTeamRate))) {
+                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone = true;
+                maxScrumTeamWorkHour -= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;
+                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintCost = getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate);
+                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintTimeSpent =  getTotalWorkHourOfSprint(sprintBacklog);;
+                setSprintBacklog(sprintBacklog);
             }
+        }
+        for (let i = 0; i < productBacklog.length; i++) {
+            let isProductBacklogDone = true;
+            let isExist = false;
+            for (let j = 0; j < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; j++) {
+                if (productBacklog[i].pbId === sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[j].relatedPbId) {
+                    isExist = true;
+                    if (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[j].isSbDone === false) {
+                        isProductBacklogDone = false;
+                        break;
+                    }
+                }
+            }
+            if (isProductBacklogDone === true && isExist === true) {
+                for (let k = 0; k < sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.length; k++) {
+                    if (sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog[k].rbId === productBacklog[i].pbId) {
+                        productBacklog[i].isPbDone = true;
+                        setProductBacklog(productBacklog);
+                        sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog[k].isRbDone = true;
+                        setSprintBacklog(sprintBacklog);
+                        break;
+                    }
+                }
+            }
+        }
+        sprintBacklog[getCurrentSprint(sprintBacklog)].isSprintDone = true;
+        setSprintBacklog(sprintBacklog);
+    }
+
+    const doEventSprintReview = (sprintBacklog, productBacklog, scrumTeamSize) => {
+        if (getRandomBoolean(eventProbability) === true) {
+            const eventResult = rejectSb(sprintBacklog, productBacklog)
+            setSprintBacklog(eventResult.sprintBacklog)
+            setProductBacklog(eventResult.productBacklog)
+        }
+        if (getRandomBoolean(eventProbability) === true) {
+            const eventResult = rejectRb(sprintBacklog, productBacklog)
+            setSprintBacklog(eventResult)
+        }
+        if (getRandomBoolean(eventProbability) === true) {
+            const eventResult = addSprintCost(sprintBacklog, scrumTeamSize)
+            setSprintBacklog(eventResult)
+        }
+    }
+
+    const handleSprintExecution = async () => {
+        markItemDone();
+        doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
+        try {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+                scrumTeamSize,
+                scrumTeamRate,
+                scrumTeamHour,
+                plannedCost,
+                sprintLength,
+                plannedSprint,
+                startDate,
+                productBacklog,
+                sprintBacklog,
+                releaseBacklog,
+            });
+            navigate(`/simconfigslist/simulation/${id}/sprintreview`);
         } catch (error) {
             console.log(error);
         }
+
     };
 
     window.onpopstate = () => {
@@ -124,13 +191,13 @@ const SprintReview = () => {
                         </h3>
                     </div>
                     <div className="navbar-end mr-2">
-                        {/* <div className="navbar-item">
+                        <div className="navbar-item">
                             <button
                                 onClick={() => navigate(`editsimconfig`)}
                                 className="button has-background-grey-lighter is-small">
                                 <strong>Edit</strong>
                             </button>
-                        </div> */}
+                        </div>
                         <div className="navbar-item">
                             <button
                                 onClick={() => navigate(`/simconfigslist`)}
@@ -149,17 +216,17 @@ const SprintReview = () => {
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr>
-                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {currentSprint+1}</th>
+                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {getCurrentSprint(sprintBacklog)+1}</th>
                                     </tr>
                                     <tr>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Cost</th>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time spent</th>
+                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Planned cost</th>
+                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time needed</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td colSpan={2}>{parseFloat(sprintBacklog[currentSprint].sprintCost).toFixed(2)}</td>
-                                        <td colSpan={2}>{parseFloat(sprintBacklog[currentSprint].sprintTimeSpent)}</td>
+                                        <td colSpan={2}>{parseFloat(getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate)).toFixed(2)}</td>
+                                        <td colSpan={2}>{parseFloat(getTotalWorkHourOfSprint(sprintBacklog))}</td>
                                     </tr>
                                 </tbody>
                                 <thead>
@@ -169,7 +236,7 @@ const SprintReview = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[currentSprint].releaseBacklog.map((releaseBacklog) => (
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.map((releaseBacklog) => (
                                         <tr>
                                             <td colSpan="2">{releaseBacklog.rbId}</td>
                                             <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
@@ -185,7 +252,7 @@ const SprintReview = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sprintBacklog[currentSprint].sprintBacklogItem.map((sprintBacklogItem) => (
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
                                             <td>{sprintBacklogItem.sbHour}</td>
@@ -197,35 +264,10 @@ const SprintReview = () => {
                             </table>
                         </div>
                     </div>
-                <h2 className="subtitle has-text-centered"><strong>Product Backlog</strong></h2>
-                    <div className="columns mb-5 is-full has-background-white-ter">
-                        <div className="column is-one-thirds">
-                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
-                                <thead>
-                                    <tr style={{backgroundColor: `lightsteelblue`}}>
-                                        <th>Product backlog ID</th>
-                                        <th>Story point</th>
-                                        <th>Time spent</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {productBacklog.map((productBacklog) => (
-                                        <tr>
-                                            <td>{productBacklog.pbId}</td>
-                                            <td>{productBacklog.pbPoint}</td>
-                                            <td>{getTotalWorkHourOfPb(productBacklog.pbId, sprintBacklog)}</td>
-                                            <td>{productBacklog.isPbDone ? "Done" : "Not done"}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
-                            <button type="submit" className="button is-fullwidth is-info" onClick={() => handleNextSprint()}>
-                                <strong>Next</strong>
+                            <button type="submit" className="button is-fullwidth is-info" onClick={() => handleSprintExecution()}>
+                                <strong>Execute</strong>
                             </button>
                         </div>
                     </div>
@@ -253,4 +295,4 @@ const SprintReview = () => {
     );
 }
 
-export default SprintReview;
+export default SprintExecution;

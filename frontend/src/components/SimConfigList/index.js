@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { getSessionUsername } from "../utils/Utils";
+import { getSessionUsername } from "../../utils/Utils";
 
 const SimConfigList = () => {
     const [simConfig, setSimConfig] = useState([]);

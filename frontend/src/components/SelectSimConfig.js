@@ -119,33 +119,49 @@ const SelectSimConfig = () => {
                 </div>
             </nav>
             <div className="hero-body">
-                <div className="container">
-                {/* <h2 className="subtitle has-text-centered">Selected</h2> */}
-                    <div className="columns mt-5 has-background-white-ter">
-                        <div className="column is-one-half has-text-centered">
-                            <div className="column is-one-half has-text-centered">
-                                <h2 className="subtitle">Team size: {scrumTeamSize}</h2>
-                                <h2 className="subtitle">Rate / hour: {scrumTeamRate}</h2>
-                                <h2 className="subtitle">Work hour / day: {scrumTeamHour}</h2>
-                                <h2 className="subtitle">Planned cost: {plannedCost}</h2>
-                                <h2 className="subtitle">Sprint length: {sprintLength}</h2>
-                                <h2 className="subtitle">Days per sprint: {plannedSprint}</h2>
-                                <h2 className="subtitle">Start date: {startDate.split('T')[0]}</h2>
-                            </div>
-                        </div>
-                        <div className="column is-one-half">
-                            <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
+                <div className="container mt-5 mb-5">
+                {/* <h2 className="subtitle has-text-centered"><strong>Project Information</strong></h2> */}
+                    <div className="columns mb-5 is-full has-background-white-ter">
+                        <div className="column is-one-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Story point</th>
+                                        <th colSpan="8" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Project information</th>
+                                    </tr>
+                                    <tr style={{backgroundColor: `lightgray`}}>
+                                        <th>Team size</th>
+                                        <th>Rate / hour</th>
+                                        <th>Work hour / day</th>
+                                        <th>Planned cost</th>
+                                        <th>Days per sprint</th>
+                                        <th>Num of sprint</th>
+                                        <th>Release point</th>
+                                        <th>Start date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{scrumTeamSize}</td>
+                                        <td>{scrumTeamRate}</td>
+                                        <td>{scrumTeamHour}</td>
+                                        <td>{plannedCost}</td>
+                                        <td>{sprintLength}</td>
+                                        <td>{plannedSprint}</td>
+                                        <td>{productBacklog.reduce((prev,next) => prev + next.pbPoint,0)}</td>
+                                        <td>{startDate.split('T')[0]}</td>
+                                    </tr>
+                                </tbody>
+                                <thead>
+                                    <tr>
+                                        <th colSpan="4" style={{backgroundColor: `lightgray`}}>Product backlog ID</th>
+                                        <th colSpan="4" style={{backgroundColor: `lightgray`}}>Story point</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {productBacklog.map((pb) => (
                                         <tr>
-                                            <td>{pb.pbId}</td>
-                                            <td>{pb.pbPoint}</td>
+                                            <td colSpan="4">{pb.pbId}</td>
+                                            <td colSpan="4">{pb.pbPoint}</td>
                                         </tr>
                                     ))}
                                 </tbody>

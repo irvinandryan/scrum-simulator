@@ -57,22 +57,24 @@ const SimConfigList = () => {
             </nav>
             <div className="hero-body">
                 <div className="container">
-                    <div className="columns if-full mt-5">
+                    <div className="columns if-full mt-5 mb-5">
                         <div className="column is-full">
                             <h1 className="title has-text-centered">Project List</h1>
-                                <table className="table is-striped has-background-white-ter is-fullwidth mt-2">
+                                <table className="table is-bordered is-striped has-background-info-light is-fullwidth mt-2">
                                     <thead>
-                                        <tr>
+                                        <tr style={{backgroundColor: `lightsteelblue`}}>
                                             <th>Team size</th>
                                             <th>Rate / hour</th>
                                             <th>Work hour / day</th>
                                             <th>Planned cost</th>
                                             <th>Days per sprint</th>
-                                            <th>Planned sprint</th>
+                                            <th>Num of sprint</th>
                                             <th>Release point</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <tr></tr>
                                         {simConfig.map((simConfig) => (
                                             <tr className="has-text-left" key={simConfig._id}>
                                                 <td>{simConfig.scrumTeamSize}</td>

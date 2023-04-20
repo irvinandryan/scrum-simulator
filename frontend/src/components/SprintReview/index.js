@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost } from "../../utils/Utils";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRemainingCost, getRandomBoolean } from "../../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../../utils/AgileEVM.js";
+import { addPb } from "../../utils/Event";
 
 
 const SprintReview = () => {
@@ -85,6 +86,19 @@ const SprintReview = () => {
             if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
                 navigate(`/simconfigslist/simulation/${id}/summary`);
             } else {
+                doEventSprintPlanning(productBacklog);
+                await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+                    scrumTeamSize,
+                    scrumTeamRate,
+                    scrumTeamHour,
+                    plannedCost,
+                    sprintLength,
+                    plannedSprint,
+                    startDate,
+                    productBacklog,
+                    sprintBacklog,
+                    releaseBacklog,
+                });
                 navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
             }
         } catch (error) {
@@ -95,6 +109,15 @@ const SprintReview = () => {
     window.onpopstate = () => {
         navigate(`/simconfigslist`);
     };
+
+    const doEventSprintPlanning = (productBacklog) => {
+        if (getRandomBoolean(eventProbability) === true) {
+            const eventResult = addPb(productBacklog);
+            setProductBacklog(eventResult)
+            const message = "Product owner add a new Product Backlog\n" + "PB ID: " + eventResult[eventResult.length-1].pbId + "\nPB Point: " + eventResult[eventResult.length-1].pbPoint
+            alert(message)
+        }
+    }
 
     return (
         <div className="hero is-fullheight">

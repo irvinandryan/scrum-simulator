@@ -14,6 +14,26 @@ const EditSimConfig = () => {
     const [plannedSprint, setPlannedSprint] = useState("");
     const [eventProbability, setEventProbability] = useState("");
 
+    const [sprintBacklog, setSprintBacklog] = useState([
+        {
+            sprintId: String,
+            releaseBacklog: [
+                {
+                    rbId: String,
+                    isRbDone: false,
+                },
+            ],
+            sprintBacklogItem: [
+                {
+                    sbId: String,
+                    sbHour: Number,
+                    relatedPbId: String,
+                    isSbDone: false,
+                },
+            ],
+        },
+    ]);
+
     useEffect(() => {
         getSimConfigById();
     }
@@ -29,10 +49,12 @@ const EditSimConfig = () => {
         setSprintLength(response.data.sprintLength);
         setPlannedSprint(response.data.plannedSprint);
         setEventProbability(response.data.eventProbability);
+        setSprintBacklog(response.data.sprintBacklog);
     }
 
     const updateSimConfig = async (e) => {
         e.preventDefault();
+        setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));
         try {
             await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 creator,
@@ -42,7 +64,8 @@ const EditSimConfig = () => {
                 plannedCost,
                 sprintLength,
                 plannedSprint,
-                eventProbability
+                eventProbability,
+                sprintBacklog
             });
             navigate(-1);
             
@@ -50,6 +73,29 @@ const EditSimConfig = () => {
             console.log(error);
         }
     }
+
+    const handlePlannedSprintChange = (plannedSprint, sprintBacklog) => {
+        if (plannedSprint > sprintBacklog.length) {
+            for (let i = sprintBacklog.length; i < plannedSprint; i++) {
+                let newSprintBacklog = {
+                    sprintId: i.toString(),
+                    releaseBacklog: [],
+                    sprintBacklogItem: [],
+                    sprintCost: 0,
+                    sprintTimeSpent: 0,
+                    isSprintDone: false,
+                };
+                sprintBacklog.push(newSprintBacklog);
+            }
+        } else {
+            if (plannedSprint < sprintBacklog.length) {
+                const n = sprintBacklog.length - plannedSprint;
+                return sprintBacklog.splice(sprintBacklog.length - n, n)
+            } else {
+                return sprintBacklog;
+            }
+        }
+    };
 
     return (
         <div className="hero is-fullheight">

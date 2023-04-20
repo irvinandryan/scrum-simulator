@@ -101,14 +101,15 @@ const CreateSimConfig = () => {
     const generateSprintBacklog = (plannedSprint) => {
         let sprintBacklog = [];
         for (let i = 0; i < plannedSprint; i++) {
-            let sprintBacklogItem = {
+            let newSprintBacklog = {
                 sprintId: i.toString(),
-                sprintBacklog: [],
+                releaseBacklog: [],
+                sprintBacklogItem: [],
                 sprintCost: 0,
                 sprintTimeSpent: 0,
                 isSprintDone: false,
             };
-            sprintBacklog.push(sprintBacklogItem);
+            sprintBacklog.push(newSprintBacklog);
         }
         return sprintBacklog;
     };

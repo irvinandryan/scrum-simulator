@@ -32,7 +32,7 @@ export const rejectRb = (sprintBacklog, productBacklog) => {
 // randomly generate a new product backlog item and add it to the product backlog
 export const addPb = (productBacklog) => {
     const newPb = {
-        pbId: "PB-"+productBacklog.length,
+        pbId: "PB-"+(productBacklog.length+1),
         pbPoint: Math.floor(Math.random() * getAveragePbPoint(productBacklog)),
         isPbDone: false,
     };

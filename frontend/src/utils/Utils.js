@@ -94,7 +94,7 @@ export const getAveragePbPoint = (productBacklog) => {
     for (let i = 0; i < productBacklog.length; i++) {
         totalPbPoint += productBacklog[i].pbPoint;
     }
-    return (totalPbPoint / productBacklog.length);
+    return Math.floor(totalPbPoint / productBacklog.length);
 };
 
 export const getSessionUsername = () => {

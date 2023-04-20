@@ -148,13 +148,13 @@ const SprintReview = () => {
                         </h3>
                     </div>
                     <div className="navbar-end mr-2">
-                        {/* <div className="navbar-item">
+                        <div className="navbar-item">
                             <button
                                 onClick={() => navigate(`editsimconfig`)}
                                 className="button has-background-grey-lighter is-small">
                                 <strong>Edit</strong>
                             </button>
-                        </div> */}
+                        </div>
                         <div className="navbar-item">
                             <button
                                 onClick={() => navigate(`/simconfigslist`)}
@@ -293,13 +293,13 @@ const SprintReview = () => {
                             CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
-                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
+                            SPI: {parseFloat(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
-                            Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
+                            Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
                         </h3>
                         <h3 className="navbar-item">
-                            Remaining cash: {(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
+                            Remaining cash: {parseFloat(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
                         </h3>
                     </div>
                 </div>

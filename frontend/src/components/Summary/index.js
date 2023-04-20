@@ -140,8 +140,8 @@ const Summary = () => {
                                     <tr>
                                         <td>{parseFloat(getTotalSpending(sprintBacklog)).toFixed(2)}</td>
                                         <td>{parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}</td>
-                                        <td>{(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}</td>
-                                        <td>{getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}</td>
+                                        <td>{parseFloat(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}</td>
+                                        <td>{getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}</td>
                                         <td>{getProjectStatus(productBacklog, sprintBacklog, plannedCost)}</td>
                                     </tr>
                                 </tbody>

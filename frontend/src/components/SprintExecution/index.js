@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint } from "../../utils/Utils";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, isSimulationDone } from "../../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../../utils/AgileEVM.js";
 import { rejectSb, rejectRb, addSprintCost } from "../../utils/Event";
 
@@ -136,7 +136,7 @@ const SprintExecution = () => {
             setSprintBacklog(sprintBacklog);
         }
         if (getRandomBoolean(eventProbability) === true) {
-            const eventResult = addSprintCost(sprintBacklog, scrumTeamSize)
+            const eventResult = addSprintCost(sprintBacklog, plannedCost)
             setSprintBacklog(eventResult.sprintBacklog)
             sprintBacklog[getCurrentSprint(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
             setSprintBacklog(sprintBacklog);
@@ -287,13 +287,13 @@ const SprintExecution = () => {
                             CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
-                            SPI: {(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
+                            SPI: {parseFloat(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3)} - {getScheduleStatus(productBacklog, sprintBacklog, plannedSprint, plannedCost)}
                         </h3>
                         <h3 className="navbar-item">
-                            Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength)}
+                            Release date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
                         </h3>
                         <h3 className="navbar-item">
-                            Remaining cash: {(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
+                            Remaining cash: {parseFloat(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
                         </h3>
                     </div>
                 </div>

@@ -24,6 +24,7 @@ function App() {
             <Route path="simconfigslist/simulation/:id/sprintplanning" element={<SprintPlanning />} />
             <Route path="simconfigslist/simulation/:id/sprintplanning/editsimconfig" element={<EditSimConfig />} />
             <Route path="simconfigslist/simulation/:id/sprintexecution/editsimconfig" element={<EditSimConfig />} />
+            <Route path="simconfigslist/simulation/:id/sprintreview/editsimconfig" element={<EditSimConfig />} />
             <Route path="simconfigslist/simulation/:id/sprintexecution" element={<SprintExecution />} />
             <Route path="simconfigslist/simulation/:id/sprintreview" element={<SprintReview />} />
             <Route path="simconfigslist/simulation/:id/summary" element={<Summary />} />

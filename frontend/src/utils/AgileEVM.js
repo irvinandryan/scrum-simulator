@@ -80,11 +80,17 @@ export const getEstimateAtCompletion = (productBacklog, sprintBacklog, plannedCo
     return (getActualCost(sprintBacklog) + getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost));
 };
 
-export const getReleaseDate = (productBacklog, sprintBacklog, plannedCost, startDate, sprintLength) => {
+export const getReleaseDate = (productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint) => {
     let SD = new Date(startDate);
     let L = sprintLength;
     let n = getCurrentSprint(sprintBacklog);
-    let EAC = getEstimateAtCompletion(productBacklog, sprintBacklog, plannedCost);
+    let x = parseInt(getEstimateAtCompletion(productBacklog, sprintBacklog, plannedCost));
+    let y = parseInt(getActualCost(sprintBacklog));
+    if (isNaN(x / y) || n === 0) {
+        let currentDate = addWorkingDays(SD, L * n);
+        return addWorkingDays(currentDate, L * plannedSprint);
+    }
+    let EAC = getEstimateAtCompletion(productBacklog, sprintBacklog, plannedCost)
     let AC = getActualCost(sprintBacklog);
     let temp = L * (n * (EAC / AC));
     if (isAllPbDone(productBacklog) === true) {

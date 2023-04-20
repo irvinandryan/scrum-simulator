@@ -4,7 +4,7 @@ import { getAveragePbPoint, getCurrentSprint, getCurrentSprintReview, getRandomB
 // randomly choose a sprint backlog item in current sprint and make isSbDone false
 export const rejectSb = (sprintBacklog, productBacklog) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
-    const randomSbIndex = Math.floor(Math.random() * (sprintBacklog[currentSprint].sprintBacklogItem.length-1));
+    const randomSbIndex = Math.floor(getRandomBetween(0, sprintBacklog[currentSprint].sprintBacklogItem.length-1));
     sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].isSbDone = false;
     const rbIndex = sprintBacklog[currentSprint].releaseBacklog.findIndex(rb => rb.rbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId);
     sprintBacklog[currentSprint].releaseBacklog[rbIndex].isRbDone = false;
@@ -18,7 +18,7 @@ export const rejectSb = (sprintBacklog, productBacklog) => {
 // randomly choose a release backlog in current sprint and make isRbDone false
 export const rejectRb = (sprintBacklog, productBacklog) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
-    const randomRbIndex = Math.floor(Math.random() * (sprintBacklog[currentSprint].releaseBacklog.length-1));
+    const randomRbIndex = Math.floor(getRandomBetween(0, sprintBacklog[currentSprint].releaseBacklog.length-1));
     sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].isRbDone = false;
     const pbIndex = productBacklog.findIndex(pb => pb.pbId === sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].rbId);
     productBacklog[pbIndex].isPbDone = false;

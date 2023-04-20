@@ -67,7 +67,8 @@ const EditSimConfig = () => {
                 eventProbability,
                 sprintBacklog
             });
-            navigate(-1);
+            const url = window.location.pathname;
+            navigate(url.substring(0, url.lastIndexOf('/')));
             
         } catch (error) {
             console.log(error);
@@ -96,6 +97,16 @@ const EditSimConfig = () => {
                 return sprintBacklog;
             }
         }
+    };
+
+    const handleCancel = () => {
+        const url = window.location.pathname;
+        navigate(url.substring(0, url.lastIndexOf('/')));
+    };
+
+    window.onpopstate = function(event) {
+        const url = window.location.pathname;
+        navigate(url.substring(0, url.lastIndexOf('/')));
     };
 
     return (
@@ -148,7 +159,7 @@ const EditSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                <div className="form-group mt-2">
+                                {/* <div className="form-group mt-2">
                                     <label className="label has-text-centered">Planned cost</label>
                                     <input
                                         type="number"
@@ -161,7 +172,7 @@ const EditSimConfig = () => {
                                         onChange={(e) => setPlannedCost(e.target.value)}
                                         required
                                     />
-                                </div>
+                                </div> */}
                                 <div className="form-group mt-2">
                                     <label className="label has-text-centered">Days per sprint</label>
                                     <input
@@ -206,7 +217,8 @@ const EditSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                <button className="button is-success mt-5 ml-2"><strong>Save</strong></button>
+                                <button className="button is-danger mt-5 ml-2" type="button" onClick={handleCancel}><strong>Cancel</strong></button>
+                                <button className="button is-success mt-5 ml-2" type="submit"><strong>Save</strong></button>
                             </form>
                         </div>
                     </div>            

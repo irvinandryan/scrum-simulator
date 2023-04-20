@@ -108,6 +108,7 @@ const CreateSimConfig = () => {
                 sprintCost: 0,
                 sprintTimeSpent: 0,
                 isSprintDone: false,
+                eventLog: [],
             };
             sprintBacklog.push(newSprintBacklog);
         }

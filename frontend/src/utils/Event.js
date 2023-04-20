@@ -10,22 +10,20 @@ export const rejectSb = (sprintBacklog, productBacklog) => {
     sprintBacklog[currentSprint].releaseBacklog[rbIndex].isRbDone = false;
     const pbIndex = productBacklog.findIndex(pb => pb.pbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId);
     productBacklog[pbIndex].isPbDone = false;
-    const message = "Sprint backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].sbId + " cannot be completed";
-    alert(message);
-    return {sprintBacklog, productBacklog};
+    const eventLog = "Sprint backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].sbId + " related with release backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId + " cannot be completed";
+    return {sprintBacklog, productBacklog, eventLog};
 };
 
 // E-02
 // randomly choose a release backlog in current sprint and make isRbDone false
 export const rejectRb = (sprintBacklog, productBacklog) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
-    const randomRbIndex = Math.floor(Math.random() * (sprintBacklog[currentSprint].sprintBacklogItem.length-1));
+    const randomRbIndex = Math.floor(Math.random() * (sprintBacklog[currentSprint].releaseBacklog.length-1));
     sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].isRbDone = false;
     const pbIndex = productBacklog.findIndex(pb => pb.pbId === sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].rbId);
     productBacklog[pbIndex].isPbDone = false;
-    const message = "Release backlog " + sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].rbId + " is rejected";
-    alert(message);
-    return sprintBacklog;
+    const eventLog = "Release backlog " + sprintBacklog[currentSprint].releaseBacklog[randomRbIndex].rbId + " is rejected by product owner";
+    return {sprintBacklog, eventLog};
 };
 
 // E-03
@@ -37,7 +35,8 @@ export const addPb = (productBacklog) => {
         isPbDone: false,
     };
     productBacklog.push(newPb);
-    return productBacklog;
+    const eventLog = "Product owner add a new item " + productBacklog[productBacklog.length-1].pbId + " in product backlog with " + productBacklog[productBacklog.length-1].pbPoint + " story points";
+    return {productBacklog, eventLog};
 };
 
 // E-04
@@ -45,26 +44,24 @@ export const addPb = (productBacklog) => {
 export const addSprintCost = (sprintBacklog) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
     const increasePercent = getRandomBetween(0, 0.25).toFixed(2);
-    sprintBacklog[currentSprint].sprintCost += increasePercent * sprintBacklog[currentSprint].sprintCost;
     if (increasePercent > 0) {
-        const message = "Sprint cost is increased by " + increasePercent * 100 + "%";
-        alert(message)
+        sprintBacklog[currentSprint].sprintCost += increasePercent * sprintBacklog[currentSprint].sprintCost;
+        const eventLog = "Sprint cost is increased by " + increasePercent * 100 + "%";
+        return {sprintBacklog, eventLog};
     }
     // handle the case when sprint cost is more than remaining budget
     // if (sprintBacklog[currentSprint].sprintCost > getRemainingCost(plannedCost, sprintBacklog)) {
     //     sprintBacklog[currentSprint].sprintCost = getRemainingCost(plannedCost, sprintBacklog);
     // }
-    return sprintBacklog;
+    // return {sprintBacklog, eventLog};
 };
 
 // E-05
 // randomly make team size decrease by 1
 export const decreaseTeamSize = (scrumTeamSize) => {
-    let random = Math.random();
-    if (random < 0.5) {
-        if (scrumTeamSize > 1) {
-            scrumTeamSize--;
-        }
-        return scrumTeamSize;
+    const decrement = Math.floor(0.2 * scrumTeamSize);
+    if (scrumTeamSize > 1) {
+        scrumTeamSize-=decrement;
     }
+    return scrumTeamSize;
 };

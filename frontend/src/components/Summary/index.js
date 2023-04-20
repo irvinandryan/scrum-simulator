@@ -50,6 +50,7 @@ const Summary = () => {
             sprintCost: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
+            eventLog: [String],
         },
     ]);
 
@@ -117,10 +118,15 @@ const Summary = () => {
             </nav>
             <div className="hero-body">
                 <div className="container mt-5 mb-5">
-                <h2 className="subtitle has-text-centered"><strong>Project Summary</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Summary</strong></h2>
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
+                                <thead>
+                                    <tr style={{backgroundColor: `lightsteelblue`}}>
+                                        <th className="has-text-centered" colSpan="5">Project metrics</th>
+                                    </tr>
+                                </thead>
                                 <thead>
                                     <tr style={{backgroundColor: `lightsteelblue`}}>
                                         <th>Project cost</th>
@@ -142,10 +148,15 @@ const Summary = () => {
                             </table>
                         </div>
                     </div>
-                <h2 className="subtitle has-text-centered"><strong>Product Backlog Summary</strong></h2>
+                {/* <h2 className="subtitle has-text-centered"><strong>Product Backlog Summary</strong></h2> */}
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
+                                <thead>
+                                    <tr>
+                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Product backlog</th>
+                                    </tr>
+                                </thead>
                                 <thead>
                                     <tr style={{backgroundColor: `lightsteelblue`}}>
                                         <th>Product backlog ID</th>
@@ -167,7 +178,7 @@ const Summary = () => {
                             </table>
                         </div>
                     </div>
-                <h2 className="subtitle has-text-centered"><strong>Sprint Backlog Summary</strong></h2>
+                {/* <h2 className="subtitle has-text-centered"><strong>Sprint Backlog Summary</strong></h2> */}
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             {sprintBacklog.map((sprint) => (
@@ -194,12 +205,19 @@ const Summary = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {sprint.releaseBacklog.map((releaseBacklog) => (
+                                        {sprint.releaseBacklog.length === 0 ? (
                                             <tr>
-                                                <td colSpan="2">{releaseBacklog.rbId}</td>
-                                                <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
-                                            </tr>
-                                        ))}
+                                                <td colSpan="2">-</td>
+                                                <td colSpan="2">-</td>
+                                                </tr>
+                                        ) : (
+                                            sprint.releaseBacklog.map((releaseBacklog) => (
+                                                <tr>
+                                                    <td colSpan="2">{releaseBacklog.rbId}</td>
+                                                    <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                     <thead>
                                         <tr style={{backgroundColor: `lightgray`}}>
@@ -210,14 +228,23 @@ const Summary = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {sprint.sprintBacklogItem.map((sprintBacklogItem) => (
+                                        {sprint.sprintBacklogItem.length === 0 ? (
                                             <tr>
-                                                <td>{sprintBacklogItem.sbId}</td>
-                                                <td>{sprintBacklogItem.sbHour}</td>
-                                                <td>{sprintBacklogItem.relatedPbId}</td>
-                                                <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                             </tr>
-                                        ))}
+                                        ) : (
+                                            sprint.sprintBacklogItem.map((sprintBacklogItem) => (
+                                                <tr>
+                                                    <td>{sprintBacklogItem.sbId}</td>
+                                                    <td>{sprintBacklogItem.sbHour}</td>
+                                                    <td>{sprintBacklogItem.relatedPbId}</td>
+                                                    <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                             ))}

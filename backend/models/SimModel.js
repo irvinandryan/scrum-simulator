@@ -25,6 +25,7 @@ var SprintBacklogSchema = mongoose.Schema({
     sprintCost: Number,
     sprintTimeSpent: Number,
     isSprintDone: Boolean,
+    eventLog: [String],
 });
 
 var SimConfigSchema = mongoose.Schema({

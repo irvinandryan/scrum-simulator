@@ -50,6 +50,7 @@ const SprintExecution = () => {
             sprintCost: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
+            eventLog: [String],
         },
     ]);
 
@@ -125,14 +126,20 @@ const SprintExecution = () => {
             const eventResult = rejectSb(sprintBacklog, productBacklog)
             setSprintBacklog(eventResult.sprintBacklog)
             setProductBacklog(eventResult.productBacklog)
+            sprintBacklog[getCurrentSprint(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
+            setSprintBacklog(sprintBacklog);
         }
         if (getRandomBoolean(eventProbability) === true) {
             const eventResult = rejectRb(sprintBacklog, productBacklog)
-            setSprintBacklog(eventResult)
+            setSprintBacklog(eventResult.sprintBacklog)
+            sprintBacklog[getCurrentSprint(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
+            setSprintBacklog(sprintBacklog);
         }
         if (getRandomBoolean(eventProbability) === true) {
             const eventResult = addSprintCost(sprintBacklog, scrumTeamSize)
-            setSprintBacklog(eventResult)
+            setSprintBacklog(eventResult.sprintBacklog)
+            sprintBacklog[getCurrentSprint(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
+            setSprintBacklog(sprintBacklog);
         }
     }
 
@@ -210,13 +217,13 @@ const SprintExecution = () => {
             </nav>
             <div className="hero-body">
                 <div className="container mt-5 mb-5">
-                <h2 className="subtitle has-text-centered"><strong>Sprint Backlog</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Execution</strong></h2>
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr>
-                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {getCurrentSprint(sprintBacklog)+1}</th>
+                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {getCurrentSprint(sprintBacklog)+1} backlog</th>
                                     </tr>
                                     <tr>
                                         <th colSpan="2" style={{backgroundColor: `lightgray`}}>Planned cost</th>

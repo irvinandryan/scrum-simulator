@@ -52,6 +52,7 @@ const SprintReview = () => {
             sprintCost: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
+            eventLog: [String],
         },
     ]);
 
@@ -113,9 +114,9 @@ const SprintReview = () => {
     const doEventSprintPlanning = (productBacklog) => {
         if (getRandomBoolean(eventProbability) === true) {
             const eventResult = addPb(productBacklog);
-            setProductBacklog(eventResult)
-            const message = "Product owner add a new Product Backlog\n" + "PB ID: " + eventResult[eventResult.length-1].pbId + "\nPB Point: " + eventResult[eventResult.length-1].pbPoint
-            alert(message)
+            setProductBacklog(eventResult.productBacklog);
+            sprintBacklog[currentSprint+1].eventLog.push(eventResult.eventLog);
+            setSprintBacklog(sprintBacklog);
         }
     }
 
@@ -166,13 +167,39 @@ const SprintReview = () => {
             </nav>
             <div className="hero-body">
                 <div className="container mt-5 mb-5">
-                <h2 className="subtitle has-text-centered"><strong>Sprint Backlog</strong></h2>
+                <h2 className="subtitle has-text-centered"><strong>Sprint Review {currentSprint+1}</strong></h2>
+                    <div className="columns mb-5 is-full has-background-white-ter">
+                        <div className="column is-one-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
+                                <thead>
+                                    <tr style={{backgroundColor: `lightsteelblue`}}>
+                                        <th className="has-text-centered">Sprint {currentSprint+1} event</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sprintBacklog[currentSprint].eventLog.length === 0 ? (
+                                        <tr>
+                                            <td className="has-text-centered">No event</td>
+                                        </tr>
+                                    ) : (
+                                        sprintBacklog[currentSprint].eventLog.map((event, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{event}</td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr>
-                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {currentSprint+1}</th>
+                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {currentSprint+1} backlog</th>
                                     </tr>
                                     <tr>
                                         <th colSpan="2" style={{backgroundColor: `lightgray`}}>Cost</th>
@@ -220,10 +247,15 @@ const SprintReview = () => {
                             </table>
                         </div>
                     </div>
-                <h2 className="subtitle has-text-centered"><strong>Product Backlog</strong></h2>
+                {/* <h2 className="subtitle has-text-centered"><strong>Product Backlog</strong></h2> */}
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
+                                <thead>
+                                    <tr>
+                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Product backlog</th>
+                                    </tr>
+                                </thead>
                                 <thead>
                                     <tr style={{backgroundColor: `lightsteelblue`}}>
                                         <th>Product backlog ID</th>

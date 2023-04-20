@@ -58,6 +58,7 @@ const SprintPlanning = () => {
             sprintCost: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
+            eventLog: [String],
         },
     ]);
 
@@ -220,8 +221,35 @@ const SprintPlanning = () => {
                 </div>
             </nav>
             <div className="hero-body">
-                <div className="container mt-5">
+                <div className="container mt-5 mb-5">
                 <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint(sprintBacklog) + 1}</strong></h2>
+                    <div className="columns mb-5 is-full has-background-white-ter">
+                        <div className="column is-one-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
+                                <thead>
+                                    <tr style={{backgroundColor: `lightsteelblue`}}>
+                                        <th className="has-text-centered">Sprint {getCurrentSprint(sprintBacklog) + 1} Event</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].eventLog.length === 0 ? (
+                                        <tr>
+                                            <td className="has-text-centered">No event</td>
+                                        </tr>
+                                    ) : (
+                                        sprintBacklog[getCurrentSprint(sprintBacklog)].eventLog.map((event, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{event}</td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {/* <h2 className="subtitle has-text-centered"><strong>Sprint Planning {getCurrentSprint(sprintBacklog) + 1}</strong></h2> */}
                     <div className="columns is-full mt-5 has-background-white-ter">
                         <div className="column has-text-centered">
                             <div className="form-group">

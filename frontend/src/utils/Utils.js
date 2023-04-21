@@ -18,8 +18,8 @@ export const getCurrentSprintReview = (sprintBacklog) => { // get the current sp
     return (sprintBacklog.length);
 };
 
-export const getMaxScrumTeamWorkHour = (scrumTeamSize, scrumTeamHour, sprintLength) => { // get the max work hour of a scrum team
-    return (scrumTeamSize * scrumTeamHour * sprintLength);
+export const getMaxScrumTeamWorkHour = (currentTeamSize, scrumTeamHour, sprintLength) => { // get the max work hour of a scrum team
+    return (currentTeamSize * scrumTeamHour * sprintLength);
 };
 
 export const getTotalWorkHourOfPb = (pbId, sprintBacklog) => { // get the total work hour of a product backlog item
@@ -27,18 +27,25 @@ export const getTotalWorkHourOfPb = (pbId, sprintBacklog) => { // get the total 
     for (let i = 0; i < sprintBacklog.length; i++) {
         for (let j = 0; j < sprintBacklog[i].sprintBacklogItem.length; j++) {
             if (sprintBacklog[i].sprintBacklogItem[j].relatedPbId === pbId) {
-                totalWorkHour += sprintBacklog[i].sprintBacklogItem[j].sbHour;
+                totalWorkHour += sprintBacklog[i].sprintBacklogItem[j].sbActualHour;
             }
         }
     }
     return totalWorkHour;
 };
 
-// get total work hour of a sprint
 export const getTotalWorkHourOfSprint = (sprintBacklog) => {
     let totalWorkHour = 0;
     for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
-        totalWorkHour += sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;
+        totalWorkHour += sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour;
+    }
+    return totalWorkHour;
+};
+
+export const getTotalPlannedWorkHourOfSprint = (sprintBacklog) => { // get total planned work hour of a sprint
+    let totalWorkHour = 0;
+    for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
+        totalWorkHour += sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour;
     }
     return totalWorkHour;
 };
@@ -50,7 +57,15 @@ export const getTotalCostOfPb = (pbId, sprintBacklog, scrumTeamRate) => { // get
 export const getTotalSpendingThisSprint = (sprintBacklog, scrumTeamRate) => { // get the total spending of the current sprint
     let totalSpentCost = 0;
     for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
-        totalSpentCost += (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour * scrumTeamRate);
+        totalSpentCost += (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour * scrumTeamRate);
+    }
+    return totalSpentCost;
+};
+
+export const getTotalPlannedSpendingThisSprint = (sprintBacklog, scrumTeamRate) => { // get the total planned spending of the current sprint
+    let totalSpentCost = 0;
+    for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
+        totalSpentCost += (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour * scrumTeamRate);
     }
     return totalSpentCost;
 };

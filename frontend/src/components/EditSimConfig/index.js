@@ -26,7 +26,8 @@ const EditSimConfig = () => {
             sprintBacklogItem: [
                 {
                     sbId: String,
-                    sbHour: Number,
+                    sbPlannedHour: Number,
+                    sbActualHour: Number,
                     relatedPbId: String,
                     isSbDone: false,
                 },
@@ -83,6 +84,7 @@ const EditSimConfig = () => {
                     releaseBacklog: [],
                     sprintBacklogItem: [],
                     sprintCost: 0,
+                    currentTeamSize: scrumTeamSize,
                     sprintTimeSpent: 0,
                     isSprintDone: false,
                     eventLog: [],
@@ -116,7 +118,7 @@ const EditSimConfig = () => {
                     <div className="columns is-full mt-5 has-background-white-ter">
                         <div className="column has-text-centered">
                             <form onSubmit={updateSimConfig}>
-                                <div className="form-group mt-2">
+                                {/* <div className="form-group mt-2">
                                     <label className="label has-text-centered">Team size</label>
                                     <input
                                         type="number"
@@ -129,7 +131,7 @@ const EditSimConfig = () => {
                                         onChange={(e) => setScrumTeamSize(e.target.value)}
                                         required
                                     />
-                                </div>
+                                </div> */}
                                 <div className="form-group mt-2">
                                     <label className="label has-text-centered">Rate per hour</label>
                                     <input

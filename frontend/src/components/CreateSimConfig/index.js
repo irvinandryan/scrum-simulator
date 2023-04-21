@@ -38,7 +38,8 @@ const CreateSimConfig = () => {
             sprintBacklogItem: [
                 {
                     sbId: String,
-                    sbHour: Number,
+                    sbPlannedHour: Number,
+                    sbActualHour: Number,
                     relatedPbId: String,
                     isSbDone: false,
                 },
@@ -106,6 +107,7 @@ const CreateSimConfig = () => {
                 releaseBacklog: [],
                 sprintBacklogItem: [],
                 sprintCost: 0,
+                currentTeamSize: scrumTeamSize,
                 sprintTimeSpent: 0,
                 isSprintDone: false,
                 eventLog: [],

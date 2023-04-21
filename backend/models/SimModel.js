@@ -8,7 +8,8 @@ var ProductBacklogSchema = mongoose.Schema({
 
 var SprintBacklogItemSchema = mongoose.Schema({
     sbId: String,
-    sbHour: Number,
+    sbPlannedHour: Number,
+    sbActualHour: Number,
     relatedPbId: String,
     isSbDone: Boolean,
 });
@@ -23,6 +24,7 @@ var SprintBacklogSchema = mongoose.Schema({
     releaseBacklog: [ReleaseBacklogSchema],
     sprintBacklogItem: [SprintBacklogItemSchema],
     sprintCost: Number,
+    currentTeamSize: Number,
     sprintTimeSpent: Number,
     isSprintDone: Boolean,
     eventLog: [String],

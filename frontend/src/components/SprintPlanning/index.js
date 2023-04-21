@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getRemainingCost, getTotalSpending } from "../../utils/Utils.js";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getRandomBoolean, getRemainingCost, getTotalSpending } from "../../utils/Utils.js";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../../utils/AgileEVM.js";
+import { decreaseTeamSize } from "../../utils/Event.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();
@@ -37,7 +38,8 @@ const SprintPlanning = () => {
     const [sprintBacklogItem, setSprintBacklogItem] = useState([
         {
             sbId: String,
-            sbHour: Number,
+            sbPlannedHour: Number,
+            sbActualHour: Number,
             relatedPbId: String,
             isSbDone: false,
         },
@@ -56,6 +58,7 @@ const SprintPlanning = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            currentTeamSize: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
@@ -88,17 +91,29 @@ const SprintPlanning = () => {
         }
     };
 
+    const doEventSprintExecution = (sprintBacklog, scrumTeamSize) => {
+        if (getRandomBoolean(eventProbability) === true) {
+            const eventResult = decreaseTeamSize(scrumTeamSize);
+            if (eventResult !== undefined) {
+                sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize = eventResult.currentTeamSize;
+                sprintBacklog[getCurrentSprint(sprintBacklog)].eventLog.push(eventResult.eventLog);
+                setSprintBacklog(sprintBacklog);
+            }
+        }
+    };
+
     const updateSimConfig = async (e) => {
         e.preventDefault();
+        // doEventSprintExecution(sprintBacklog, scrumTeamSize);
         let sum = 0;
         sprintBacklogItem.forEach((item) => {
-            sum += parseInt(item.sbHour);
+            sum += parseInt(item.sbPlannedHour);
         });
-        if (sum > (scrumTeamSize * scrumTeamHour * sprintLength)) {
-            alert("Total work hours of sprint backlog items cannot be greater than total work hours per sprint");
+        if (sum > (sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize * scrumTeamHour * sprintLength)) {
+            alert("Total work hours of sprint backlog items cannot be greater than maximum work hours of scrum team");
             return;
         }
-        if ((plannedCost - getTotalSpending(sprintBacklog)) < (sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate)) {
+        if ((plannedCost - getTotalSpending(sprintBacklog)) < (sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbPlannedHour),0) * scrumTeamRate)) {
             alert("Total spending cannot be greater than remaining cost");
             return;
         }
@@ -111,6 +126,7 @@ const SprintPlanning = () => {
                 break;
             }
         }
+        doEventSprintExecution(sprintBacklog, scrumTeamSize);
         try {
             await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,
@@ -124,8 +140,10 @@ const SprintPlanning = () => {
                 sprintBacklog,
                 releaseBacklog,
                 eventProbability,
+            }).then((response) => {
+                console.log(response);
+                navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
             });
-            navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
         } catch (error) {
             console.log(error);
         }
@@ -134,7 +152,8 @@ const SprintPlanning = () => {
     const addSprintBacklogItem = () => {
         let object = {
             sbId: String,
-            sbHour: Number,
+            sbPlannedHour: Number,
+            sbActualHour: Number,
             relatedPbId: String,
             isSbDone: false,
         };
@@ -158,17 +177,17 @@ const SprintPlanning = () => {
     };
 
     const getInputHour = (sprintBacklogItem) => {
-        if (isNaN(sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0))) {
+        if (isNaN(sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbPlannedHour),0))) {
             return '-';
         }
-        return sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0);
+        return sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbPlannedHour),0);
     };
 
     const getInputCost = (sprintBacklogItem) => {
-        if (isNaN(sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0))) {
+        if (isNaN(sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbPlannedHour),0))) {
             return '-';
         }
-        return sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate;
+        return sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbPlannedHour),0) * scrumTeamRate;
     };
 
     window.onpopstate = () => {
@@ -181,7 +200,7 @@ const SprintPlanning = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-start ml-2">
                         <h3 className="navbar-item">
-                            Team size: {scrumTeamSize}
+                            Team size: {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize}
                         </h3>
                         <h3 className="navbar-item">
                             Rate / hour: {scrumTeamRate}
@@ -228,7 +247,7 @@ const SprintPlanning = () => {
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr style={{backgroundColor: `lightsteelblue`}}>
-                                        <th className="has-text-centered">Sprint {getCurrentSprint(sprintBacklog) + 1} Event</th>
+                                        <th className="has-text-centered">Sprint {getCurrentSprint(sprintBacklog) + 1} event</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -295,9 +314,9 @@ const SprintPlanning = () => {
                                                     min="1"
                                                     oninput="validity.valid||(value='')"
                                                     className="input is-small is-inline mr-1 ml-1 mb-1"
-                                                    name="sbHour"
+                                                    name="sbPlannedHour"
                                                     placeholder="Hour needed"
-                                                    value={form.sbHour}
+                                                    value={form.sbPlannedHour}
                                                     required
                                                     onChange={(e) => handleSprintBacklogItem(e, index)}
                                                 />
@@ -344,7 +363,7 @@ const SprintPlanning = () => {
                                         className="input is-small is-static has-text-centered is-inline mr-1 ml-1 mb-1 mt-2"
                                         name="totalHour"
                                         min="0"
-                                        max={getMaxScrumTeamWorkHour(scrumTeamSize, scrumTeamHour, sprintLength)}
+                                        max={getMaxScrumTeamWorkHour(sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize, scrumTeamHour, sprintLength)}
                                         value={getInputHour(sprintBacklogItem)}
                                         required
                                     />

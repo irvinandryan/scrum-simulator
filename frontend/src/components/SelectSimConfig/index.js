@@ -30,7 +30,8 @@ const SelectSimConfig = () => {
     const [sprintBacklogItem, setSprintBacklogItem] = useState([
         {
             sbId: String,
-            sbHour: Number,
+            sbPlannedHour: Number,
+            sbActualHour: Number,
             relatedPbId: String,
             isSbDone: false,
         },
@@ -49,6 +50,7 @@ const SelectSimConfig = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            currentTeamSize: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],

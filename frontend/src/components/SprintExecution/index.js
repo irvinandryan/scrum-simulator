@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, isSimulationDone } from "../../utils/Utils";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, getTotalPlannedSpendingThisSprint, getTotalPlannedWorkHourOfSprint } from "../../utils/Utils";
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../../utils/AgileEVM.js";
 import { rejectSb, rejectRb, addSprintCost } from "../../utils/Event";
 
@@ -29,7 +29,8 @@ const SprintExecution = () => {
     const [sprintBacklogItem, setSprintBacklogItem] = useState([
         {
             sbId: String,
-            sbHour: Number,
+            sbPlannedHour: Number,
+            sbActualHour: Number,
             relatedPbId: String,
             isSbDone: false,
         },
@@ -48,6 +49,7 @@ const SprintExecution = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            currentTeamSize: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
@@ -81,18 +83,26 @@ const SprintExecution = () => {
 
     const markItemDone = () => {
         let remainingCost = plannedCost - getTotalSpending(sprintBacklog);
-        let maxScrumTeamWorkHour = getMaxScrumTeamWorkHour(scrumTeamSize, scrumTeamHour, sprintLength);
+        let maxScrumTeamWorkHour = getMaxScrumTeamWorkHour(sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize, scrumTeamHour, sprintLength);
         for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
-            if ((sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone === false) 
-                && (maxScrumTeamWorkHour >= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour)
-                && (remainingCost >= (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour * scrumTeamRate))) {
-                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone = true;
-                maxScrumTeamWorkHour -= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbHour;
-                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintCost = getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate);
-                sprintBacklog[getCurrentSprint(sprintBacklog)].sprintTimeSpent =  getTotalWorkHourOfSprint(sprintBacklog);;
-                setSprintBacklog(sprintBacklog);
+            if ((sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone === false)     
+                && (remainingCost >= (maxScrumTeamWorkHour * scrumTeamRate))) {
+                    if ((maxScrumTeamWorkHour >= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour)) {
+                        sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone = true;
+                        sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour = sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour;
+                    }
+                    
+                    if ((maxScrumTeamWorkHour < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour)) {
+                        alert(maxScrumTeamWorkHour)
+                        sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour = maxScrumTeamWorkHour;
+                    }
+                    maxScrumTeamWorkHour -= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour;
             }
+                    
         }
+        sprintBacklog[getCurrentSprint(sprintBacklog)].sprintCost = getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate);
+        sprintBacklog[getCurrentSprint(sprintBacklog)].sprintTimeSpent =  getTotalWorkHourOfSprint(sprintBacklog);
+        setSprintBacklog(sprintBacklog);
         for (let i = 0; i < productBacklog.length; i++) {
             let isProductBacklogDone = true;
             let isExist = false;
@@ -144,8 +154,19 @@ const SprintExecution = () => {
     }
 
     const handleSprintExecution = async () => {
+        let sum = 0;
+        sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.forEach((item) => {
+            sum += parseInt(item.sbHour);
+        });
+        if (sum > (sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize * scrumTeamHour * sprintLength)) {
+            alert("Warning! Total planned work hours of sprint backlog items is greater than maximum work hours of scrum team");
+        }
+        if ((plannedCost - getTotalSpending(sprintBacklog)) < (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate)) {
+            alert("Total spending cannot be greater than remaining cost");
+            return;
+        }
         markItemDone();
-        doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
+        // doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
         try {
             await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,
@@ -176,7 +197,7 @@ const SprintExecution = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-start ml-2">
                         <h3 className="navbar-item">
-                            Team size: {scrumTeamSize}
+                            Team size: {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize}
                         </h3>
                         <h3 className="navbar-item">
                             Rate / hour: {scrumTeamRate}
@@ -218,6 +239,32 @@ const SprintExecution = () => {
             <div className="hero-body">
                 <div className="container mt-5 mb-5">
                 <h2 className="subtitle has-text-centered"><strong>Sprint Execution</strong></h2>
+                <div className="columns mb-5 is-full has-background-white-ter">
+                    <div className="column is-one-thirds">
+                            <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
+                                <thead>
+                                    <tr style={{backgroundColor: `lightsteelblue`}}>
+                                        <th className="has-text-centered">Sprint {getCurrentSprint(sprintBacklog) + 1} event</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sprintBacklog[getCurrentSprint(sprintBacklog)].eventLog.length === 0 ? (
+                                        <tr>
+                                            <td className="has-text-centered">No event</td>
+                                        </tr>
+                                    ) : (
+                                        sprintBacklog[getCurrentSprint(sprintBacklog)].eventLog.map((event, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{event}</td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
@@ -232,8 +279,8 @@ const SprintExecution = () => {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td colSpan={2}>{parseFloat(getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate)).toFixed(2)}</td>
-                                        <td colSpan={2}>{parseFloat(getTotalWorkHourOfSprint(sprintBacklog))}</td>
+                                        <td colSpan={2}>{parseFloat(getTotalPlannedSpendingThisSprint(sprintBacklog, scrumTeamRate)).toFixed(2)}</td>
+                                        <td colSpan={2}>{parseFloat(getTotalPlannedWorkHourOfSprint(sprintBacklog))}</td>
                                     </tr>
                                 </tbody>
                                 <thead>
@@ -262,7 +309,7 @@ const SprintExecution = () => {
                                     {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
-                                            <td>{sprintBacklogItem.sbHour}</td>
+                                            <td>{sprintBacklogItem.sbPlannedHour}</td>
                                             <td>{sprintBacklogItem.relatedPbId}</td>
                                             <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
                                         </tr>

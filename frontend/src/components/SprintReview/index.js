@@ -31,7 +31,8 @@ const SprintReview = () => {
     const [sprintBacklogItem, setSprintBacklogItem] = useState([
         {
             sbId: String,
-            sbHour: Number,
+            sbPlannedHour: Number,
+            sbActualHour: Number,
             relatedPbId: String,
             isSbDone: false,
         },
@@ -50,6 +51,7 @@ const SprintReview = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            currentTeamSize: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
@@ -87,7 +89,7 @@ const SprintReview = () => {
             if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
                 navigate(`/simconfigslist/simulation/${id}/summary`);
             } else {
-                doEventSprintPlanning(productBacklog);
+                // doEventSprintPlanning(productBacklog);
                 await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                     scrumTeamSize,
                     scrumTeamRate,
@@ -126,7 +128,7 @@ const SprintReview = () => {
                 <div id="navbar-info" className="navbar-menu">
                     <div className="navbar-start ml-2">
                         <h3 className="navbar-item">
-                            Team size: {scrumTeamSize}
+                            Team size: {sprintBacklog[currentSprint].currentTeamSize}
                         </h3>
                         <h3 className="navbar-item">
                             Rate / hour: {scrumTeamRate}
@@ -199,38 +201,39 @@ const SprintReview = () => {
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr>
-                                        <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {currentSprint+1} backlog</th>
+                                        <th colSpan="5" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {currentSprint+1} backlog</th>
                                     </tr>
                                     <tr>
                                         <th colSpan="2" style={{backgroundColor: `lightgray`}}>Cost</th>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time spent</th>
+                                        <th colSpan="3" style={{backgroundColor: `lightgray`}}>Time spent</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td colSpan={2}>{parseFloat(sprintBacklog[currentSprint].sprintCost).toFixed(2)}</td>
-                                        <td colSpan={2}>{parseFloat(sprintBacklog[currentSprint].sprintTimeSpent)}</td>
+                                        <td colSpan="2">{parseFloat(sprintBacklog[currentSprint].sprintCost).toFixed(2)}</td>
+                                        <td colSpan="3">{parseFloat(sprintBacklog[currentSprint].sprintTimeSpent)}</td>
                                     </tr>
                                 </tbody>
                                 <thead>
                                     <tr>
                                         <th colSpan="2" style={{backgroundColor: `lightgray`}}>Release backlog ID</th>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Status</th>
+                                        <th colSpan="3" style={{backgroundColor: `lightgray`}}>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {sprintBacklog[currentSprint].releaseBacklog.map((releaseBacklog) => (
                                         <tr>
                                             <td colSpan="2">{releaseBacklog.rbId}</td>
-                                            <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
+                                            <td colSpan="3">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                                 <thead>
                                     <tr style={{backgroundColor: `lightgray`}}>
                                         <th>Sprint backlog ID</th>
-                                        <th>Time needed</th>
                                         <th>Related product backlog</th>
+                                        <th>Time needed</th>
+                                        <th>Time spent</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -238,8 +241,9 @@ const SprintReview = () => {
                                     {sprintBacklog[currentSprint].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
-                                            <td>{sprintBacklogItem.sbHour}</td>
                                             <td>{sprintBacklogItem.relatedPbId}</td>
+                                            <td>{sprintBacklogItem.sbPlannedHour}</td>
+                                            <td>{sprintBacklogItem.sbActualHour}</td>
                                             <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
                                         </tr>
                                     ))}

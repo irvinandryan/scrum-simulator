@@ -29,7 +29,8 @@ const Summary = () => {
     const [sprintBacklogItem, setSprintBacklogItem] = useState([
         {
             sbId: String,
-            sbHour: Number,
+            sbPlannedHour: Number,
+            sbActualHour: Number,
             relatedPbId: String,
             isSbDone: false,
         },
@@ -48,6 +49,7 @@ const Summary = () => {
             releaseBacklog: [releaseBacklog],
             sprintBacklogItem: [sprintBacklogItem],
             sprintCost: Number,
+            currentTeamSize: Number,
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
@@ -239,7 +241,7 @@ const Summary = () => {
                                             sprint.sprintBacklogItem.map((sprintBacklogItem) => (
                                                 <tr>
                                                     <td>{sprintBacklogItem.sbId}</td>
-                                                    <td>{sprintBacklogItem.sbHour}</td>
+                                                    <td>{sprintBacklogItem.sbActualHour}</td>
                                                     <td>{sprintBacklogItem.relatedPbId}</td>
                                                     <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
                                                 </tr>

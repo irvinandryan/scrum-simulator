@@ -62,42 +62,60 @@ const SimConfigList = () => {
                             <h1 className="title has-text-centered">Project List</h1>
                                 <table className="table is-bordered is-striped has-background-info-light is-fullwidth mt-2">
                                     <thead>
-                                        <tr style={{backgroundColor: `lightsteelblue`}}>
-                                            <th>Team size</th>
-                                            <th>Rate / hour</th>
-                                            <th>Work hour / day</th>
-                                            <th>Planned cost</th>
-                                            <th>Days per sprint</th>
-                                            <th>Num of sprint</th>
-                                            <th>Release point</th>
-                                            <th></th>
-                                        </tr>
+                                        {simConfig.length === 0 ? (
+                                            <tr style={{backgroundColor: `lightsteelblue`}}>
+                                                <th>Team size</th>
+                                                <th>Rate / hour</th>
+                                                <th>Work hour / day</th>
+                                                <th>Planned cost</th>
+                                                <th>Days per sprint</th>
+                                                <th>Num of sprint</th>
+                                                <th>Release point</th>
+                                            </tr>
+                                        ) : (
+                                            <tr style={{backgroundColor: `lightsteelblue`}}>
+                                                <th>Team size</th>
+                                                <th>Rate / hour</th>
+                                                <th>Work hour / day</th>
+                                                <th>Planned cost</th>
+                                                <th>Days per sprint</th>
+                                                <th>Num of sprint</th>
+                                                <th>Release point</th>
+                                                <th></th>
+                                            </tr>
+                                        )}
                                     </thead>
                                     <tbody>
                                         <tr></tr>
-                                        {simConfig.map((simConfig) => (
-                                            <tr className="has-text-left" key={simConfig._id}>
-                                                <td>{simConfig.scrumTeamSize}</td>
-                                                <td>{simConfig.scrumTeamRate}</td>
-                                                <td>{simConfig.scrumTeamHour}</td>
-                                                <td>{simConfig.plannedCost}</td>
-                                                <td>{simConfig.sprintLength}</td>
-                                                <td>{simConfig.plannedSprint}</td>
-                                                <td>{simConfig.productBacklog.reduce((prev,next) => prev + next.pbPoint,0)}</td>
-                                                <td>
-                                                    <Link
-                                                        to={`simulation/${simConfig._id}`} 
-                                                        className="button is-info is-small mr-1">
-                                                        <strong>Select</strong>
-                                                    </Link>
-                                                    <button
-                                                        onClick={() => deleteSimConfig(simConfig._id)}
-                                                        className="button is-danger is-small">
-                                                        <strong>Delete</strong>
-                                                    </button>
-                                                </td>
+                                        {simConfig.length === 0 ? (
+                                            <tr>
+                                                <td className="has-text-centered" colSpan="7">No simulation available</td>
                                             </tr>
-                                        ))}
+                                        ) : (
+                                            simConfig.map((simConfig) => (
+                                                <tr className="has-text-left" key={simConfig._id}>
+                                                    <td>{simConfig.scrumTeamSize}</td>
+                                                    <td>{simConfig.scrumTeamRate}</td>
+                                                    <td>{simConfig.scrumTeamHour}</td>
+                                                    <td>{simConfig.plannedCost}</td>
+                                                    <td>{simConfig.sprintLength}</td>
+                                                    <td>{simConfig.plannedSprint}</td>
+                                                    <td>{simConfig.productBacklog.reduce((prev,next) => prev + next.pbPoint,0)}</td>
+                                                    <td>
+                                                        <Link
+                                                            to={`simulation/${simConfig._id}`} 
+                                                            className="button is-info is-small mr-1">
+                                                            <strong>Select</strong>
+                                                        </Link>
+                                                        <button
+                                                            onClick={() => deleteSimConfig(simConfig._id)}
+                                                            className="button is-danger is-small">
+                                                            <strong>Delete</strong>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                             <div className="has-text-centered">

@@ -187,36 +187,36 @@ const Summary = () => {
                                 <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                     <thead>
                                         <tr>
-                                            <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {sprint.sprintId+1}</th>
+                                            <th colSpan="5" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {sprint.sprintId+1}</th>
                                         </tr>
                                         <tr>
                                             <th colSpan="2" style={{backgroundColor: `lightgray`}}>Cost</th>
-                                            <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time spent</th>
+                                            <th colSpan="3" style={{backgroundColor: `lightgray`}}>Time spent</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td colSpan="2">{parseFloat(sprint.sprintCost).toFixed(2)}</td>
-                                            <td colSpan="2">{sprint.sprintTimeSpent}</td>
+                                            <td colSpan="3">{sprint.sprintTimeSpent}</td>
                                         </tr>
                                     </tbody>
                                     <thead>
                                         <tr>
                                             <th colSpan="2" style={{backgroundColor: `lightgray`}}>Release backlog ID</th>
-                                            <th colSpan="2" style={{backgroundColor: `lightgray`}}>Status</th>
+                                            <th colSpan="3" style={{backgroundColor: `lightgray`}}>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {sprint.releaseBacklog.length === 0 ? (
                                             <tr>
                                                 <td colSpan="2">-</td>
-                                                <td colSpan="2">-</td>
+                                                <td colSpan="3">-</td>
                                                 </tr>
                                         ) : (
                                             sprint.releaseBacklog.map((releaseBacklog) => (
                                                 <tr>
                                                     <td colSpan="2">{releaseBacklog.rbId}</td>
-                                                    <td colSpan="2">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
+                                                    <td colSpan="3">{releaseBacklog.isRbDone ? "Done" : "Not done"}</td>
                                                 </tr>
                                             ))
                                         )}
@@ -224,8 +224,9 @@ const Summary = () => {
                                     <thead>
                                         <tr style={{backgroundColor: `lightgray`}}>
                                             <th>Sprint backlog ID</th>
-                                            <th>Time spent</th>
                                             <th>Related product backlog</th>
+                                            <th>Time needed</th>
+                                            <th>Time spent</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -236,13 +237,15 @@ const Summary = () => {
                                                 <td>-</td>
                                                 <td>-</td>
                                                 <td>-</td>
+                                                <td>-</td>
                                             </tr>
                                         ) : (
                                             sprint.sprintBacklogItem.map((sprintBacklogItem) => (
                                                 <tr>
                                                     <td>{sprintBacklogItem.sbId}</td>
-                                                    <td>{sprintBacklogItem.sbActualHour}</td>
                                                     <td>{sprintBacklogItem.relatedPbId}</td>
+                                                    <td>{sprintBacklogItem.sbPlannedHour}</td>
+                                                    <td>{sprintBacklogItem.sbActualHour}</td>
                                                     <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
                                                 </tr>
                                             ))

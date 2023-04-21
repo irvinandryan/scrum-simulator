@@ -85,20 +85,16 @@ const SprintExecution = () => {
         let remainingCost = plannedCost - getTotalSpending(sprintBacklog);
         let maxScrumTeamWorkHour = getMaxScrumTeamWorkHour(sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize, scrumTeamHour, sprintLength);
         for (let i = 0; i < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.length; i++) {
-            if ((sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone === false)     
-                && (remainingCost >= (maxScrumTeamWorkHour * scrumTeamRate))) {
+            if ((sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone === false)) {
                     if ((maxScrumTeamWorkHour >= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour)) {
                         sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].isSbDone = true;
                         sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour = sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour;
                     }
-                    
                     if ((maxScrumTeamWorkHour < sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbPlannedHour)) {
-                        alert(maxScrumTeamWorkHour)
                         sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour = maxScrumTeamWorkHour;
                     }
                     maxScrumTeamWorkHour -= sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem[i].sbActualHour;
             }
-                    
         }
         sprintBacklog[getCurrentSprint(sprintBacklog)].sprintCost = getTotalSpendingThisSprint(sprintBacklog, scrumTeamRate);
         sprintBacklog[getCurrentSprint(sprintBacklog)].sprintTimeSpent =  getTotalWorkHourOfSprint(sprintBacklog);
@@ -156,13 +152,14 @@ const SprintExecution = () => {
     const handleSprintExecution = async () => {
         let sum = 0;
         sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.forEach((item) => {
-            sum += parseInt(item.sbHour);
+            sum += parseInt(item.sbPlannedHour);
         });
         if (sum > (sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize * scrumTeamHour * sprintLength)) {
             alert("Warning! Total planned work hours of sprint backlog items is greater than maximum work hours of scrum team");
+            return;
         }
-        if ((plannedCost - getTotalSpending(sprintBacklog)) < (sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.reduce((prev,next) => prev + parseInt(next.sbHour),0) * scrumTeamRate)) {
-            alert("Total spending cannot be greater than remaining cost");
+        if (parseFloat(getRemainingCost(plannedCost, sprintBacklog)) < parseFloat(getTotalPlannedSpendingThisSprint(sprintBacklog, scrumTeamRate))) {
+            alert("Warning! Total spending cannot be greater than remaining cash");
             return;
         }
         markItemDone();
@@ -273,7 +270,7 @@ const SprintExecution = () => {
                                         <th colSpan="4" className="has-text-centered" style={{backgroundColor: `lightsteelblue`}}>Sprint {getCurrentSprint(sprintBacklog)+1} backlog</th>
                                     </tr>
                                     <tr>
-                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Planned cost</th>
+                                        <th colSpan="2" style={{backgroundColor: `lightgray`}}>Planned sprint cost</th>
                                         <th colSpan="2" style={{backgroundColor: `lightgray`}}>Time needed</th>
                                     </tr>
                                 </thead>
@@ -300,8 +297,8 @@ const SprintExecution = () => {
                                 <thead>
                                     <tr style={{backgroundColor: `lightgray`}}>
                                         <th>Sprint backlog ID</th>
-                                        <th>Time needed</th>
                                         <th>Related product backlog</th>
+                                        <th>Time needed</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -309,8 +306,8 @@ const SprintExecution = () => {
                                     {sprintBacklog[getCurrentSprint(sprintBacklog)].sprintBacklogItem.map((sprintBacklogItem) => (
                                         <tr>
                                             <td>{sprintBacklogItem.sbId}</td>
-                                            <td>{sprintBacklogItem.sbPlannedHour}</td>
                                             <td>{sprintBacklogItem.relatedPbId}</td>
+                                            <td>{sprintBacklogItem.sbPlannedHour}</td>
                                             <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
                                         </tr>
                                     ))}

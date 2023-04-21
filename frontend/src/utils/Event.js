@@ -59,7 +59,6 @@ export const addSprintCost = (sprintBacklog, plannedCost) => {
 export const decreaseTeamSize = (scrumTeamSize) => {
     let percentDecrement = getRandomBetween(0.2, 0.4);
     const decrement = Math.floor(percentDecrement * scrumTeamSize);
-    alert(decrement)
     if (scrumTeamSize > decrement && decrement > 0) {
         let currentTeamSize = scrumTeamSize - decrement;
         const eventLog = decrement + " team member cannot work in this sprint";

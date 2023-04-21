@@ -4,11 +4,12 @@ import cors from "cors";
 import SimRoute from "./routes/SimRoute.js";
 import UserRoute from "./routes/UserRoute.js";
 import dotenv from "dotenv";
+import config from "./config/Config.js";
 
 dotenv.config();
 
 const app = express();
-mongoose.connect('mongodb://localhost:27017/scrum_db',{
+mongoose.connect(config.mongo.uri,{
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -21,4 +22,4 @@ app.use(express.json());
 app.use(SimRoute);
 app.use(UserRoute);
 
-app.listen(5000, ()=> console.log('Server up and running...'));
+app.listen(config.port, ()=> console.log('Server up and running...'));

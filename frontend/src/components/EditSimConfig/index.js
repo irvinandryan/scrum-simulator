@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const EditSimConfig = () => {
     const { id } = useParams();
+    const { token } = useParams();
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -41,7 +42,7 @@ const EditSimConfig = () => {
     , []);
 
     const getSimConfigById = async () => {
-        const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
+        const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
         setCreator(response.data.creator);
         setScrumTeamSize(response.data.scrumTeamSize);
         setScrumTeamRate(response.data.scrumTeamRate);
@@ -57,7 +58,7 @@ const EditSimConfig = () => {
         e.preventDefault();
         setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));
         try {
-            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`, {
                 creator,
                 scrumTeamSize,
                 scrumTeamRate,

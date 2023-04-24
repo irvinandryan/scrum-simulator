@@ -8,6 +8,7 @@ import { addPb } from "../../utils/Event";
 
 const SprintReview = () => {
     const { id } = useParams();
+    const { token } = useParams();
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -64,7 +65,7 @@ const SprintReview = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -87,10 +88,10 @@ const SprintReview = () => {
     const handleNextSprint = async () => {
         try {
             if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
-                navigate(`/simconfigslist/simulation/${id}/summary`);
+                navigate(`/simconfigslist/${token}/simulation/${id}/summary`);
             } else {
-                // doEventSprintPlanning(productBacklog);
-                await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+                doEventSprintPlanning(productBacklog);
+                await axios.patch(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`, {
                     scrumTeamSize,
                     scrumTeamRate,
                     scrumTeamHour,
@@ -102,7 +103,7 @@ const SprintReview = () => {
                     sprintBacklog,
                     releaseBacklog,
                 });
-                navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
+                navigate(`/simconfigslist/${token}/simulation/${id}/sprintplanning`);
             }
         } catch (error) {
             console.log(error);
@@ -110,7 +111,7 @@ const SprintReview = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist`);
+        navigate(`/simconfigslist/${token}`);
     };
 
     const doEventSprintPlanning = (productBacklog) => {
@@ -159,7 +160,7 @@ const SprintReview = () => {
                         </div>
                         <div className="navbar-item">
                             <button
-                                onClick={() => navigate(`/simconfigslist`)}
+                                onClick={() => navigate(`/simconfigslist/${token}`)}
                                 className="button is-danger is-small">
                                 <strong>Exit simulation</strong>
                             </button>

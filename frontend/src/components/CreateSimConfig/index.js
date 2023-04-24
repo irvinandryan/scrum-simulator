@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getSessionUsername, isWeekday } from "../../utils/Utils";
@@ -8,6 +8,7 @@ import "./CreateSimConfigStyle.css";
 
 const CreateSimConfig = () => {
     const navigate = useNavigate();
+    const { token } = useParams();
     const [creator, setCreator] = useState(getSessionUsername());
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
@@ -80,7 +81,7 @@ const CreateSimConfig = () => {
     const saveSimConfig = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(process.env.REACT_APP_API + "/simConfigs", {
+            await axios.post(process.env.REACT_APP_API + `/simConfigs/${token}`, {
                 creator,
                 scrumTeamSize,
                 scrumTeamRate,
@@ -93,7 +94,7 @@ const CreateSimConfig = () => {
                 startDate,
                 eventProbability,
             });
-            navigate("/simconfigslist");
+            navigate(`/simconfigslist/${token}`);
           } catch (error) {
             console.log(error);
           }
@@ -292,7 +293,7 @@ const CreateSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                <Link to={`/simconfigslist`}  className="button is-danger mt-4 mr-4">
+                                <Link to={`/simconfigslist/${token}`}  className="button is-danger mt-4 mr-4">
                                     <strong>Cancel</strong>
                                 </Link>
                                 <button type="submit" className="button is-success mt-4">

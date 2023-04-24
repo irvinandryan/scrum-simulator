@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getSessionUsername } from "../../utils/Utils";
 
 const SimConfigList = () => {
+    const { token } = useParams();
     const [simConfig, setSimConfig] = useState([]);
     const navigate = useNavigate();
 
@@ -12,14 +13,17 @@ const SimConfigList = () => {
     }, []);
 
     const getSimConfig = async () => {
-        const response = await axios.get(process.env.REACT_APP_API + "/simConfigs")
-        const filteredSimConfig = response.data.filter(simConfig => simConfig.creator === getSessionUsername());
-        setSimConfig(filteredSimConfig);
-    }
+        try {
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}`)
+            setSimConfig(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const deleteSimConfig = async (id) => {
         try {
-            await axios.delete(process.env.REACT_APP_API + `/simConfigs/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`)
             getSimConfig();
         } catch (error) {
             console.log(error);
@@ -27,7 +31,7 @@ const SimConfigList = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist`);
+        navigate(`/simconfigslist/${token}`);
     };
 
     const handleLogout = () => {

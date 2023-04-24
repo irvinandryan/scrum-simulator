@@ -7,6 +7,7 @@ import { rejectSb, rejectRb, addSprintCost } from "../../utils/Event";
 
 const SprintExecution = () => {
     const { id } = useParams();
+    const { token } = useParams();
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -62,7 +63,7 @@ const SprintExecution = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -163,9 +164,9 @@ const SprintExecution = () => {
             return;
         }
         markItemDone();
-        // doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
+        doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
         try {
-            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`, {
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,
@@ -177,7 +178,7 @@ const SprintExecution = () => {
                 sprintBacklog,
                 releaseBacklog,
             });
-            navigate(`/simconfigslist/simulation/${id}/sprintreview`);
+            navigate(`/simconfigslist/${token}/simulation/${id}/sprintreview`);
         } catch (error) {
             console.log(error);
         }
@@ -185,7 +186,7 @@ const SprintExecution = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist`);
+        navigate(`/simconfigslist/${token}`);
     };
 
     return (
@@ -225,7 +226,7 @@ const SprintExecution = () => {
                         </div>
                         <div className="navbar-item">
                             <button
-                                onClick={() => navigate(`/simconfigslist`)}
+                                onClick={() => navigate(`/simconfigslist/${token}`)}
                                 className="button is-danger is-small">
                                 <strong>Exit simulation</strong>
                             </button>

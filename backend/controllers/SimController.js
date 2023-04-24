@@ -1,8 +1,14 @@
 import SimConfigModel from "../models/SimModel.js";
+import jwt_decode from "jwt-decode";
+
+export const getSessionUsername = (token) => {
+    const decoded = jwt_decode(token);
+    return decoded.username;
+}
 
 export const getSimConfigs = async (req, res) => {
     try {
-        const simConfigs = await SimConfigModel.find();
+        const simConfigs = await SimConfigModel.find({creator: getSessionUsername(req.params.token)});
         res.json(simConfigs);
     } catch (error) {
         res.status(500).json({message: error.message});

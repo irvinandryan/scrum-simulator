@@ -8,6 +8,7 @@ import { decreaseTeamSize } from "../../utils/Event.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();
+    const { token } = useParams();
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -71,7 +72,7 @@ const SprintPlanning = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -104,7 +105,6 @@ const SprintPlanning = () => {
 
     const updateSimConfig = async (e) => {
         e.preventDefault();
-        // doEventSprintExecution(sprintBacklog, scrumTeamSize);
         let sum = 0;
         sprintBacklogItem.forEach((item) => {
             sum += parseInt(item.sbPlannedHour);
@@ -128,7 +128,7 @@ const SprintPlanning = () => {
         }
         doEventSprintExecution(sprintBacklog, scrumTeamSize);
         try {
-            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`, {
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,
@@ -142,7 +142,7 @@ const SprintPlanning = () => {
                 eventProbability,
             }).then((response) => {
                 console.log(response);
-                navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
+                navigate(`/simconfigslist/${token}/simulation/${id}/sprintexecution`);
             });
         } catch (error) {
             console.log(error);
@@ -191,7 +191,7 @@ const SprintPlanning = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist`);
+        navigate(`/simconfigslist/${token}`);
     };
 
     return (
@@ -231,7 +231,7 @@ const SprintPlanning = () => {
                         </div>
                         <div className="navbar-item">
                             <button
-                                onClick={() => navigate(`/simconfigslist`)}
+                                onClick={() => navigate(`/simconfigslist/${token}`)}
                                 className="button is-danger is-small">
                                 <strong>Exit simulation</strong>
                             </button>

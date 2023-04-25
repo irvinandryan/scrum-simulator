@@ -63,7 +63,7 @@ const SprintExecution = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.get(process.env.REACT_APP_API + `/simconfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -166,7 +166,7 @@ const SprintExecution = () => {
         markItemDone();
         doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
         try {
-            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simconfigs/${id}`, {
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,

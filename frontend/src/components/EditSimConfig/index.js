@@ -42,7 +42,7 @@ const EditSimConfig = () => {
     , []);
 
     const getSimConfigById = async () => {
-        const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+        const response = await axios.get(process.env.REACT_APP_API + `/simconfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         setCreator(response.data.creator);
         setScrumTeamSize(response.data.scrumTeamSize);
         setScrumTeamRate(response.data.scrumTeamRate);
@@ -58,7 +58,7 @@ const EditSimConfig = () => {
         e.preventDefault();
         setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));
         try {
-            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simconfigs/${id}`, {
                 creator,
                 scrumTeamSize,
                 scrumTeamRate,

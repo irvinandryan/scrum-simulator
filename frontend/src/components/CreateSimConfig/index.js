@@ -81,7 +81,7 @@ const CreateSimConfig = () => {
     const saveSimConfig = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(process.env.REACT_APP_API + `/simConfigs`, {
+            await axios.post(process.env.REACT_APP_API + `/simconfigs`, {
                 creator,
                 scrumTeamSize,
                 scrumTeamRate,

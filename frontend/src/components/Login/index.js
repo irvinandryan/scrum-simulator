@@ -17,7 +17,7 @@ const Login = () => {
             }).then(response => {
                 const token = response.data.token;
                 localStorage.setItem("authToken", token);
-                navigate(`/simconfigslist/${token}`);
+                navigate(`/simconfigslist`);
             });
         } catch (error) {
             if (

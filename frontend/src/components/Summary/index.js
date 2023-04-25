@@ -6,7 +6,7 @@ import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getRelease
 
 const Summary = () => {
     const { id } = useParams();
-    const { token } = useParams();
+    const token = localStorage.getItem("authToken");
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -63,7 +63,7 @@ const Summary = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -86,9 +86,9 @@ const Summary = () => {
     const handleNextSprint = async () => {
         try {
             if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
-                navigate(`/simconfigslist/${token}`)
+                navigate(`/simconfigslist`)
             } else {
-                navigate(`/simconfigslist/${token}/simulation/${id}/sprintplanning`);
+                navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
             }
         } catch (error) {
             console.log(error);
@@ -96,7 +96,7 @@ const Summary = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist/${token}`);
+        navigate(`/simconfigslist`);
     };
 
     return (

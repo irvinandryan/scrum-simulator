@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-router.get('/simConfigs/:token', getSimConfigs); // GET all simConfigs by username
-router.get('/simConfigs/:token/:id', getSimConfigById); // GET a simConfig by id
-router.post('/simConfigs/:token', saveSimConfig); // POST a simConfig
-router.patch('/simConfigs/:token/:id', updateSimConfig); // PATCH a simConfig by id
-router.delete('/simConfigs/:token/:id', deleteSimConfig); // DELETE a simConfig by id
+router.get('/simConfigs/', getSimConfigs); // GET all simConfigs by username
+router.get('/simConfigs/:id', getSimConfigById); // GET a simConfig by id
+router.post('/simConfigs', saveSimConfig); // POST a simConfig
+router.patch('/simConfigs/:id', updateSimConfig); // PATCH a simConfig by id
+router.delete('/simConfigs/:id', deleteSimConfig); // DELETE a simConfig by id
 
 export default router;

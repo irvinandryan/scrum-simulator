@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getSessionUsername } from "../../utils/Utils";
 
 const SimConfigList = () => {
-    const { token } = useParams();
+    const token = localStorage.getItem("authToken");
     const [simConfig, setSimConfig] = useState([]);
     const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const SimConfigList = () => {
 
     const getSimConfig = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}`)
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs`, {headers: {"Authorization": `Bearer ${token}`}})
             setSimConfig(response.data);
         } catch (error) {
             console.log(error);
@@ -23,7 +23,7 @@ const SimConfigList = () => {
 
     const deleteSimConfig = async (id) => {
         try {
-            await axios.delete(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/simConfigs/${id}`, {headers: {"Authorization": `Bearer ${token}`}})
             getSimConfig();
         } catch (error) {
             console.log(error);
@@ -31,7 +31,7 @@ const SimConfigList = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist/${token}`);
+        navigate(`/simconfigslist`);
     };
 
     const handleLogout = () => {

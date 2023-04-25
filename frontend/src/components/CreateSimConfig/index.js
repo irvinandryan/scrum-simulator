@@ -8,7 +8,7 @@ import "./CreateSimConfigStyle.css";
 
 const CreateSimConfig = () => {
     const navigate = useNavigate();
-    const { token } = useParams();
+    const token = localStorage.getItem("authToken");
     const [creator, setCreator] = useState(getSessionUsername());
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
@@ -81,7 +81,7 @@ const CreateSimConfig = () => {
     const saveSimConfig = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(process.env.REACT_APP_API + `/simConfigs/${token}`, {
+            await axios.post(process.env.REACT_APP_API + `/simConfigs`, {
                 creator,
                 scrumTeamSize,
                 scrumTeamRate,
@@ -93,8 +93,8 @@ const CreateSimConfig = () => {
                 sprintBacklog,
                 startDate,
                 eventProbability,
-            });
-            navigate(`/simconfigslist/${token}`);
+            }, {headers: {Authorization: `Bearer ${token}`}});
+            navigate(`/simconfigslist`);
           } catch (error) {
             console.log(error);
           }
@@ -119,7 +119,7 @@ const CreateSimConfig = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
+        localStorage.removeItem("authToken");
         navigate(`/`);
     };
 
@@ -293,7 +293,7 @@ const CreateSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                <Link to={`/simconfigslist/${token}`}  className="button is-danger mt-4 mr-4">
+                                <Link to={`/simconfigslist`}  className="button is-danger mt-4 mr-4">
                                     <strong>Cancel</strong>
                                 </Link>
                                 <button type="submit" className="button is-success mt-4">

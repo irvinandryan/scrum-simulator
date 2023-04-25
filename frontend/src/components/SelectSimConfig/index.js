@@ -5,7 +5,7 @@ import { isSimulationDone, getCurrentSprint, getSessionUsername } from "../../ut
 
 const SelectSimConfig = () => {
     const { id } = useParams();
-    const { token } = useParams();
+    const token = localStorage.getItem("authToken");
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -60,7 +60,7 @@ const SelectSimConfig = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -86,15 +86,15 @@ const SelectSimConfig = () => {
     const handleContinue = () => {
         if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
             alert("This simulation has been completed.");
-            navigate(`/simconfigslist/${token}/simulation/${id}/summary`);
+            navigate(`/simconfigslist/simulation/${id}/summary`);
         } else {
             if (sprintBacklog[getCurrentSprint(sprintBacklog)].isSprintDone === true) {
-                navigate(`/simconfigslist/${token}/simulation/${id}/sprintreview`);
+                navigate(`/simconfigslist/simulation/${id}/sprintreview`);
             } else {
                 if (sprintBacklog[getCurrentSprint(sprintBacklog)].releaseBacklog.length > 0) {
-                    navigate(`/simconfigslist/${token}/simulation/${id}/sprintexecution`);
+                    navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
                 } else {
-                    navigate(`/simconfigslist/${token}/simulation/${id}/sprintplanning`);
+                    navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
                 }
             }
         }
@@ -172,7 +172,7 @@ const SelectSimConfig = () => {
                     </div>
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
-                            <Link to={`/simconfigslist/${token}`}  className="button is-danger is-fullwidth">
+                            <Link to={`/simconfigslist`}  className="button is-danger is-fullwidth">
                                 <strong>Cancel</strong>
                             </Link>
                         </div>

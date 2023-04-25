@@ -8,7 +8,7 @@ import { addPb } from "../../utils/Event";
 
 const SprintReview = () => {
     const { id } = useParams();
-    const { token } = useParams();
+    const token = localStorage.getItem("authToken");
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -65,7 +65,7 @@ const SprintReview = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -88,10 +88,10 @@ const SprintReview = () => {
     const handleNextSprint = async () => {
         try {
             if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
-                navigate(`/simconfigslist/${token}/simulation/${id}/summary`);
+                navigate(`/simconfigslist/simulation/${id}/summary`);
             } else {
                 doEventSprintPlanning(productBacklog);
-                await axios.patch(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`, {
+                await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                     scrumTeamSize,
                     scrumTeamRate,
                     scrumTeamHour,
@@ -102,8 +102,8 @@ const SprintReview = () => {
                     productBacklog,
                     sprintBacklog,
                     releaseBacklog,
-                });
-                navigate(`/simconfigslist/${token}/simulation/${id}/sprintplanning`);
+                }, { headers: { "Authorization": `Bearer ${token}` } });
+                navigate(`/simconfigslist/simulation/${id}/sprintplanning`);
             }
         } catch (error) {
             console.log(error);
@@ -111,7 +111,7 @@ const SprintReview = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist/${token}`);
+        navigate(`/simconfigslist`);
     };
 
     const doEventSprintPlanning = (productBacklog) => {
@@ -160,7 +160,7 @@ const SprintReview = () => {
                         </div>
                         <div className="navbar-item">
                             <button
-                                onClick={() => navigate(`/simconfigslist/${token}`)}
+                                onClick={() => navigate(`/simconfigslist`)}
                                 className="button is-danger is-small">
                                 <strong>Exit simulation</strong>
                             </button>

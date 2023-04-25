@@ -7,7 +7,7 @@ import { rejectSb, rejectRb, addSprintCost } from "../../utils/Event";
 
 const SprintExecution = () => {
     const { id } = useParams();
-    const { token } = useParams();
+    const token = localStorage.getItem("authToken");
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -63,7 +63,7 @@ const SprintExecution = () => {
 
     const getSimConfigById = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             setCreator(response.data.creator);
             setScrumTeamSize(response.data.scrumTeamSize);
             setScrumTeamRate(response.data.scrumTeamRate);
@@ -166,7 +166,7 @@ const SprintExecution = () => {
         markItemDone();
         doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
         try {
-            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 scrumTeamSize,
                 scrumTeamRate,
                 scrumTeamHour,
@@ -177,8 +177,8 @@ const SprintExecution = () => {
                 productBacklog,
                 sprintBacklog,
                 releaseBacklog,
-            });
-            navigate(`/simconfigslist/${token}/simulation/${id}/sprintreview`);
+            }, { headers: { "Authorization": `Bearer ${token}` } } );
+            navigate(`/simconfigslist/simulation/${id}/sprintreview`);
         } catch (error) {
             console.log(error);
         }
@@ -186,7 +186,7 @@ const SprintExecution = () => {
     };
 
     window.onpopstate = () => {
-        navigate(`/simconfigslist/${token}`);
+        navigate(`/simconfigslist`);
     };
 
     return (
@@ -226,7 +226,7 @@ const SprintExecution = () => {
                         </div>
                         <div className="navbar-item">
                             <button
-                                onClick={() => navigate(`/simconfigslist/${token}`)}
+                                onClick={() => navigate(`/simconfigslist`)}
                                 className="button is-danger is-small">
                                 <strong>Exit simulation</strong>
                             </button>

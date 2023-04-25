@@ -18,16 +18,16 @@ function App() {
             <Routes>
             <Route path="/" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="simconfigslist/:token" element={<SimConfigList />} />
-            <Route path="simconfigslist/:token/create" element={<CreateSimConfig />} />
-            <Route path="simconfigslist/:token/simulation/:id" element={<SelectSimConfig />} />
-            <Route path="simconfigslist/:token/simulation/:id/sprintplanning" element={<SprintPlanning />} />
-            <Route path="simconfigslist/:token/simulation/:id/sprintplanning/editsimconfig" element={<EditSimConfig />} />
-            <Route path="simconfigslist/:token/simulation/:id/sprintexecution/editsimconfig" element={<EditSimConfig />} />
-            <Route path="simconfigslist/:token/simulation/:id/sprintreview/editsimconfig" element={<EditSimConfig />} />
-            <Route path="simconfigslist/:token/simulation/:id/sprintexecution" element={<SprintExecution />} />
-            <Route path="simconfigslist/:token/simulation/:id/sprintreview" element={<SprintReview />} />
-            <Route path="simconfigslist/:token/simulation/:id/summary" element={<Summary />} />
+            <Route path="simconfigslist" element={<SimConfigList />} />
+            <Route path="simconfigslist/create" element={<CreateSimConfig />} />
+            <Route path="simconfigslist/simulation/:id" element={<SelectSimConfig />} />
+            <Route path="simconfigslist/simulation/:id/sprintplanning" element={<SprintPlanning />} />
+            <Route path="simconfigslist/simulation/:id/sprintplanning/editsimconfig" element={<EditSimConfig />} />
+            <Route path="simconfigslist/simulation/:id/sprintexecution/editsimconfig" element={<EditSimConfig />} />
+            <Route path="simconfigslist/simulation/:id/sprintreview/editsimconfig" element={<EditSimConfig />} />
+            <Route path="simconfigslist/simulation/:id/sprintexecution" element={<SprintExecution />} />
+            <Route path="simconfigslist/simulation/:id/sprintreview" element={<SprintReview />} />
+            <Route path="simconfigslist/simulation/:id/summary" element={<Summary />} />
             <Route path="*" element={<NotFound />} />
             </Routes>
         </div>

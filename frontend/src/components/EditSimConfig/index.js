@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const EditSimConfig = () => {
     const { id } = useParams();
-    const { token } = useParams();
+    const token = localStorage.getItem("authToken");
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -42,7 +42,7 @@ const EditSimConfig = () => {
     , []);
 
     const getSimConfigById = async () => {
-        const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`);
+        const response = await axios.get(process.env.REACT_APP_API + `/simConfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         setCreator(response.data.creator);
         setScrumTeamSize(response.data.scrumTeamSize);
         setScrumTeamRate(response.data.scrumTeamRate);
@@ -58,7 +58,7 @@ const EditSimConfig = () => {
         e.preventDefault();
         setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));
         try {
-            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${token}/${id}`, {
+            await axios.patch(process.env.REACT_APP_API + `/simConfigs/${id}`, {
                 creator,
                 scrumTeamSize,
                 scrumTeamRate,
@@ -68,7 +68,7 @@ const EditSimConfig = () => {
                 plannedSprint,
                 eventProbability,
                 sprintBacklog
-            });
+            }, { headers: { "Authorization": `Bearer ${token}` } });
             const url = window.location.pathname;
             navigate(url.substring(0, url.lastIndexOf('/')));
             

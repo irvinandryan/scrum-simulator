@@ -1,15 +1,17 @@
 import SimConfigModel from "../models/SimModel.js";
-import jwt_decode from "jwt-decode";
-
-export const getSessionUsername = (token) => {
-    const decoded = jwt_decode(token);
-    return decoded.username;
-}
+import jwt from "jsonwebtoken";
 
 export const getSimConfigs = async (req, res) => {
     try {
-        const simConfigs = await SimConfigModel.find({creator: getSessionUsername(req.params.token)});
-        res.json(simConfigs);
+        const token = req.headers.authorization.split(" ")[1];
+        jwt.verify(token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+            if (err) {
+                res.status(401).json({message: err.message});
+            } else {
+                const simConfigs = await SimConfigModel.find({creator: decoded.username});
+                res.json(simConfigs);
+            }
+        });
     } catch (error) {
         res.status(500).json({message: error.message});
     }
@@ -17,18 +19,33 @@ export const getSimConfigs = async (req, res) => {
 
 export const getSimConfigById = async (req, res) => {
     try {
-        const simConfig = await SimConfigModel.findById(req.params.id);
-        res.json(simConfig);
+        const token = req.headers.authorization.split(" ")[1];
+        jwt.verify(token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+            if (err) {
+                res.status(401).json({message: err.message});
+            } else {
+                console.log(decoded)
+                const simConfig = await SimConfigModel.findById(req.params.id);
+                res.json(simConfig);
+            }
+        });
     } catch (error) {
         res.status(404).json({message: error.message});
     }
 }
 
 export const saveSimConfig = async (req, res) => {
-    const simConfig = new SimConfigModel(req.body);
     try {
-        const insertedSimConfig = await simConfig.save();
-        res.status(201).json(insertedSimConfig);
+        const token = req.headers.authorization.split(" ")[1];
+        jwt.verify(token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+            if (err) {
+                res.status(401).json({message: err.message});
+            } else {
+                const simConfig = new SimConfigModel(req.body);
+                const insertedSimConfig = await simConfig.save();
+                res.status(201).json(insertedSimConfig);
+            }
+        });
     } catch (error) {
         res.status(400).json({message: error.message});
     }
@@ -36,8 +53,15 @@ export const saveSimConfig = async (req, res) => {
 
 export const updateSimConfig = async (req, res) => {
     try {
-        const updatedSimConfig = await SimConfigModel.updateOne({_id:req.params.id}, {$set: req.body});
-        res.status(200).json(updatedSimConfig);
+        const token = req.headers.authorization.split(" ")[1];
+        jwt.verify(token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+            if (err) {
+                res.status(401).json({message: err.message});
+            } else {
+                const updatedSimConfig = await SimConfigModel.updateOne({_id:req.params.id}, {$set: req.body});
+                res.status(200).json(updatedSimConfig);
+            }
+        });
     } catch (error) {
         res.status(400).json({message: error.message});
     }
@@ -45,8 +69,15 @@ export const updateSimConfig = async (req, res) => {
 
 export const deleteSimConfig = async (req, res) => {
     try {
-        const deletedSimConfig = await SimConfigModel.deleteOne({_id:req.params.id});
-        res.status(200).json(deletedSimConfig);
+        const token = req.headers.authorization.split(" ")[1];
+        jwt.verify(token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+            if (err) {
+                res.status(401).json({message: err.message});
+            } else {
+                const deletedSimConfig = await SimConfigModel.deleteOne({_id:req.params.id});
+                res.status(200).json(deletedSimConfig);
+            }
+        });
     } catch (error) {
         res.status(400).json({message: error.message});
     }

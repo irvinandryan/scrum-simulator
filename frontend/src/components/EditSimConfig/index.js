@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { getCurrentSprint } from "../../utils/Utils";
 
 const EditSimConfig = () => {
     const { id } = useParams();
@@ -56,6 +57,10 @@ const EditSimConfig = () => {
 
     const updateSimConfig = async (e) => {
         e.preventDefault();
+        if (plannedSprint <= getCurrentSprint(sprintBacklog)) {
+            alert("Cannot update planned sprint to a value less than or equal to current sprint");
+            return;
+        }
         setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));
         try {
             await axios.patch(process.env.REACT_APP_API + `/simconfigs/${id}`, {
@@ -95,7 +100,7 @@ const EditSimConfig = () => {
         } else {
             if (plannedSprint < sprintBacklog.length) {
                 const n = sprintBacklog.length - plannedSprint;
-                return sprintBacklog.splice(sprintBacklog.length - n, n)
+                return sprintBacklog.splice(sprintBacklog.length - n, n);
             } else {
                 return sprintBacklog;
             }

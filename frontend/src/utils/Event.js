@@ -7,11 +7,16 @@ export const rejectSb = (sprintBacklog, productBacklog) => {
     const randomSbIndex = Math.floor(getRandomBetween(0, sprintBacklog[currentSprint].sprintBacklogItem.length-1));
     sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].isSbDone = false;
     const rbIndex = sprintBacklog[currentSprint].releaseBacklog.findIndex(rb => rb.rbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId);
-    sprintBacklog[currentSprint].releaseBacklog[rbIndex].isRbDone = false;
-    const pbIndex = productBacklog.findIndex(pb => pb.pbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId);
-    productBacklog[pbIndex].isPbDone = false;
-    const eventLog = "Sprint backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].sbId + ", related with release backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId + ", cannot be completed";
-    return {sprintBacklog, productBacklog, eventLog};
+    if (rbIndex !== -1) {
+        sprintBacklog[currentSprint].releaseBacklog[rbIndex].isRbDone = false;
+        const pbIndex = productBacklog.findIndex(pb => pb.pbId === sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId);
+        productBacklog[pbIndex].isPbDone = false;
+        const eventLog = "Sprint backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].sbId + ", related with release backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].relatedPbId + ", cannot be completed";
+        return {sprintBacklog, productBacklog, eventLog};
+    } else {
+        const eventLog = "Sprint backlog " + sprintBacklog[currentSprint].sprintBacklogItem[randomSbIndex].sbId + " cannot be completed";
+        return {sprintBacklog, productBacklog, eventLog};
+    }
 };
 
 // E-02

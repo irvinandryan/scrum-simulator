@@ -24,7 +24,6 @@ export const getSimConfigById = async (req, res) => {
             if (err) {
                 res.status(401).json({message: err.message});
             } else {
-                console.log(decoded)
                 const simConfig = await SimConfigModel.findById(req.params.id);
                 res.json(simConfig);
             }

@@ -163,7 +163,7 @@ const CreateSimConfig = () => {
                                             />
                                             <input
                                                 type="number"
-                                                min="0"
+                                                min="1"
                                                 oninput="validity.valid||(value='')"
                                                 className="input is-small is-inline mr-1 ml-1 mb-1"
                                                 name="pbPoint"
@@ -204,7 +204,7 @@ const CreateSimConfig = () => {
                                     />
                                     <input
                                         type="number"
-                                        min="0"
+                                        min="1"
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline ml-1"
@@ -229,7 +229,7 @@ const CreateSimConfig = () => {
                                     />
                                     <input
                                         type="number"
-                                        min="0"
+                                        min="1"
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline ml-1"

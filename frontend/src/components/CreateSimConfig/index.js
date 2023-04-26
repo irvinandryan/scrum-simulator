@@ -229,6 +229,7 @@ const CreateSimConfig = () => {
                                     />
                                     <input
                                         type="number"
+                                        step="any"
                                         min="1"
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"

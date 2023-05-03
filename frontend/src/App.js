@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import SimConfigList from "./components/SimConfigList";
-import CreateSimConfig from "./components/CreateSimConfig";
-import SelectSimConfig from "./components/SelectSimConfig";
-import SprintPlanning from "./components/SprintPlanning"
-import EditSimConfig from "./components/EditSimConfig";
-import SprintReview from "./components/SprintReview";
-import SprintExecution from "./components/SprintExecution";
-import NotFound from "./components/NotFound";
-import Summary from "./components/Summary";
+import Login from "./simulator-interface/Login";
+import Register from "./simulator-interface/Register";
+import SimConfigList from "./simulator-interface/SimConfigList";
+import CreateSimConfig from "./simulator-interface/CreateSimConfig";
+import SelectSimConfig from "./simulator-interface/SelectSimConfig";
+import SprintPlanning from "./simulator-interface/SprintPlanning"
+import EditSimConfig from "./simulator-interface/EditSimConfig";
+import SprintReview from "./simulator-interface/SprintReview";
+import SprintExecution from "./simulator-interface/SprintExecution";
+import NotFound from "./simulator-interface/NotFound";
+import Summary from "./simulator-interface/Summary";
 
 function App() {
     return (

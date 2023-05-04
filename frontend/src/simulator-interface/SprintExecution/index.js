@@ -196,11 +196,11 @@ const SprintExecution = () => {
                     <div className="navbar-start ml-2">
                         {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize  === scrumTeamSize ? (
                             <h3 className="navbar-item">
-                                Team size: {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize}
+                                Team size: {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize}/{scrumTeamSize}
                             </h3>
                             ) : (
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
-                                Team size: {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize}
+                                Team size: {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize}/{scrumTeamSize}
                             </h3>
                         )}
                         <h3 className="navbar-item">

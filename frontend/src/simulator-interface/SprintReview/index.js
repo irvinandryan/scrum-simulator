@@ -130,11 +130,11 @@ const SprintReview = () => {
                     <div className="navbar-start ml-2">
                         {sprintBacklog[currentSprint].currentTeamSize  === scrumTeamSize ? (
                             <h3 className="navbar-item">
-                                Team size: {sprintBacklog[currentSprint].currentTeamSize}
+                                Team size: {sprintBacklog[currentSprint].currentTeamSize}/{scrumTeamSize}
                             </h3>
                             ) : (
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
-                                Team size: {sprintBacklog[currentSprint].currentTeamSize}
+                                Team size: {sprintBacklog[currentSprint].currentTeamSize}/{scrumTeamSize}
                             </h3>
                         )}
                         <h3 className="navbar-item">

@@ -1,15 +1,6 @@
 import UserModel from "../models/UserModel.js";
-import jwt from "jsonwebtoken";
-import Joi from "joi";
 import bcrypt from "bcrypt";
-
-const validateUserData = (data) => {
-    const schema = Joi.object({
-        username: Joi.string().required().label("Username"),
-        password: Joi.string().required().label("Password"),
-    });
-    return schema.validate(data);
-}
+import { signAuth, validateUserData } from "../authenticator/auth.js";
 
 export const register = async (req, res) => {
     try {
@@ -28,7 +19,7 @@ export const register = async (req, res) => {
             username: req.body.username,
             password: hashedPassword,
         }).then(user => {
-            const token = jwt.sign({ username: req.body.username }, process.env.JWT_PRIVATE_KEY, {expiresIn: 86400});
+            const token = signAuth(req.body.username);
             res.status(200).json({auth: true, token: token, user: user});
         });
     } catch (error) {
@@ -50,7 +41,7 @@ export const login = async (req, res) => {
         if (!validPassword) {
             return res.status(400).json({message: "Username or password is incorrect"});
         }
-        const token = jwt.sign({ username: req.body.username }, process.env.JWT_PRIVATE_KEY, {expiresIn: 86400});
+        const token = signAuth(req.body.username);
         res.status(200).json({auth: true, token: token, user: isUserAlready});
     } catch (error) {
         res.status(500).json({message: error.message});

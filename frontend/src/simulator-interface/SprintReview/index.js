@@ -5,7 +5,6 @@ import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRand
 import { addPb } from "../../simulation-event-handler/Event";
 import { EVMBar, NavBarReview } from "../../utils/NavBar";
 
-
 const SprintReview = () => {
     const { id } = useParams();
     const token = localStorage.getItem("authToken");

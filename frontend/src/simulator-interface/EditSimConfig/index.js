@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint } from "../../utils/Utils";
+import { getCurrentSprint, getRemainingCost } from "../../utils/Utils";
+import { getEstimateAtCompletion } from "../../utils/AgileEVM";
 
 const EditSimConfig = () => {
     const { id } = useParams();
@@ -15,6 +16,8 @@ const EditSimConfig = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [eventProbability, setEventProbability] = useState("");
+    const [remainingCost, setRemainingCost] = useState("");
+    const [predictedCost, setPredictedCost] = useState("");
 
     const [sprintBacklog, setSprintBacklog] = useState([
         {
@@ -53,12 +56,17 @@ const EditSimConfig = () => {
         setPlannedSprint(response.data.plannedSprint);
         setEventProbability(response.data.eventProbability);
         setSprintBacklog(response.data.sprintBacklog);
+        setPredictedCost(getEstimateAtCompletion(response.data.productBacklog, response.data.sprintBacklog, response.data.plannedCost));
     }
 
     const updateSimConfig = async (e) => {
         e.preventDefault();
         if (plannedSprint <= getCurrentSprint(sprintBacklog)) {
             alert("Cannot update planned sprint to a value less than or equal to current sprint");
+            return;
+        }
+        if (plannedCost <= predictedCost) {
+            alert("Cannot update planned cost to a value less than or equal to predicted cost");
             return;
         }
         setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));
@@ -167,20 +175,6 @@ const EditSimConfig = () => {
                                         required
                                     />
                                 </div>
-                                {/* <div className="form-group mt-2">
-                                    <label className="label has-text-centered">Planned cost</label>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        style={{width: "35%"}}
-                                        oninput="validity.valid||(value='')"
-                                        className="input is-small"
-                                        placeholder="Planned Cost"
-                                        value={plannedCost}
-                                        onChange={(e) => setPlannedCost(e.target.value)}
-                                        required
-                                    />
-                                </div> */}
                                 <div className="form-group mt-2">
                                     <label className="label has-text-centered">Days per sprint</label>
                                     <input
@@ -210,6 +204,20 @@ const EditSimConfig = () => {
                                     />
                                 </div>
                                 <div className="form-group mt-2">
+                                    <label className="label has-text-centered">Planned cost</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        style={{width: "35%"}}
+                                        oninput="validity.valid||(value='')"
+                                        className="input is-small"
+                                        placeholder="Planned Cost"
+                                        value={plannedCost}
+                                        onChange={(e) => {setPlannedCost(e.target.value)}}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group mt-2">
                                     <label className="label has-text-centered">Event probability</label>
                                     <input
                                         type="number"
@@ -219,7 +227,7 @@ const EditSimConfig = () => {
                                         style={{width: "35%"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small"
-                                        placeholder="Planned Sprint"
+                                        placeholder="Event Probability"
                                         value={eventProbability}
                                         onChange={(e) => {setEventProbability(e.target.value)}}
                                         required

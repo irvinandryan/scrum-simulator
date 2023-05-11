@@ -6,7 +6,7 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
     return (
         <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
             <div id="navbar-info" className="navbar-menu">
-                <div className="navbar-start ml-2">
+                <div className="navbar-start">
                     {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize  === scrumTeamSize ? (
                         <h3 className="navbar-item">
                             Team size: {sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize}/{scrumTeamSize}
@@ -17,10 +17,10 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                         </h3>
                     )}
                     <h3 className="navbar-item">
-                        Rate / hour: {scrumTeamRate}
+                        Rate/hour: {scrumTeamRate}
                     </h3>
                     <h3 className="navbar-item">
-                        Work hour / day: {scrumTeamHour}
+                        Work hour/day: {scrumTeamHour}
                     </h3>
                     <h3 className="navbar-item">
                         Days per sprint: {sprintLength}
@@ -50,7 +50,7 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                         <button
                             onClick={() => navigate(`/simconfigslist`)}
                             className="button is-danger is-small">
-                            <strong>Exit simulation</strong>
+                            <strong>Exit</strong>
                         </button>
                     </div>
                 </div>
@@ -63,7 +63,7 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
     return (
         <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
             <div id="navbar-info" className="navbar-menu">
-                <div className="navbar-start ml-2">
+                <div className="navbar-start">
                     {sprintBacklog[currentSprint].currentTeamSize  === scrumTeamSize ? (
                         <h3 className="navbar-item">
                             Team size: {sprintBacklog[currentSprint].currentTeamSize}/{scrumTeamSize}
@@ -74,10 +74,10 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                         </h3>
                     )}
                     <h3 className="navbar-item">
-                        Rate / hour: {scrumTeamRate}
+                        Rate/hour: {scrumTeamRate}
                     </h3>
                     <h3 className="navbar-item">
-                        Work hour / day: {scrumTeamHour}
+                        Work hour/day: {scrumTeamHour}
                     </h3>
                     <h3 className="navbar-item">
                         Days per sprint: {sprintLength}
@@ -107,7 +107,7 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                         <button
                             onClick={() => navigate(`/simconfigslist`)}
                             className="button is-danger is-small">
-                            <strong>Exit simulation</strong>
+                            <strong>Exit</strong>
                         </button>
                     </div>
                 </div>
@@ -131,7 +131,7 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                                 CPI: {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3)} - {getBudgetStatus(productBacklog, sprintBacklog, plannedCost)}
                             </h3>
                         )}
-                        {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3) >= 1 ? (
+                        {/* {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3) >= 1 ? (
                             <h3 className="navbar-item">
                                 Predicted cost: {parseFloat(getEstimateAtCompletion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
                             </h3>
@@ -139,14 +139,14 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
                                 Predicted cost: {parseFloat(getEstimateAtCompletion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
                             </h3>
-                        )}
+                        )} */}
                         {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3) >= 1 ? (
                             <h3 className="navbar-item">
-                                Cost needed: {parseFloat(getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
+                                Cost to complete: {parseFloat(getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
                             </h3>
                         ) : (
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
-                                Cost needed: {parseFloat(getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
+                                Cost to complete: {parseFloat(getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
                             </h3>
                         )}
                         {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3) >= 1 ? (
@@ -169,20 +169,20 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                         )}
                         {parseFloat(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3) >= 1 ? (
                             <h3 className="navbar-item">
-                                Predicted date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
+                                Predicted release: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
                             </h3>
                         ) : (
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
-                                Predicted date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
+                                Predicted release: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
                             </h3>
                         )}
                         {parseFloat(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3) >= 1 ? (
                             <h3 className="navbar-item">
-                                Planned date: {addWorkingDays(startDate, plannedSprint * sprintLength)}
+                                Planned release: {addWorkingDays(startDate, plannedSprint * sprintLength)}
                             </h3>
                         ) : (
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
-                                Planned date: {addWorkingDays(startDate, plannedSprint * sprintLength)}
+                                Planned release: {addWorkingDays(startDate, plannedSprint * sprintLength)}
                             </h3>
                         )}
                     </div>
@@ -191,11 +191,11 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                         <h3 className="navbar-item has-text-white">
                             CPI: -
                         </h3>
-                        <h3 className="navbar-item has-text-white">
+                        {/* <h3 className="navbar-item has-text-white">
                             Predicted cost: -
-                        </h3>
+                        </h3> */}
                         <h3 className="navbar-item has-text-white">
-                            Cost needed: -
+                            Cost to complete: -
                         </h3>
                         <h3 className="navbar-item has-text-white">
                             Remaining cash : {parseFloat(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
@@ -205,20 +205,20 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                         </h3>
                         {parseFloat(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3) >= 1 ? (
                             <h3 className="navbar-item">
-                                Predicted date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
+                                Predicted release: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
                             </h3>
                         ) : (
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
-                                Predicted date: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
+                                Predicted release: {getReleaseDate(productBacklog, sprintBacklog, plannedCost, startDate, sprintLength, plannedSprint)}
                             </h3>
                         )}
                         {parseFloat(getSchedulePerformanceIndex(productBacklog, sprintBacklog, plannedSprint, plannedCost)).toFixed(3) >= 1 ? (
                             <h3 className="navbar-item">
-                                Planned date: {addWorkingDays(startDate, plannedSprint * sprintLength)}
+                                Planned release: {addWorkingDays(startDate, plannedSprint * sprintLength)}
                             </h3>
                         ) : (
                             <h3 className="navbar-item has-text-white has-background-danger-dark">
-                                Planned date: {addWorkingDays(startDate, plannedSprint * sprintLength)}
+                                Planned release: {addWorkingDays(startDate, plannedSprint * sprintLength)}
                             </h3>
                         )}
                     </div>

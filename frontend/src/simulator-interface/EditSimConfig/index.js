@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getRemainingCost } from "../../utils/Utils";
-import { getEstimateAtCompletion } from "../../utils/AgileEVM";
-import { getActualCost } from "../../utils/AgileEVM";
+import { getCurrentSprint } from "../../utils/Utils";
+import { getEstimateAtCompletion, getActualCost } from "../../utils/AgileEVM";
 
 const EditSimConfig = () => {
     const { id } = useParams();
@@ -64,7 +63,7 @@ const EditSimConfig = () => {
     const updateSimConfig = async (e) => {
         e.preventDefault();
         if (plannedSprint <= getCurrentSprint(sprintBacklog)) {
-            alert("Cannot update planned sprint to a value less than or equal to current sprint");
+            alert("Cannot update planned sprint to a value less than the current sprint");
             return;
         }
         if (plannedCost <= actualCost && isFinite(actualCost)) {

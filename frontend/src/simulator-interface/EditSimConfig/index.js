@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentSprint, getRemainingCost } from "../../utils/Utils";
 import { getEstimateAtCompletion } from "../../utils/AgileEVM";
+import { getActualCost } from "../../utils/AgileEVM";
 
 const EditSimConfig = () => {
     const { id } = useParams();
@@ -16,8 +17,8 @@ const EditSimConfig = () => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [eventProbability, setEventProbability] = useState("");
-    const [remainingCost, setRemainingCost] = useState("");
     const [predictedCost, setPredictedCost] = useState("");
+    const [actualCost, setActualCost] = useState("");
 
     const [sprintBacklog, setSprintBacklog] = useState([
         {
@@ -57,6 +58,7 @@ const EditSimConfig = () => {
         setEventProbability(response.data.eventProbability);
         setSprintBacklog(response.data.sprintBacklog);
         setPredictedCost(getEstimateAtCompletion(response.data.productBacklog, response.data.sprintBacklog, response.data.plannedCost));
+        setActualCost(getActualCost(response.data.sprintBacklog));
     }
 
     const updateSimConfig = async (e) => {
@@ -65,8 +67,8 @@ const EditSimConfig = () => {
             alert("Cannot update planned sprint to a value less than or equal to current sprint");
             return;
         }
-        if (plannedCost <= predictedCost) {
-            alert("Cannot update planned cost to a value less than or equal to predicted cost");
+        if (plannedCost <= actualCost && isFinite(actualCost)) {
+            alert("Cannot update planned cost to a value less than or equal to total spending");
             return;
         }
         setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));

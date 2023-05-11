@@ -1,6 +1,6 @@
 import React from "react";
 import { getCurrentSprint, getRemainingCost } from "./Utils.js"
-import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getEstimateAtCompletion, getReleasePointCompleted } from "./AgileEVM.js"
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getEstimateAtCompletion, getReleasePointCompleted, getActualCost, getEstimateToCompleteion } from "./AgileEVM.js"
 
 export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamHour, sprintLength, plannedSprint, plannedCost, startDate, navigate }) => {
     return (
@@ -30,6 +30,9 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                     </h3>
                     <h3 className="navbar-item">
                         Planned cost: {plannedCost}
+                    </h3>
+                    <h3 className="navbar-item">
+                        Spending: {parseFloat(getActualCost(sprintBacklog)).toFixed(2)}
                     </h3>
                     <h3 className="navbar-item">
                         Start date: {startDate.split('T')[0]}
@@ -86,6 +89,9 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                         Planned cost: {plannedCost}
                     </h3>
                     <h3 className="navbar-item">
+                        Spending: {parseFloat(getActualCost(sprintBacklog)).toFixed(2)}
+                    </h3>
+                    <h3 className="navbar-item">
                         Start date: {startDate.split('T')[0]}
                     </h3>
                 </div>
@@ -136,6 +142,15 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                         )}
                         {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3) >= 1 ? (
                             <h3 className="navbar-item">
+                                Cost needed: {parseFloat(getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
+                            </h3>
+                        ) : (
+                            <h3 className="navbar-item has-text-white has-background-danger-dark">
+                                Cost needed: {parseFloat(getEstimateToCompleteion(productBacklog, sprintBacklog, plannedCost)).toFixed(2)}
+                            </h3>
+                        )}
+                        {parseFloat(getCostPerformanceIndex(productBacklog, sprintBacklog, plannedCost)).toFixed(3) >= 1 ? (
+                            <h3 className="navbar-item">
                                 Remaining cash : {parseFloat(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}
                             </h3>
                         ) : (
@@ -178,6 +193,9 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                         </h3>
                         <h3 className="navbar-item has-text-white">
                             Predicted cost: -
+                        </h3>
+                        <h3 className="navbar-item has-text-white">
+                            Cost needed: -
                         </h3>
                         <h3 className="navbar-item has-text-white">
                             Remaining cash : {parseFloat(getRemainingCost(plannedCost, sprintBacklog)).toFixed(2)}

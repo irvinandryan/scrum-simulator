@@ -124,6 +124,14 @@ const SprintReview = () => {
 
     return (
         <div className="hero is-fullheight">
+            <EVMBar
+                productBacklog={productBacklog}
+                sprintBacklog={sprintBacklog}
+                plannedCost={plannedCost}
+                plannedSprint={plannedSprint}
+                startDate={startDate}
+                sprintLength={sprintLength}
+            />
             <NavBarReview
                 sprintBacklog={sprintBacklog}
                 currentSprint={currentSprint}
@@ -258,14 +266,6 @@ const SprintReview = () => {
                     </div>
                 </div>
             </div>
-            <EVMBar
-                productBacklog={productBacklog}
-                sprintBacklog={sprintBacklog}
-                plannedCost={plannedCost}
-                plannedSprint={plannedSprint}
-                startDate={startDate}
-                sprintLength={sprintLength}
-            />
         </div>
     );
 }

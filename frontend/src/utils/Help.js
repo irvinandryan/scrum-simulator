@@ -6,16 +6,47 @@ export const Help = ({active, handleClickModal}) => {
             <div className={`modal ${active}`}>
                 <div class="modal-background"></div>
                 <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">HELP PLANNING</p>
+                    <header class="modal-card-head has-background-grey-lighter">
+                        <p class="modal-card-title has-text-black">Help</p>
                         <button onClick={handleClickModal} class="delete" aria-label="close"></button>
                     </header>
-                    <section class="modal-card-body">
-                        <p>Modal content</p>
+                    <section class="modal-card-body has-text-dark">
+                        <h1 class="modal-card-title">Sprint Planning</h1>
+                        <div className="is-size-6">
+                            <p>1. Create a new sprint by clicking on the <strong>Create Sprint</strong> button.</p>
+                            <p>2. Add a new task by clicking on the <strong>Add Task</strong> button.</p>
+                            <p>3. Edit a task by clicking on the <strong>Edit</strong> button.</p>
+                            <p>4. Delete a task by clicking on the <strong>Delete</strong> button.</p>
+                            <p>5. Move a task to the next sprint by clicking on the <strong>Move</strong> button.</p>
+                            <p>6. Move a task to the previous sprint by clicking on the <strong>Move</strong> button.</p>
+                            <p>7. Move a task to the current sprint by clicking on the <strong>Move</strong> button.</p>
+                        </div>
+                        <br />
+                        <h1 class="modal-card-title">Modal content</h1>
+                        <div className="is-size-6">
+                            <p>1. Create a new sprint by clicking on the <strong>Create Sprint</strong> button.</p>
+                            <p>2. Add a new task by clicking on the <strong>Add Task</strong> button.</p>
+                            <p>3. Edit a task by clicking on the <strong>Edit</strong> button.</p>
+                            <p>4. Delete a task by clicking on the <strong>Delete</strong> button.</p>
+                            <p>5. Move a task to the next sprint by clicking on the <strong>Move</strong> button.</p>
+                            <p>6. Move a task to the previous sprint by clicking on the <strong>Move</strong> button.</p>
+                            <p>7. Move a task to the current sprint by clicking on the <strong>Move</strong> button.</p>
+                        </div>
+                        <br />
+                        <h1 class="modal-card-title">Modal content</h1>
+                        <div className="is-size-6">
+                            <p>1. Create a new sprint by clicking on the <strong>Create Sprint</strong> button.</p>
+                            <p>2. Add a new task by clicking on the <strong>Add Task</strong> button.</p>
+                            <p>3. Edit a task by clicking on the <strong>Edit</strong> button.</p>
+                            <p>4. Delete a task by clicking on the <strong>Delete</strong> button.</p>
+                            <p>5. Move a task to the next sprint by clicking on the <strong>Move</strong> button.</p>
+                            <p>6. Move a task to the previous sprint by clicking on the <strong>Move</strong> button.</p>
+                            <p>7. Move a task to the current sprint by clicking on the <strong>Move</strong> button.</p>
+                        </div>
                     </section>
-                    <footer class="modal-card-foot">
+                    <footer class="modal-card-foot has-background-grey-lighter has-text-centered">
                         {/* <button class="button is-success">Save changes</button> */}
-                        <button onClick={handleClickModal} class="button">Close</button>
+                        <button onClick={handleClickModal} class="button is-dark"><strong>Close</strong></button>
                     </footer>
                 </div>
             </div>

@@ -51,15 +51,11 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                             className="button has-background-grey-lighter is-small">
                             <strong>Edit</strong>
                         </button>
-                    </div>
-                    <div className="navbar-item">
                         <button
                             onClick={() => handleClickModal()}
-                            className="button is-info is-small">
+                            className="button is-info is-small ml-2 mr-2">
                             <strong>Help</strong>
                         </button>
-                    </div>
-                    <div className="navbar-item">
                         <button
                             onClick={() => navigate(`/simconfigslist`)}
                             className="button is-danger is-small">
@@ -121,15 +117,11 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                             className="button has-background-grey-lighter is-small">
                             <strong>Edit</strong>
                         </button>
-                    </div>
-                    <div className="navbar-item">
                         <button
                             onClick={() => handleClickModal()}
-                            className="button is-info is-small">
+                            className="button is-info is-small ml-2 mr-2">
                             <strong>Help</strong>
                         </button>
-                    </div>
-                    <div className="navbar-item">
                         <button
                             onClick={() => navigate(`/simconfigslist`)}
                             className="button is-danger is-small">

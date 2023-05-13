@@ -113,7 +113,7 @@ const Summary = () => {
                             <button
                                 onClick={handleNextSprint}
                                 className="button is-danger is-small">
-                                <strong>Exit simulation</strong>
+                                <strong>Exit</strong>
                             </button>
                         </div>
                     </div>
@@ -151,7 +151,6 @@ const Summary = () => {
                             </table>
                         </div>
                     </div>
-                {/* <h2 className="subtitle has-text-centered"><strong>Product Backlog Summary</strong></h2> */}
                     <div className="columns mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>

@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { getCurrentSprint, getRemainingCost } from "./Utils.js"
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getEstimateAtCompletion, getReleasePointCompleted, getActualCost, getEstimateToCompleteion } from "./AgileEVM.js"
+import { Help } from "./Help.js";
 
 export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamHour, sprintLength, plannedSprint, plannedCost, startDate, navigate }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const active = isModalOpen ? "is-active" : "";
+    const handleClickModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };  
     return (
         <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
             <div id="navbar-info" className="navbar-menu">
@@ -48,6 +54,13 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                     </div>
                     <div className="navbar-item">
                         <button
+                            onClick={() => handleClickModal()}
+                            className="button is-info is-small">
+                            <strong>Help</strong>
+                        </button>
+                    </div>
+                    <div className="navbar-item">
+                        <button
                             onClick={() => navigate(`/simconfigslist`)}
                             className="button is-danger is-small">
                             <strong>Exit</strong>
@@ -55,11 +68,17 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                     </div>
                 </div>
             </div>
+            <Help active={active} handleClickModal={handleClickModal} />
         </nav>
     )
 }
 
 export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamHour, sprintLength, plannedSprint, plannedCost, startDate, navigate, currentSprint }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const active = isModalOpen ? "is-active" : "";
+    const handleClickModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
     return (
         <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
             <div id="navbar-info" className="navbar-menu">
@@ -105,6 +124,13 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                     </div>
                     <div className="navbar-item">
                         <button
+                            onClick={() => handleClickModal()}
+                            className="button is-info is-small">
+                            <strong>Help</strong>
+                        </button>
+                    </div>
+                    <div className="navbar-item">
+                        <button
                             onClick={() => navigate(`/simconfigslist`)}
                             className="button is-danger is-small">
                             <strong>Exit</strong>
@@ -112,6 +138,7 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                     </div>
                 </div>
             </div>
+            <Help active={active} handleClickModal={handleClickModal} />
         </nav>
     )
 }

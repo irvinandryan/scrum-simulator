@@ -3,7 +3,8 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { getSessionUsername, isWeekday } from "../../utils/Utils";
+import { getSessionUsername, isWeekday } from "../../../utils/Utils";
+
 import "./CreateSimConfigStyle.css";
 
 const CreateSimConfig = () => {

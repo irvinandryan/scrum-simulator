@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { isSimulationDone, getCurrentSprint, getSessionUsername } from "../../utils/Utils";
+import { isSimulationDone, getCurrentSprint, getSessionUsername } from "../../../utils/Utils";
 
 const SelectSimConfig = () => {
     const { id } = useParams();

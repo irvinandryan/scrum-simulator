@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, getTotalPlannedSpendingThisSprint, getTotalPlannedWorkHourOfSprint } from "../../utils/Utils";
-import { rejectSb, rejectRb, addSprintCost } from "../../simulation-event-handler/Event";
-import { NavBar, EVMBar } from "../components/NavBar";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, getTotalPlannedSpendingThisSprint, getTotalPlannedWorkHourOfSprint } from "../../../utils/Utils";
+import { rejectSb, rejectRb, addSprintCost } from "../../../simulation-event-handler/Event";
+import { NavBar, EVMBar } from "../../components/NavBar";
 
 const SprintExecution = () => {
     const { id } = useParams();

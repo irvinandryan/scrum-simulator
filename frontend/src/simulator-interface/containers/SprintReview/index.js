@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRandomBoolean } from "../../utils/Utils";
-import { addPb } from "../../simulation-event-handler/Event";
-import { NavBarReview, EVMBar } from "../components/NavBar";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRandomBoolean } from "../../../utils/Utils";
+import { addPb } from "../../../simulation-event-handler/Event";
+import { NavBarReview, EVMBar } from "../../components/NavBar";
 
 const SprintReview = () => {
     const { id } = useParams();

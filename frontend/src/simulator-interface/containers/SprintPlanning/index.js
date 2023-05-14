@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getRandomBoolean, getTotalSpending } from "../../utils/Utils.js";
-import { decreaseTeamSize } from "../../simulation-event-handler/Event.js";
-import { EVMBar, NavBar } from "../components/NavBar.js";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getRandomBoolean, getTotalSpending } from "../../../utils/Utils.js";
+import { decreaseTeamSize } from "../../../simulation-event-handler/Event.js";
+import { EVMBar, NavBar } from "../../components/NavBar.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();

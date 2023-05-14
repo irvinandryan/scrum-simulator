@@ -6,8 +6,8 @@ export const Help = ({active, handleClickModal}) => {
             <div className={`modal ${active}`}>
                 <div class="modal-background"></div>
                 <div class="modal-card">
-                    <header class="modal-card-head has-background-grey-lighter">
-                        <p class="modal-card-title has-text-black">Help</p>
+                    <header class="modal-card-head has-background-grey-lighter has-text-centered">
+                        <p class="modal-card-title has-text-black"><strong>Help</strong></p>
                         <button onClick={handleClickModal} class="delete" aria-label="close"></button>
                     </header>
                     <section class="modal-card-body has-text-dark">
@@ -44,8 +44,8 @@ export const Help = ({active, handleClickModal}) => {
                             <p>7. Move a task to the current sprint by clicking on the <strong>Move</strong> button.</p>
                         </div>
                     </section>
-                    <footer class="modal-card-foot has-background-grey-lighter has-text-centered">
-                        <button onClick={handleClickModal} class="button is-dark"><strong>Close</strong></button>
+                    <footer class="modal-card-foot has-background-grey-lighter buttons is-centered">
+                        <button onClick={handleClickModal} class="button is-fullwidth has-background-dark has-text-white"><strong>Close</strong></button>
                     </footer>
                 </div>
             </div>

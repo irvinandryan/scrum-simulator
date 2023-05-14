@@ -114,12 +114,12 @@ export const EditSim = ({active, handleClickModal}) => {
     };
 
     return (
-        <div className="EditSim">
+        <div className="EditSim has-text-centered">
             <div className={`modal ${active}`}>
                 <div className="modal-background"></div>
                 <div className="modal-card">
-                    <header className="modal-card-head">
-                        <p className="modal-card-title">Edit Simulation</p>
+                    <header className="modal-card-head has-background-grey-lighter">
+                        <p className="modal-card-title"><strong>Edit Simulation</strong></p>
                         <button className="delete" aria-label="close" onClick={handleClickModal}></button>
                     </header>
                     <form onSubmit={updateSimConfig}>
@@ -227,9 +227,9 @@ export const EditSim = ({active, handleClickModal}) => {
                                 />
                             </div>
                         </section>
-                        <footer className="modal-card-foot">
-                            <button class="button is-success" type="submit">Save changes</button>
-                            <button onClick={handleClickModal} class="button is-dark" type="button"><strong>Close</strong></button>
+                        <footer className="modal-card-foot has-background-grey-lighter buttons is-centered">
+                            <button onClick={handleClickModal} class="button is-danger" type="button"><strong>Cancel</strong></button>
+                            <button class="button is-success" type="submit"><strong>Save changes</strong></button>
                         </footer>
                     </form>
                 </div>

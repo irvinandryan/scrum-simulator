@@ -5,7 +5,6 @@ import SimConfigList from "./simulator-interface/SimConfigList";
 import CreateSimConfig from "./simulator-interface/CreateSimConfig";
 import SelectSimConfig from "./simulator-interface/SelectSimConfig";
 import SprintPlanning from "./simulator-interface/SprintPlanning"
-import EditSimConfig from "./simulator-interface/EditSimConfig";
 import SprintReview from "./simulator-interface/SprintReview";
 import SprintExecution from "./simulator-interface/SprintExecution";
 import NotFound from "./simulator-interface/NotFound";
@@ -22,9 +21,6 @@ function App() {
             <Route path="simconfigslist/create" element={<CreateSimConfig />} />
             <Route path="simconfigslist/simulation/:id" element={<SelectSimConfig />} />
             <Route path="simconfigslist/simulation/:id/sprintplanning" element={<SprintPlanning />} />
-            <Route path="simconfigslist/simulation/:id/sprintplanning/editsimconfig" element={<EditSimConfig />} />
-            <Route path="simconfigslist/simulation/:id/sprintexecution/editsimconfig" element={<EditSimConfig />} />
-            <Route path="simconfigslist/simulation/:id/sprintreview/editsimconfig" element={<EditSimConfig />} />
             <Route path="simconfigslist/simulation/:id/sprintexecution" element={<SprintExecution />} />
             <Route path="simconfigslist/simulation/:id/sprintreview" element={<SprintReview />} />
             <Route path="simconfigslist/simulation/:id/summary" element={<Summary />} />

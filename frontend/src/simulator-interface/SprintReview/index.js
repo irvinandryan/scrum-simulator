@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRandomBoolean } from "../../utils/Utils";
 import { addPb } from "../../simulation-event-handler/Event";
-import { EVMBar, NavBarReview } from "../../utils/NavBar";
+import { NavBarReview, EVMBar } from "../components/NavBar";
 
 const SprintReview = () => {
     const { id } = useParams();

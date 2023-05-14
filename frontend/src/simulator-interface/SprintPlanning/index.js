@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
 import { getCurrentSprint, getMaxScrumTeamWorkHour, getRandomBoolean, getTotalSpending } from "../../utils/Utils.js";
 import { decreaseTeamSize } from "../../simulation-event-handler/Event.js";
-import { EVMBar, NavBar } from "../../utils/NavBar.js";
+import { EVMBar, NavBar } from "../components/NavBar.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();

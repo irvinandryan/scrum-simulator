@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { getCurrentSprint, getRemainingCost } from "./Utils.js"
-import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getEstimateAtCompletion, getReleasePointCompleted, getActualCost, getEstimateToCompleteion } from "./AgileEVM.js"
+import { getCurrentSprint, getRemainingCost } from "../../utils/Utils.js"
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getEstimateAtCompletion, getReleasePointCompleted, getActualCost, getEstimateToCompleteion } from "../../utils/AgileEVM.js"
 import { Help } from "./Help.js";
+import { EditSim } from "./EditSim.js";
 
 export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamHour, sprintLength, plannedSprint, plannedCost, startDate, navigate }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const active = isModalOpen ? "is-active" : "";
-    const handleClickModal = () => {
-        setIsModalOpen(!isModalOpen);
-    };  
+    const [isHelpOpen, setIsHelpOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const activeHelp = isHelpOpen ? "is-active" : "";
+    const activeEdit = isEditOpen ? "is-active" : "";
+    const handleClickModalHelp = () => {
+        setIsHelpOpen(!isHelpOpen);
+    };
+    const handleClickModalEdit = () => {
+        setIsEditOpen(!isEditOpen);
+    };
     return (
         <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
             <div id="navbar-info" className="navbar-menu">
@@ -47,12 +53,12 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                 <div className="navbar-end mr-2">
                     <div className="navbar-item">
                         <button
-                            onClick={() => navigate(`editsimconfig`)}
+                            onClick={() => handleClickModalEdit()}
                             className="button has-background-grey-lighter is-small">
                             <strong>Edit</strong>
                         </button>
                         <button
-                            onClick={() => handleClickModal()}
+                            onClick={() => handleClickModalHelp()}
                             className="button is-info is-small ml-2 mr-2">
                             <strong>Help</strong>
                         </button>
@@ -64,16 +70,22 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                     </div>
                 </div>
             </div>
-            <Help active={active} handleClickModal={handleClickModal} />
+            <Help active={activeHelp} handleClickModal={handleClickModalHelp} />
+            <EditSim active={activeEdit} handleClickModal={handleClickModalEdit} />
         </nav>
     )
 }
 
 export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamHour, sprintLength, plannedSprint, plannedCost, startDate, navigate, currentSprint }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const active = isModalOpen ? "is-active" : "";
-    const handleClickModal = () => {
-        setIsModalOpen(!isModalOpen);
+    const [isHelpOpen, setIsHelpOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const activeHelp = isHelpOpen ? "is-active" : "";
+    const activeEdit = isEditOpen ? "is-active" : "";
+    const handleClickModalHelp = () => {
+        setIsHelpOpen(!isHelpOpen);
+    };
+    const handleClickModalEdit = () => {
+        setIsEditOpen(!isEditOpen);
     };
     return (
         <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
@@ -113,12 +125,12 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                 <div className="navbar-end mr-2">
                     <div className="navbar-item">
                         <button
-                            onClick={() => navigate(`editsimconfig`)}
+                            onClick={() => handleClickModalEdit()}
                             className="button has-background-grey-lighter is-small">
                             <strong>Edit</strong>
                         </button>
                         <button
-                            onClick={() => handleClickModal()}
+                            onClick={() => handleClickModalHelp()}
                             className="button is-info is-small ml-2 mr-2">
                             <strong>Help</strong>
                         </button>
@@ -130,7 +142,8 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                     </div>
                 </div>
             </div>
-            <Help active={active} handleClickModal={handleClickModal} />
+            <Help active={activeHelp} handleClickModal={handleClickModalHelp} />
+            <EditSim active={activeEdit} handleClickModal={handleClickModalEdit} />
         </nav>
     )
 }

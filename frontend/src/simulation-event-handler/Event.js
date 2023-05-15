@@ -55,7 +55,7 @@ export const addSprintCost = (sprintBacklog, plannedCost) => {
         sprintBacklog[currentSprint].sprintCost = getRemainingCost(plannedCost, sprintBacklog);
         increasePercent = (sprintBacklog[currentSprint].sprintCost - temp) / temp;
     }
-    const eventLog = "Sprint cost is increased by " + parseFloat(increasePercent).toFixed(2) * 100 + "%";
+    const eventLog = "Sprint cost is increased by " + parseFloat(increasePercent * 100).toFixed(2) + "%";
     return {sprintBacklog, eventLog};
 };
 

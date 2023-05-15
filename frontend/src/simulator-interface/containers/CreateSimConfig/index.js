@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getSessionUsername, isWeekday } from "../../../utils/Utils";
+import { NavBarHome } from "../../components/NavBar";
 
 import "./CreateSimConfigStyle.css";
 
@@ -119,31 +120,11 @@ const CreateSimConfig = () => {
         return sprintBacklog;
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem("authToken");
-        navigate(`/`);
-    };
-
     return (
         <div className="hero is-fullheight">
-            <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
-                <div id="navbar-info" className="navbar-menu">
-                    <div className="navbar-start ml-2">
-                        <h3 className="navbar-item">
-                            Welcome {getSessionUsername()}
-                        </h3>
-                    </div>
-                    <div className="navbar-end mr-2">
-                        <div className="navbar-item">
-                            <button
-                                onClick={handleLogout}
-                                className="button is-danger is-small">
-                                <strong>Logout</strong>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            <NavBarHome
+                navigate={navigate}
+            />
             <div className="hero-body">
                 <div className="container">
                     <div className="columns mt-5 has-text-centered has-background-white-ter">
@@ -209,7 +190,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline ml-1"
-                                        placeholder="Rate per hour"
+                                        placeholder="Rate/hour"
                                         value={scrumTeamRate}
                                         onChange={(e) => setScrumTeamRate(e.target.value)}
                                         required
@@ -223,7 +204,7 @@ const CreateSimConfig = () => {
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline mr-1"
-                                        placeholder="Work hours per day"
+                                        placeholder="Work hours/day"
                                         value={scrumTeamHour}
                                         onChange={(e) => setScrumTeamHour(e.target.value)}
                                         required

@@ -11,7 +11,22 @@ export const Help = ({active, handleClickModal}) => {
                         <button onClick={handleClickModal} class="delete" aria-label="close"></button>
                     </header>
                     <section class="modal-card-body has-text-dark">
-                        <h1 class="modal-card-title">Sprint Planning</h1>
+                        <h1 class="modal-card-title">How to start</h1>
+                        <ol className="is-size-6 ml-6 has-text-justified">
+                            <li>To start a simulation, create a new one using <strong>New simulation</strong> button (you can select any available simulation in your project list too).</li>
+                            <li>Create a product backlog by adding product backlog items using <strong>Add product backlog</strong> button.</li>
+                            <li>Determine the story point of each product backlog items by filling the <strong>Story point</strong> field.</li>
+                            <li>Determine the number of people in your scrum team by filling the <strong>Team size</strong> field.</li>
+                            <li>Determine the cost per hour of each person in your team by filling the <strong>Rate/hour</strong> field.</li>
+                            <li>Determine the number of work hours per day of each person in your team by filling the <strong>Work hours/day</strong> field.</li>
+                            <li>Determine the planned cost of your project by filling the <strong>Planned cost</strong> field.</li>
+                            <li>Determine the number of days in a sprint by filling the <strong>Days/sprint</strong> field.</li>
+                            <li>Determine the number of sprints in your project by filling the <strong>Planned sprint</strong> field.</li>
+                            <li>Choose a start date of your project by clicking <strong>Pick a start date</strong>.</li>
+                            <li>Determine the probability of simulation event by filling the <strong>Event probability</strong> field with any value between 0 and 1.</li>
+                        </ol>
+                        <br />
+                        <h1 class="modal-card-title">Planning a Sprint</h1>
                         <ol className="is-size-6 ml-6 has-text-justified">
                             <li>Create a release backlog by choosing one or more product backlog items in the <strong>Select release backlog</strong> dropdown.</li>
                             <li>Add one or more sprint backlog items using the <strong>Add sprint backlog</strong> button.</li>

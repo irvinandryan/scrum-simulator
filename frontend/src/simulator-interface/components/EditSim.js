@@ -140,7 +140,7 @@ export const EditSim = ({active, handleClickModal}) => {
                                 />
                             </div> */}
                             <div className="form-group mt-2">
-                                <label className="label has-text-centered">Rate per hour</label>
+                                <label className="label has-text-centered">Rate/hour</label>
                                 <input
                                     type="number"
                                     min="0"
@@ -154,7 +154,7 @@ export const EditSim = ({active, handleClickModal}) => {
                                 />
                             </div>
                             <div className="form-group mt-2">
-                                <label className="label has-text-centered">Work hours per day</label>
+                                <label className="label has-text-centered">Work hours/day</label>
                                 <input
                                     type="number"
                                     min="1"
@@ -162,21 +162,21 @@ export const EditSim = ({active, handleClickModal}) => {
                                     style={{width: "35%"}}
                                     oninput="validity.valid||(value='')"
                                     className="input is-small"
-                                    placeholder="Work Hours per Day"
+                                    placeholder="Work Hours/Day"
                                     value={scrumTeamHour}
                                     onChange={(e) => setScrumTeamHour(e.target.value)}
                                     required
                                 />
                             </div>
                             <div className="form-group mt-2">
-                                <label className="label has-text-centered">Days per sprint</label>
+                                <label className="label has-text-centered">Days/sprint</label>
                                 <input
                                     type="number"
                                     min="1"
                                     style={{width: "35%"}}
                                     oninput="validity.valid||(value='')"
                                     className="input is-small"
-                                    placeholder="Days per Sprint"
+                                    placeholder="Days/Sprint"
                                     value={sprintLength}
                                     onChange={(e) => setSprintLength(e.target.value)}
                                     required

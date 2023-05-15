@@ -32,13 +32,13 @@ export const NavBar = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scrumTeamH
                         Rate/hour: {scrumTeamRate}
                     </h3>
                     <h3 className="navbar-item">
-                        Work hour/day: {scrumTeamHour}
+                        Work hours/day: {scrumTeamHour}
                     </h3>
                     <h3 className="navbar-item">
-                        Days per sprint: {sprintLength}
+                        Days/sprint: {sprintLength}
                     </h3>
                     <h3 className="navbar-item">
-                        Num of sprint: {plannedSprint}
+                        Planned sprint: {plannedSprint}
                     </h3>
                     <h3 className="navbar-item">
                         Planned cost: {plannedCost}
@@ -104,13 +104,13 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
                         Rate/hour: {scrumTeamRate}
                     </h3>
                     <h3 className="navbar-item">
-                        Work hour/day: {scrumTeamHour}
+                        Work hours/day: {scrumTeamHour}
                     </h3>
                     <h3 className="navbar-item">
-                        Days per sprint: {sprintLength}
+                        Days/sprint: {sprintLength}
                     </h3>
                     <h3 className="navbar-item">
-                        Num of sprint: {plannedSprint}
+                        Planned sprint: {plannedSprint}
                     </h3>
                     <h3 className="navbar-item">
                         Planned cost: {plannedCost}

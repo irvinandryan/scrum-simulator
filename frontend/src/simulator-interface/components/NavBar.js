@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getCurrentSprint, getRemainingCost } from "../../utils/Utils.js"
+import { getCurrentSprint, getRemainingCost, getSessionUsername } from "../../utils/Utils.js"
 import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getEstimateAtCompletion, getReleasePointCompleted, getActualCost, getEstimateToCompleteion } from "../../utils/AgileEVM.js"
 import { Help } from "./Help.js";
 import { EditSim } from "./EditSim.js";
@@ -257,6 +257,44 @@ export const EVMBar = ({ productBacklog, sprintBacklog, plannedCost, plannedSpri
                     )
                 }       
             </div>
+        </nav>
+    )
+}
+
+export const NavBarHome = ({ navigate }) => {
+    const [isHelpOpen, setIsHelpOpen] = useState(false);
+    const activeHelp = isHelpOpen ? "is-active" : "";
+    const handleClickModalHelp = () => {
+        setIsHelpOpen(!isHelpOpen);
+    };
+    const handleLogout = () => {
+        localStorage.removeItem("authToken");
+        navigate(`/`);
+    };
+    return (    
+        <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
+            <div id="navbar-info" className="navbar-menu">
+                <div className="navbar-start ml-2">
+                    <h3 className="navbar-item">
+                        Welcome {getSessionUsername()}
+                    </h3>
+                </div>
+                <div className="navbar-end mr-2">
+                    <div className="navbar-item">
+                        <button
+                            onClick={() => handleClickModalHelp()}
+                            className="button is-info is-small ml-2 mr-2">
+                            <strong>Help</strong>
+                        </button>
+                        <button
+                            onClick={handleLogout}
+                            className="button is-danger is-small">
+                            <strong>Logout</strong>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <Help active={activeHelp} handleClickModal={handleClickModalHelp} />
         </nav>
     )
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { isSimulationDone, getCurrentSprint, getSessionUsername } from "../../../utils/Utils";
+import { isSimulationDone, getCurrentSprint } from "../../../utils/Utils";
+import { NavBarHome } from "../../components/NavBar";
 
 const SelectSimConfig = () => {
     const { id } = useParams();
@@ -78,11 +79,6 @@ const SelectSimConfig = () => {
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem("authToken");
-        navigate(`/`);
-    };
-
     const handleContinue = () => {
         if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
             alert("This simulation has been completed.");
@@ -102,27 +98,11 @@ const SelectSimConfig = () => {
 
     return (
         <div className="hero is-fullheight">
-            <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
-                <div id="navbar-info" className="navbar-menu">
-                    <div className="navbar-start ml-2">
-                        <h3 className="navbar-item">
-                            Welcome {getSessionUsername()}
-                        </h3>
-                    </div>
-                    <div className="navbar-end mr-2">
-                        <div className="navbar-item">
-                            <button
-                                onClick={handleLogout}
-                                className="button is-danger is-small">
-                                <strong>Logout</strong>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            <NavBarHome
+                navigate={navigate}
+            />
             <div className="hero-body">
                 <div className="container mt-5 mb-5">
-                {/* <h2 className="subtitle has-text-centered"><strong>Project Information</strong></h2> */}
                     <div className="columns mt-5 mb-5 is-full has-background-white-ter">
                         <div className="column is-one-thirds">
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
@@ -132,11 +112,11 @@ const SelectSimConfig = () => {
                                     </tr>
                                     <tr style={{backgroundColor: `lightgray`}}>
                                         <th>Team size</th>
-                                        <th>Rate / hour</th>
-                                        <th>Work hour / day</th>
+                                        <th>Rate/hour</th>
+                                        <th>Work hours/day</th>
                                         <th>Planned cost</th>
-                                        <th>Days per sprint</th>
-                                        <th>Num of sprint</th>
+                                        <th>Days/sprint</th>
+                                        <th>Planned sprint</th>
                                         <th>Release point</th>
                                         <th>Start date</th>
                                     </tr>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getCurrentSprint, getRemainingCost, getSessionUsername } from "../../utils/Utils.js"
-import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getEstimateAtCompletion, getReleasePointCompleted, getActualCost, getEstimateToCompleteion } from "../../utils/AgileEVM.js"
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex, addWorkingDays, getReleasePointCompleted, getActualCost, getEstimateToCompleteion } from "../../utils/AgileEVM.js"
 import { Help } from "./Help.js";
 import { EditSim } from "./EditSim.js";
 

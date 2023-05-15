@@ -1,4 +1,4 @@
-import { getAveragePbPoint, getCurrentSprint, getCurrentSprintReview, getRandomBetween, getRemainingCost } from '../utils/Utils';
+import { getAveragePbPoint, getCurrentSprintReview, getRandomBetween, getRemainingCost } from '../utils/Utils';
 
 // E-01
 // randomly choose a sprint backlog item in current sprint and make isSbDone false

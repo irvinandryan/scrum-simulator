@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { getCurrentSprint } from "../../utils/Utils";
-import { getEstimateAtCompletion, getActualCost } from "../../utils/AgileEVM";
+import { getActualCost } from "../../utils/AgileEVM";
 
 export const EditSim = ({active, handleClickModal}) => {
     const { id } = useParams();
@@ -15,7 +15,6 @@ export const EditSim = ({active, handleClickModal}) => {
     const [sprintLength, setSprintLength] = useState("");
     const [plannedSprint, setPlannedSprint] = useState("");
     const [eventProbability, setEventProbability] = useState("");
-    const [predictedCost, setPredictedCost] = useState("");
     const [actualCost, setActualCost] = useState("");
 
     const [sprintBacklog, setSprintBacklog] = useState([
@@ -41,8 +40,7 @@ export const EditSim = ({active, handleClickModal}) => {
 
     useEffect(() => {
         getSimConfigById();
-    }
-    , []);
+    }, []);
 
     const getSimConfigById = async () => {
         const response = await axios.get(process.env.REACT_APP_API + `/simconfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
@@ -55,7 +53,6 @@ export const EditSim = ({active, handleClickModal}) => {
         setPlannedSprint(response.data.plannedSprint);
         setEventProbability(response.data.eventProbability);
         setSprintBacklog(response.data.sprintBacklog);
-        setPredictedCost(getEstimateAtCompletion(response.data.productBacklog, response.data.sprintBacklog, response.data.plannedCost));
         setActualCost(getActualCost(response.data.sprintBacklog));
     }
 

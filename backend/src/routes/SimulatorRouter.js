@@ -5,9 +5,12 @@ import {
     saveSimConfig,
     updateSimConfig,
     deleteSimConfig,
+} from "../controllers/SimController.js"; // import the controller functions
+
+import {
+    register,
     login,
-    register
-} from "../controllers/SimulatorAPI.js"; // import the controller functions
+} from "../controllers/UserController.js"; // import the controller functions
 
 const router = express.Router();
 

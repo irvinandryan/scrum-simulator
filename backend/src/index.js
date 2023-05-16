@@ -1,8 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import SimRoute from "./routes/SimRoute.js";
-import UserRoute from "./routes/UserRoute.js";
+import SimulatorRouter from "./routes/SimulatorRouter.js";
 import dotenv from "dotenv";
 import config from "./config/Config.js";
 
@@ -19,7 +18,6 @@ db.once('open', () => console.log('Database Connected...'));
 
 app.use(cors());
 app.use(express.json());
-app.use(SimRoute);
-app.use(UserRoute);
+app.use(SimulatorRouter);
 
 app.listen(config.port, ()=> console.log('Server up and running...'));

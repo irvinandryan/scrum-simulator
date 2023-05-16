@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { isSimulationDone, getCurrentSprint } from "../../../utils/Utils";
+import { isSimulationDone, getCurrentSprint } from "../../../application-logic/Utils";
 import { NavBarHome } from "../../components/NavBar";
 
 const SelectSimConfig = () => {

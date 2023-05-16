@@ -55,9 +55,12 @@ export const Help = ({active, handleClickModal}) => {
                             <li><strong>Cost to complete</strong>: Cost needed to complete your project based on AgileEVM</li>
                             <li><strong>Days/sprint</strong>: Number of days in a sprint</li>
                             <li><strong>Planned cost</strong>: Planned project cost</li>
+                            <li><strong>Planned release</strong>: Calculated project finish date based on <strong>Start date</strong> + (<strong>Days/sprint</strong> x <strong>Planned sprint</strong>) days, excluding Saturday and Sunday</li>
                             <li><strong>Planned sprint</strong>: Number of planned sprint</li>
+                            <li><strong>Predicted release</strong>: Project finish date based on AgileEVM</li>
                             <li><strong>Rate/hour</strong>: Cost per hour of each person in your team</li>
                             <li><strong>Remaining cash</strong>: Remaining cash that can be used to complete your project</li>
+                            <li><strong>SPI</strong>: Schedule Performance Index</li>
                             <li><strong>Spending</strong>: Total expenditure to date</li>
                             <li><strong>Start date</strong>: Project start date</li>
                             <li><strong>Team size</strong>: Number of people in your team</li>

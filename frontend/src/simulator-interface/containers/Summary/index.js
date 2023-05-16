@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getSessionUsername, getTotalSpending, getProjectStatus } from "../../../utils/Utils";
-import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../../../utils/AgileEVM.js";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getSessionUsername, getTotalSpending, getProjectStatus } from "../../../application-logic/Utils";
+import { getScheduleStatus, getBudgetStatus, getCostPerformanceIndex, getReleaseDate, getSchedulePerformanceIndex } from "../../../application-logic/AgileEVM.js";
 
 const Summary = () => {
     const { id } = useParams();

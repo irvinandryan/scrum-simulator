@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRandomBoolean } from "../../../application-logic/Utils";
-import { addPb } from "../../../simulation-event-handler/Event";
+import { addPb } from "../../../application-logic/EventHandler";
 import { NavBarReview, EVMBar } from "../../components/NavBar";
 
 const SprintReview = () => {

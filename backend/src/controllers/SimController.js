@@ -1,4 +1,4 @@
-import SimConfigModel from "../models/SimModel.js";
+import SimConfigModel from "../models/Simulation.js";
 import jwt from "jsonwebtoken";
 
 export const getSimConfigs = async (req, res) => {

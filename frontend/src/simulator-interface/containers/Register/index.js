@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { Link, Router, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerAPI } from "../../../simulator-api/SimulatorApi";
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -10,23 +10,7 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await axios.post(process.env.REACT_APP_API + "/register", {
-                username,
-                password
-            });
-            alert("Account created successfully!");
-            navigate(`/`);
-        } catch (error) {
-            if (
-                error.response &&
-                error.response.status >= 400 &&
-                error.response.status <= 500
-            ) {
-                setError(error.response.data.message);
-                alert(error.response.data.message);
-            }
-        }
+        registerAPI(username, password, setError, navigate);
     };
 
     return (

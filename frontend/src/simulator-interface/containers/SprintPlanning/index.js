@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
 import { getCurrentSprint, getMaxScrumTeamWorkHour, getRandomBoolean, getTotalSpending } from "../../../application-logic/Utils.js";
-import { decreaseTeamSize } from "../../../simulation-event-handler/Event.js";
+import { decreaseTeamSize } from "../../../application-logic/EventHandler.js";
 import { EVMBar, NavBar } from "../../components/NavBar.js";
+import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();
-    const token = localStorage.getItem("authToken");
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -19,14 +18,6 @@ const SprintPlanning = () => {
     const [plannedSprint, setPlannedSprint] = useState("");
     const [startDate, setStartDate] = useState("");
     const [eventProbability, setEventProbability] = useState("");
-
-    const [notDoneProductBacklog, setNotDoneProductBacklog] = useState([
-        {
-            pbId: String,
-            pbPoint: Number,
-            isPbDone: false,
-        },
-    ]);
 
     const [productBacklog, setProductBacklog] = useState([
         {
@@ -71,25 +62,7 @@ const SprintPlanning = () => {
     }, []);
 
     const getSimConfigById = async () => {
-        try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simconfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
-            setCreator(response.data.creator);
-            setScrumTeamSize(response.data.scrumTeamSize);
-            setScrumTeamRate(response.data.scrumTeamRate);
-            setScrumTeamHour(response.data.scrumTeamHour);
-            setPlannedCost(response.data.plannedCost);
-            setSprintLength(response.data.sprintLength);
-            setPlannedSprint(response.data.plannedSprint);
-            setStartDate(response.data.startDate);
-            setProductBacklog(response.data.productBacklog);
-            setSprintBacklog(response.data.sprintBacklog);
-            setNotDoneProductBacklog(response.data.productBacklog.filter((pb) => pb.isPbDone === false))
-            setEventProbability(response.data.eventProbability);
-        }
-        catch (error) {
-            console.log(error);
-            navigate("/*");
-        }
+        getSimConfigByIdAPI(id, setCreator, setScrumTeamSize, setScrumTeamRate, setScrumTeamHour, setPlannedCost, setSprintLength, setPlannedSprint, setProductBacklog, setSprintBacklog, setStartDate, setEventProbability, navigate)
     };
 
     const doEventSprintExecution = (sprintBacklog, scrumTeamSize) => {
@@ -127,26 +100,8 @@ const SprintPlanning = () => {
             }
         }
         doEventSprintExecution(sprintBacklog, scrumTeamSize);
-        try {
-            await axios.patch(process.env.REACT_APP_API + `/simconfigs/${id}`, {
-                scrumTeamSize,
-                scrumTeamRate,
-                scrumTeamHour,
-                plannedCost,
-                sprintLength,
-                plannedSprint,
-                startDate,
-                productBacklog,
-                sprintBacklog,
-                releaseBacklog,
-                eventProbability,
-            }, { headers: { "Authorization": `Bearer ${token}` } }).then((response) => {
-                console.log(response);
-                navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
-            });
-        } catch (error) {
-            console.log(error);
-        }
+        updateSimConfigAPI(id, scrumTeamSize, scrumTeamRate, scrumTeamHour, plannedCost, sprintLength, plannedSprint, productBacklog, sprintBacklog, startDate, releaseBacklog, eventProbability, navigate);
+        navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
     };
         
     const addSprintBacklogItem = () => {
@@ -255,7 +210,7 @@ const SprintPlanning = () => {
                                             required
                                             placeholder="Select release backlog"
                                             isMulti
-                                            options={notDoneProductBacklog.map((pb) => {
+                                            options={productBacklog.filter((pb) => pb.isPbDone === false).map((pb) => {
                                                 return (
                                                     {value: pb.pbId, label: pb.pbId}
                                                 );
@@ -304,7 +259,7 @@ const SprintPlanning = () => {
                                                     <option value="" disabled>
                                                         Related product backlog
                                                     </option>
-                                                    {notDoneProductBacklog.map((pb) => {
+                                                    {productBacklog.filter((pb) => pb.isPbDone === false).map((pb) => {
                                                         return (
                                                             <option value={pb.pbId}>
                                                                 {pb.pbId}

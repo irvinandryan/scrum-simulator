@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { NavBarHome } from "../../components/NavBar";
+import { deleteSimConfigAPI, getSimConfigAPI } from "../../../simulator-api/SimulatorApi";
 
 const SimConfigList = () => {
-    const token = localStorage.getItem("authToken");
     const [simConfig, setSimConfig] = useState([]);
     const navigate = useNavigate();
 
@@ -13,21 +12,11 @@ const SimConfigList = () => {
     }, []);
 
     const getSimConfig = async () => {
-        try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simconfigs`, {headers: {"Authorization": `Bearer ${token}`}})
-            setSimConfig(response.data);
-        } catch (error) {
-            console.log(error);
-        }
+        getSimConfigAPI(setSimConfig);
     };
 
     const deleteSimConfig = async (id) => {
-        try {
-            await axios.delete(process.env.REACT_APP_API + `/simconfigs/${id}`, {headers: {"Authorization": `Bearer ${token}`}})
-            getSimConfig();
-        } catch (error) {
-            console.log(error);
-        }
+        deleteSimConfigAPI(id, getSimConfig);
     };
 
     window.onpopstate = () => {

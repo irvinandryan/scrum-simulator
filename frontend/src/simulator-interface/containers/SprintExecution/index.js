@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, getTotalPlannedSpendingThisSprint, getTotalPlannedWorkHourOfSprint } from "../../../application-logic/Utils";
-import { rejectSb, rejectRb, addSprintCost } from "../../../simulation-event-handler/Event";
+import { rejectSb, rejectRb, addSprintCost } from "../../../application-logic/EventHandler";
 import { NavBar, EVMBar } from "../../components/NavBar";
+import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi";
 
 const SprintExecution = () => {
     const { id } = useParams();
-    const token = localStorage.getItem("authToken");
     const navigate = useNavigate();
     const [creator, setCreator] = useState("");
     const [scrumTeamSize, setScrumTeamSize] = useState("");
@@ -62,24 +61,7 @@ const SprintExecution = () => {
     }, []);
 
     const getSimConfigById = async () => {
-        try {
-            const response = await axios.get(process.env.REACT_APP_API + `/simconfigs/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
-            setCreator(response.data.creator);
-            setScrumTeamSize(response.data.scrumTeamSize);
-            setScrumTeamRate(response.data.scrumTeamRate);
-            setScrumTeamHour(response.data.scrumTeamHour);
-            setPlannedCost(response.data.plannedCost);
-            setSprintLength(response.data.sprintLength);
-            setPlannedSprint(response.data.plannedSprint);
-            setStartDate(response.data.startDate);
-            setProductBacklog(response.data.productBacklog);
-            setSprintBacklog(response.data.sprintBacklog);
-            setEventProbability(response.data.eventProbability);
-        }
-        catch (error) {
-            console.log(error);
-            navigate("/*")
-        }
+        getSimConfigByIdAPI(id, setCreator, setScrumTeamSize, setScrumTeamRate, setScrumTeamHour, setPlannedCost, setSprintLength, setPlannedSprint, setProductBacklog, setSprintBacklog, setStartDate, setEventProbability, navigate);
     }
 
     const markItemDone = () => {
@@ -165,24 +147,8 @@ const SprintExecution = () => {
         }
         markItemDone();
         doEventSprintReview(sprintBacklog, productBacklog, scrumTeamSize);
-        try {
-            await axios.patch(process.env.REACT_APP_API + `/simconfigs/${id}`, {
-                scrumTeamSize,
-                scrumTeamRate,
-                scrumTeamHour,
-                plannedCost,
-                sprintLength,
-                plannedSprint,
-                startDate,
-                productBacklog,
-                sprintBacklog,
-                releaseBacklog,
-            }, { headers: { "Authorization": `Bearer ${token}` } } );
-            navigate(`/simconfigslist/simulation/${id}/sprintreview`);
-        } catch (error) {
-            console.log(error);
-        }
-
+        updateSimConfigAPI(id, scrumTeamSize, scrumTeamRate, scrumTeamHour, plannedCost, sprintLength, plannedSprint, productBacklog, sprintBacklog, startDate, releaseBacklog, eventProbability, navigate);
+        navigate(`/simconfigslist/simulation/${id}/sprintreview`);
     };
 
     window.onpopstate = () => {

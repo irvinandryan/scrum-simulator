@@ -91,7 +91,7 @@ export const NavBarReview = ({ sprintBacklog, scrumTeamSize, scrumTeamRate, scru
         <nav className="navbar is-fixed-top has-background-dark is-dark is-transparent" aria-label="main navigation">
             <div id="navbar-info" className="navbar-menu">
                 <div className="navbar-start">
-                    {sprintBacklog[currentSprint].currentTeamSize  === scrumTeamSize ? (
+                    {sprintBacklog[currentSprint].currentTeamSize  === scrumTeamSize || scrumTeamSize === "" ? (
                         <h3 className="navbar-item">
                             Team size: {sprintBacklog[currentSprint].currentTeamSize}/{scrumTeamSize}
                         </h3>

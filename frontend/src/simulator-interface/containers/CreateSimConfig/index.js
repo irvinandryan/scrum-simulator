@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getSessionUsername, isWeekday } from "../../../application-logic/Utils";
 import { NavBarHome } from "../../components/NavBar";
-
 import "./CreateSimConfigStyle.css";
+import { saveSimConfigAPI } from "../../../simulator-api/SimulatorApi";
 
 const CreateSimConfig = () => {
     const navigate = useNavigate();
-    const token = localStorage.getItem("authToken");
     const [creator, setCreator] = useState(getSessionUsername());
     const [scrumTeamSize, setScrumTeamSize] = useState("");
     const [scrumTeamRate, setScrumTeamRate] = useState("");
@@ -82,24 +80,7 @@ const CreateSimConfig = () => {
 
     const saveSimConfig = async (e) => {
         e.preventDefault();
-        try {
-            await axios.post(process.env.REACT_APP_API + `/simconfigs`, {
-                creator,
-                scrumTeamSize,
-                scrumTeamRate,
-                scrumTeamHour,
-                plannedCost,
-                sprintLength,
-                plannedSprint,
-                productBacklog,
-                sprintBacklog,
-                startDate,
-                eventProbability,
-            }, {headers: {Authorization: `Bearer ${token}`}});
-            navigate(`/simconfigslist`);
-          } catch (error) {
-            console.log(error);
-          }
+        saveSimConfigAPI(creator, scrumTeamSize, scrumTeamRate, scrumTeamHour, plannedCost, sprintLength, plannedSprint, productBacklog, sprintBacklog, startDate, eventProbability, navigate);
     };
 
     const generateSprintBacklog = (plannedSprint) => {
@@ -175,7 +156,8 @@ const CreateSimConfig = () => {
                                 <div className="form-group mt-2">
                                     <input
                                         type="number"
-                                        min="1" 
+                                        min="1"
+                                        max="9"
                                         style={{width: "170px"}}
                                         oninput="validity.valid||(value='')"
                                         className="input is-small is-inline mr-1"

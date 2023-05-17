@@ -1,4 +1,4 @@
-import UserModel from "../models/UserModel.js";
+import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import { signAuth, validateUserData } from "./Authenticator.js";
 

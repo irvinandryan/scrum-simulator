@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { loginAPI } from "../../../simulator-api/SimulatorApi";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -10,25 +10,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            await axios.post(process.env.REACT_APP_API + "/login", {
-                username,
-                password,
-            }).then(response => {
-                const token = response.data.token;
-                localStorage.setItem("authToken", token);
-                navigate(`/simconfigslist`);
-            });
-        } catch (error) {
-            if (
-                error.response &&
-                error.response.status >= 400 &&
-                error.response.status <= 500
-            ) {
-                setError(error.response.data.message);
-                alert(error.response.data.message);
-            }
-        }
+        loginAPI(username, password, setError, navigate);
     };
 
     const handleRegister = () => {

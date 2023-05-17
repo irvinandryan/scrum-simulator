@@ -16,10 +16,14 @@ export const EditSim = ({active, handleClickModal}) => {
     const [plannedSprint, setPlannedSprint] = useState("");
     const [eventProbability, setEventProbability] = useState("");
     const [actualCost, setActualCost] = useState("");
+    const [tempSize, setTempSize] = useState("");
 
     const [sprintBacklog, setSprintBacklog] = useState([
         {
             sprintId: String,
+            isSprintDone: false,
+            currentTeamSize: Number,
+            eventLog: [String],
             releaseBacklog: [
                 {
                     rbId: String,
@@ -54,6 +58,7 @@ export const EditSim = ({active, handleClickModal}) => {
         setEventProbability(response.data.eventProbability);
         setSprintBacklog(response.data.sprintBacklog);
         setActualCost(getActualCost(response.data.sprintBacklog));
+        setTempSize(response.data.scrumTeamSize)
     }
 
     const updateSimConfig = async (e) => {
@@ -84,6 +89,34 @@ export const EditSim = ({active, handleClickModal}) => {
             console.log(error);
         }
     }
+
+    const handleTeamSizeChange = async (e) => {
+        setTempSize(e);
+        if (e <= sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize) {
+            for (let i = 0; i < sprintBacklog.length; i++) {
+                if (sprintBacklog[i].isSprintDone === false) {
+                    sprintBacklog[i].currentTeamSize = e;
+                }
+            }
+            setSprintBacklog(sprintBacklog);
+            setScrumTeamSize(e);
+        } else {
+            if (e > tempSize) {
+                let diff = parseInt(tempSize) - parseInt(sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize);
+                sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize = parseInt(e) - parseInt(diff);
+                for (let i = getCurrentSprint(sprintBacklog)+1; i < sprintBacklog.length; i++) {
+                    if (sprintBacklog[i].isSprintDone === false) {
+                        sprintBacklog[i].currentTeamSize = e;
+                    }
+                }
+                setSprintBacklog(sprintBacklog);
+                setScrumTeamSize(e);
+            }
+            else {
+                setScrumTeamSize(e);
+            }
+        }
+    };
 
     const handlePlannedSprintChange = (plannedSprint, sprintBacklog) => {
         if (plannedSprint > sprintBacklog.length) {
@@ -122,25 +155,26 @@ export const EditSim = ({active, handleClickModal}) => {
                     <form onSubmit={updateSimConfig}>
                         <section className="modal-card-body">
                         {/* <form onSubmit={updateSimConfig}> */}
-                            {/* <div className="form-group mt-2">
+                            <div className="form-group mt-2">
                                 <label className="label has-text-centered">Team size</label>
                                 <input
                                     type="number"
-                                    min="1" 
+                                    min="1"
+                                    max="9"
                                     style={{width: "35%"}}
                                     oninput="validity.valid||(value='')"
                                     className="input is-small"
                                     placeholder="Scrum Team Size"
-                                    value={scrumTeamSize}
-                                    onChange={(e) => setScrumTeamSize(e.target.value)}
+                                    value={tempSize}
+                                    onChange={(e) => handleTeamSizeChange(e.target.value)}
                                     required
                                 />
-                            </div> */}
+                            </div>
                             <div className="form-group mt-2">
                                 <label className="label has-text-centered">Rate/hour</label>
                                 <input
                                     type="number"
-                                    min="0"
+                                    min="1"
                                     style={{width: "35%"}}
                                     oninput="validity.valid||(value='')"
                                     className="input is-small"

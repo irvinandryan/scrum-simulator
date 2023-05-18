@@ -48,14 +48,17 @@ export const addPb = (productBacklog) => {
 // randomly add sprint cost between 1-25% to the current sprint
 export const addSprintCost = (sprintBacklog, plannedCost) => {
     const currentSprint = getCurrentSprintReview(sprintBacklog)-1;
-    let increasePercent = getRandomBetween(0.01, 0.25).toFixed(2);
-    let temp = sprintBacklog[currentSprint].sprintCost;
-    sprintBacklog[currentSprint].sprintCost += increasePercent * sprintBacklog[currentSprint].sprintCost;
-    if (sprintBacklog[currentSprint].sprintCost > getRemainingCost(plannedCost, sprintBacklog)) {
-        sprintBacklog[currentSprint].sprintCost = getRemainingCost(plannedCost, sprintBacklog);
-        increasePercent = (sprintBacklog[currentSprint].sprintCost - temp) / temp;
+    let increasePercent = getRandomBetween(1.01, 1.25).toFixed(2);
+    let percent = (increasePercent * 100) - 100;
+    let currentCost = sprintBacklog[currentSprint].sprintCost;
+    let newCost = (increasePercent * currentCost);
+
+    if (newCost > getRemainingCost(plannedCost, sprintBacklog)) {
+        increasePercent = (getRemainingCost(plannedCost, sprintBacklog) - currentCost) / currentCost;
+        newCost = getRemainingCost(plannedCost, sprintBacklog);
     }
-    const eventLog = "Sprint cost is increased by " + parseFloat(increasePercent * 100).toFixed(2) + "%";
+    sprintBacklog[currentSprint].sprintCost = newCost;
+    const eventLog = "Sprint cost is increased by " + parseFloat(percent).toFixed(2) + "%";
     return {sprintBacklog, eventLog};
 };
 

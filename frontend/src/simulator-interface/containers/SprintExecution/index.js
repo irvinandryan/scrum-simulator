@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, getTotalPlannedSpendingThisSprint, getTotalPlannedWorkHourOfSprint, getCurrentSprintReview } from "../../../application-logic/Utils";
-import { rejectSb, rejectRb, addSprintCost } from "../../../application-logic/EventHandler";
+import { doEventSprintReview } from "../../../application-logic/EventHandler";
 import { NavBar, EVMBar } from "../../components/NavBar";
 import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi";
 
@@ -107,29 +107,7 @@ const SprintExecution = () => {
         }
         sprintBacklog[getCurrentSprint(sprintBacklog)].isSprintDone = true;
         setSprintBacklog(sprintBacklog);
-    }
-
-    const doEventSprintReview = (sprintBacklog, productBacklog, plannedCost) => {
-        if (getRandomBoolean(eventProbability) === true) {
-            const eventResult = rejectSb(sprintBacklog, productBacklog)
-            setSprintBacklog(eventResult.sprintBacklog)
-            setProductBacklog(eventResult.productBacklog)
-            sprintBacklog[getCurrentSprintReview(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
-            setSprintBacklog(sprintBacklog);
-        }
-        if (getRandomBoolean(eventProbability) === true) {
-            const eventResult = rejectRb(sprintBacklog, productBacklog)
-            setSprintBacklog(eventResult.sprintBacklog)
-            sprintBacklog[getCurrentSprintReview(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
-            setSprintBacklog(sprintBacklog);
-        }
-        if (getRandomBoolean(eventProbability) === true) {
-            const eventResult = addSprintCost(sprintBacklog, plannedCost)
-            setSprintBacklog(eventResult.sprintBacklog)
-            sprintBacklog[getCurrentSprintReview(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
-            setSprintBacklog(sprintBacklog);
-        }
-    }
+    };
 
     const handleSprintExecution = async () => {
         let sum = 0;
@@ -145,7 +123,7 @@ const SprintExecution = () => {
             return;
         }
         markItemDone();
-        doEventSprintReview(sprintBacklog, productBacklog, plannedCost);
+        doEventSprintReview(sprintBacklog, productBacklog, plannedCost, setSprintBacklog, setProductBacklog, eventProbability);
         updateSimConfigAPI(id, scrumTeamSize, scrumTeamRate, scrumTeamHour, plannedCost, sprintLength, plannedSprint, productBacklog, sprintBacklog, startDate, releaseBacklog, eventProbability, navigate);
         navigate(`/simconfigslist/simulation/${id}/sprintreview`);
     };

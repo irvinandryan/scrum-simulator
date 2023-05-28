@@ -1,4 +1,4 @@
-import { getAveragePbPoint, getCurrentSprintReview, getRandomBetween, getRemainingCost } from './Utils';
+import { getAveragePbPoint, getCurrentSprintReview, getRandomBetween, getRemainingCost, getRandomBoolean, getCurrentSprint } from './Utils';
 
 // E-01
 // randomly choose a sprint backlog item in current sprint and make isSbDone false
@@ -71,5 +71,50 @@ export const decreaseTeamSize = (scrumTeamSize) => {
         let currentTeamSize = scrumTeamSize - decrement;
         const eventLog = decrement + " team member cannot work in this sprint";
         return {currentTeamSize, eventLog};
+    }
+};
+
+// Event Handler for Sprint Planning
+export const doEventSprintPlanning = (productBacklog, sprintBacklog, setProductBacklog, setSprintBacklog, eventProbability, currentSprint) => {
+    if (getRandomBoolean(eventProbability) === true) {
+        const eventResult = addPb(productBacklog);
+        setProductBacklog(eventResult.productBacklog);
+        sprintBacklog[currentSprint+1].eventLog.push(eventResult.eventLog);
+        setSprintBacklog(sprintBacklog);
+    }
+};
+
+// Event Handler for Sprint Execution
+export const doEventSprintExecution = (sprintBacklog, scrumTeamSize, setSprintBacklog, eventProbability) => {
+    if (getRandomBoolean(eventProbability) === true) {
+        const eventResult = decreaseTeamSize(scrumTeamSize);
+        if (eventResult !== undefined) {
+            sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize = eventResult.currentTeamSize;
+            sprintBacklog[getCurrentSprint(sprintBacklog)].eventLog.push(eventResult.eventLog);
+            setSprintBacklog(sprintBacklog);
+        }
+    }
+};
+
+// Event Handler for Sprint Review
+export const doEventSprintReview = (sprintBacklog, productBacklog, plannedCost, setSprintBacklog, setProductBacklog, eventProbability) => {
+    if (getRandomBoolean(eventProbability) === true) {
+        const eventResult = rejectSb(sprintBacklog, productBacklog)
+        setSprintBacklog(eventResult.sprintBacklog)
+        setProductBacklog(eventResult.productBacklog)
+        sprintBacklog[getCurrentSprintReview(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
+        setSprintBacklog(sprintBacklog);
+    }
+    if (getRandomBoolean(eventProbability) === true) {
+        const eventResult = rejectRb(sprintBacklog, productBacklog)
+        setSprintBacklog(eventResult.sprintBacklog)
+        sprintBacklog[getCurrentSprintReview(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
+        setSprintBacklog(sprintBacklog);
+    }
+    if (getRandomBoolean(eventProbability) === true) {
+        const eventResult = addSprintCost(sprintBacklog, plannedCost)
+        setSprintBacklog(eventResult.sprintBacklog)
+        sprintBacklog[getCurrentSprintReview(sprintBacklog)-1].eventLog.push(eventResult.eventLog);
+        setSprintBacklog(sprintBacklog);
     }
 };

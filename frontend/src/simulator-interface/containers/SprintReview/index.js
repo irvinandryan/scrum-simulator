@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone, getRandomBoolean } from "../../../application-logic/Utils";
-import { addPb } from "../../../application-logic/EventHandler";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone } from "../../../application-logic/Utils";
+import { doEventSprintPlanning } from "../../../application-logic/EventHandler";
 import { NavBarReview, EVMBar } from "../../components/NavBar";
 
 const SprintReview = () => {
@@ -89,7 +89,7 @@ const SprintReview = () => {
             if (isSimulationDone(productBacklog, sprintBacklog, plannedCost)) {
                 navigate(`/simconfigslist/simulation/${id}/summary`);
             } else {
-                doEventSprintPlanning(productBacklog);
+                doEventSprintPlanning(productBacklog, sprintBacklog, setProductBacklog, setSprintBacklog, eventProbability, currentSprint);
                 await axios.patch(process.env.REACT_APP_API + `/simconfigs/${id}`, {
                     scrumTeamSize,
                     scrumTeamRate,
@@ -112,15 +112,6 @@ const SprintReview = () => {
     window.onpopstate = () => {
         navigate(`/simconfigslist`);
     };
-
-    const doEventSprintPlanning = (productBacklog) => {
-        if (getRandomBoolean(eventProbability) === true) {
-            const eventResult = addPb(productBacklog);
-            setProductBacklog(eventResult.productBacklog);
-            sprintBacklog[currentSprint+1].eventLog.push(eventResult.eventLog);
-            setSprintBacklog(sprintBacklog);
-        }
-    }
 
     return (
         <div className="hero is-fullheight">

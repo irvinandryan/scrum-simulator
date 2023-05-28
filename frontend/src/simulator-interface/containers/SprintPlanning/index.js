@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getRandomBoolean, getTotalSpending } from "../../../application-logic/Utils.js";
-import { decreaseTeamSize } from "../../../application-logic/EventHandler.js";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending } from "../../../application-logic/Utils.js";
+import { doEventSprintExecution } from "../../../application-logic/EventHandler.js";
 import { EVMBar, NavBar } from "../../components/NavBar.js";
 import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi.js";
 
@@ -65,17 +65,6 @@ const SprintPlanning = () => {
         getSimConfigByIdAPI(id, setCreator, setScrumTeamSize, setScrumTeamRate, setScrumTeamHour, setPlannedCost, setSprintLength, setPlannedSprint, setProductBacklog, setSprintBacklog, setStartDate, setEventProbability, navigate)
     };
 
-    const doEventSprintExecution = (sprintBacklog, scrumTeamSize) => {
-        if (getRandomBoolean(eventProbability) === true) {
-            const eventResult = decreaseTeamSize(scrumTeamSize);
-            if (eventResult !== undefined) {
-                sprintBacklog[getCurrentSprint(sprintBacklog)].currentTeamSize = eventResult.currentTeamSize;
-                sprintBacklog[getCurrentSprint(sprintBacklog)].eventLog.push(eventResult.eventLog);
-                setSprintBacklog(sprintBacklog);
-            }
-        }
-    };
-
     const updateSimConfig = async (e) => {
         e.preventDefault();
         let sum = 0;
@@ -99,7 +88,7 @@ const SprintPlanning = () => {
                 break;
             }
         }
-        doEventSprintExecution(sprintBacklog, scrumTeamSize);
+        doEventSprintExecution(sprintBacklog, scrumTeamSize, setSprintBacklog, eventProbability)
         updateSimConfigAPI(id, scrumTeamSize, scrumTeamRate, scrumTeamHour, plannedCost, sprintLength, plannedSprint, productBacklog, sprintBacklog, startDate, releaseBacklog, eventProbability, navigate);
         navigate(`/simconfigslist/simulation/${id}/sprintexecution`);
     };

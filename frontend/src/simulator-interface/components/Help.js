@@ -41,6 +41,7 @@ export const Help = ({active, handleClickModal}) => {
                             <li>Click the <strong>Edit</strong> button.</li>
                             <li>Update any of the following variables you find necessary:</li>
                             <ul className="ml-5" style={{listStyleType:"disc"}}>
+                                <li><strong>Team size</strong></li>
                                 <li><strong>Rate/hour</strong></li>
                                 <li><strong>Work hours/day</strong></li>
                                 <li><strong>Days/sprint</strong></li>

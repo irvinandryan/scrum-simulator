@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { isSimulationDone, getCurrentSprint } from "../../../application-logic/Utils";
+import { isSimulationDone, getCurrentSprint } from "../../../simulation-handler/Utils";
 import { NavBarHome } from "../../components/NavBar";
 import { getSimConfigByIdAPI } from "../../../simulator-api/SimulatorApi";
 

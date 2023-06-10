@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { getSessionUsername, isWeekday } from "../../../application-logic/Utils";
+import { getSessionUsername, isWeekday } from "../../../simulation-handler/Utils";
 import { NavBarHome } from "../../components/NavBar";
 import "./CreateSimConfigStyle.css";
 import { saveSimConfigAPI } from "../../../simulator-api/SimulatorApi";

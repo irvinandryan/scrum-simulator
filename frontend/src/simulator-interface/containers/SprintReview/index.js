@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone } from "../../../application-logic/Utils";
-import { doEventSprintPlanning } from "../../../application-logic/EventHandler";
+import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone } from "../../../simulation-handler/Utils";
+import { doEventSprintPlanning } from "../../../simulation-handler/EventHandler";
 import { NavBarReview, EVMBar } from "../../components/NavBar";
 
 const SprintReview = () => {

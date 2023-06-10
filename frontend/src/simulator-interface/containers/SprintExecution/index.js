@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, getTotalPlannedSpendingThisSprint, getTotalPlannedWorkHourOfSprint, getCurrentSprintReview } from "../../../application-logic/Utils";
-import { doEventSprintReview } from "../../../application-logic/EventHandler";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpendingThisSprint, getRemainingCost, getRandomBoolean, getTotalWorkHourOfSprint, getTotalPlannedSpendingThisSprint, getTotalPlannedWorkHourOfSprint, getCurrentSprintReview } from "../../../simulation-handler/Utils";
+import { doEventSprintReview } from "../../../simulation-handler/EventHandler";
 import { NavBar, EVMBar } from "../../components/NavBar";
 import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi";
 

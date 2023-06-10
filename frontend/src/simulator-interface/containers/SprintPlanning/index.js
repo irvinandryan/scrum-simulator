@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending } from "../../../application-logic/Utils.js";
-import { doEventSprintExecution } from "../../../application-logic/EventHandler.js";
+import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending } from "../../../simulation-handler/Utils.js";
+import { doEventSprintExecution } from "../../../simulation-handler/EventHandler.js";
 import { EVMBar, NavBar } from "../../components/NavBar.js";
 import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi.js";
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { getCurrentSprint } from "../../application-logic/Utils";
-import { getActualCost } from "../../application-logic/AgileEVM";
+import { getCurrentSprint } from "../../simulation-handler/Utils";
+import { getActualCost } from "../../simulation-handler/AgileEVM";
 
 export const EditSim = ({active, handleClickModal}) => {
     const { id } = useParams();

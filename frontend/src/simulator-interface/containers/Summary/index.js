@@ -54,6 +54,7 @@ const Summary = () => {
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
+            responseLog: [String],
         },
     ]);
 
@@ -249,6 +250,46 @@ const Summary = () => {
                                                     <td>{sprintBacklogItem.isSbDone ? "Done" : "Not done"}</td>
                                                 </tr>
                                             ))
+                                        )}
+                                    </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="5" style={{backgroundColor: `lightgray`}}>Event log</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sprint.eventLog.length === 0 ? (
+                                            <tr>
+                                                <td className="has-text-centered" colSpan={5}>No event</td>
+                                            </tr>
+                                        ) : (
+                                            sprint.eventLog.map((event, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td colSpan={5}>{event}</td>
+                                                    </tr>
+                                                );
+                                            })
+                                        )}
+                                    </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="5" style={{backgroundColor: `lightgray`}}>Action log</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sprint.responseLog.length === 0 ? (
+                                            <tr>
+                                                <td className="has-text-centered" colSpan={5}>No action</td>
+                                            </tr>
+                                        ) : (
+                                            sprint.responseLog.map((response, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td colSpan={5}>{response}</td>
+                                                    </tr>
+                                                );
+                                            })
                                         )}
                                     </tbody>
                                 </table>

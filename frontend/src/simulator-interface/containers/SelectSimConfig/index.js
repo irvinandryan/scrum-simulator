@@ -56,6 +56,7 @@ const SelectSimConfig = () => {
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
+            responseLog: [String],
         },
     ]);
 

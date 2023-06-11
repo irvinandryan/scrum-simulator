@@ -4,6 +4,7 @@ import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpendingThisSprint, 
 import { doEventSprintReview } from "../../../simulation-handler/EventHandler";
 import { NavBar, EVMBar } from "../../components/NavBar";
 import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi";
+import { EditSim } from "../../components/ManageProject.js";
 
 const SprintExecution = () => {
     const { id } = useParams();
@@ -53,6 +54,7 @@ const SprintExecution = () => {
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
+            responseLog: [String],
         },
     ]);
 
@@ -130,6 +132,12 @@ const SprintExecution = () => {
 
     window.onpopstate = () => {
         navigate(`/simconfigslist`);
+    };
+
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const activeEdit = isEditOpen ? "is-active" : "";
+    const handleClickModalEdit = () => {
+        setIsEditOpen(!isEditOpen);
     };
 
     return (
@@ -237,13 +245,19 @@ const SprintExecution = () => {
                     </div>
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
+                            <button type="button" className="button is-fullwidth has-background-grey-dark has-text-white" onClick={() => handleClickModalEdit()}>
+                                <strong>Manage project</strong>
+                            </button>
+                        </div>
+                        <div className="column is-one-half has-text-centered">
                             <button type="submit" className="button is-fullwidth is-info" onClick={() => handleSprintExecution()}>
-                                <strong>Execute</strong>
+                                <strong>Execute sprint</strong>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+            <EditSim active={activeEdit} handleClickModal={handleClickModalEdit} />
         </div>
     );
 }

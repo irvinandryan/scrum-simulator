@@ -18,12 +18,20 @@ export const EditSim = ({active, handleClickModal}) => {
     const [actualCost, setActualCost] = useState("");
     const [tempSize, setTempSize] = useState("");
 
+    const [scrumTeamSize_old, setScrumTeamSize_old] = useState("");
+    const [scrumTeamRate_old, setScrumTeamRate_old] = useState("");
+    const [scrumTeamHour_old, setScrumTeamHour_old] = useState("");
+    const [plannedCost_old, setPlannedCost_old] = useState("");
+    const [sprintLength_old, setSprintLength_old] = useState("");
+    const [plannedSprint_old, setPlannedSprint_old] = useState("");
+
     const [sprintBacklog, setSprintBacklog] = useState([
         {
             sprintId: String,
             isSprintDone: false,
             currentTeamSize: Number,
             eventLog: [String],
+            responseLog: [String],
             releaseBacklog: [
                 {
                     rbId: String,
@@ -59,6 +67,13 @@ export const EditSim = ({active, handleClickModal}) => {
         setSprintBacklog(response.data.sprintBacklog);
         setActualCost(getActualCost(response.data.sprintBacklog));
         setTempSize(response.data.scrumTeamSize)
+
+        setScrumTeamSize_old(response.data.scrumTeamSize);
+        setScrumTeamRate_old(response.data.scrumTeamRate);
+        setScrumTeamHour_old(response.data.scrumTeamHour);
+        setPlannedCost_old(response.data.plannedCost);
+        setSprintLength_old(response.data.sprintLength);
+        setPlannedSprint_old(response.data.plannedSprint);
     }
 
     const updateSimConfig = async (e) => {
@@ -72,6 +87,39 @@ export const EditSim = ({active, handleClickModal}) => {
             return;
         }
         setSprintBacklog(handlePlannedSprintChange(plannedSprint, sprintBacklog));
+
+        // check if any value is changed
+        if (scrumTeamSize !== scrumTeamSize_old) {
+            const log_message = "Scrum team size is changed from " + scrumTeamSize_old + " to " + scrumTeamSize;
+            sprintBacklog[getCurrentSprint(sprintBacklog)].responseLog.push(log_message);
+            setSprintBacklog(sprintBacklog);
+        }
+        if (scrumTeamRate !== scrumTeamRate_old) {
+            const log_message = "Scrum team rate is changed from " + scrumTeamRate_old + " to " + scrumTeamRate;
+            sprintBacklog[getCurrentSprint(sprintBacklog)].responseLog.push(log_message);
+            setSprintBacklog(sprintBacklog);
+        }
+        if (scrumTeamHour !== scrumTeamHour_old) {
+            const log_message = "Scrum team work hours per day is changed from " + scrumTeamHour_old + " to " + scrumTeamHour;
+            sprintBacklog[getCurrentSprint(sprintBacklog)].responseLog.push(log_message);
+            setSprintBacklog(sprintBacklog);
+        }
+        if (plannedCost !== plannedCost_old) {
+            const log_message = "Planned cost is changed from " + plannedCost_old + " to " + plannedCost;
+            sprintBacklog[getCurrentSprint(sprintBacklog)].responseLog.push(log_message);
+            setSprintBacklog(sprintBacklog);
+        }
+        if (sprintLength !== sprintLength_old) {
+            const log_message = "Sprint length is changed from " + sprintLength_old + " to " + sprintLength;
+            sprintBacklog[getCurrentSprint(sprintBacklog)].responseLog.push(log_message);
+            setSprintBacklog(sprintBacklog);
+        }
+        if (plannedSprint !== plannedSprint_old) {
+            const log_message = "Planned sprint is changed from " + plannedSprint_old + " to " + plannedSprint;
+            sprintBacklog[getCurrentSprint(sprintBacklog)].responseLog.push(log_message);
+            setSprintBacklog(sprintBacklog);
+        }
+
         try {
             await axios.patch(process.env.REACT_APP_API + `/simconfigs/${id}`, {
                 creator,
@@ -130,6 +178,7 @@ export const EditSim = ({active, handleClickModal}) => {
                     sprintTimeSpent: 0,
                     isSprintDone: false,
                     eventLog: [],
+                    responseLog: [],
                 };
                 sprintBacklog.push(newSprintBacklog);
             }
@@ -149,12 +198,11 @@ export const EditSim = ({active, handleClickModal}) => {
                 <div className="modal-background"></div>
                 <div className="modal-card">
                     <header className="modal-card-head has-background-grey-lighter">
-                        <p className="modal-card-title"><strong>Edit Simulation</strong></p>
+                        <p className="modal-card-title"><strong>Manage Project</strong></p>
                         <button className="delete" aria-label="close" onClick={handleClickModal}></button>
                     </header>
                     <form onSubmit={updateSimConfig}>
                         <section className="modal-card-body">
-                        {/* <form onSubmit={updateSimConfig}> */}
                             <div className="form-group mt-2">
                                 <label className="label has-text-centered">Team size</label>
                                 <input

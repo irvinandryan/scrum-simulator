@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
+import { Tooltip } from 'react-tooltip'
 import { getCurrentSprint, getMaxScrumTeamWorkHour, getTotalSpending } from "../../../simulation-handler/Utils.js";
 import { doEventSprintExecution } from "../../../simulation-handler/EventHandler.js";
 import { EVMBar, NavBar } from "../../components/NavBar.js";
 import { getSimConfigByIdAPI, updateSimConfigAPI } from "../../../simulator-api/SimulatorApi.js";
+import { EditSim } from "../../components/ManageProject.js";
 
 const SprintPlanning = () => {
     const { id } = useParams();
@@ -54,6 +56,7 @@ const SprintPlanning = () => {
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
+            responseLog: [String],
         },
     ]);
 
@@ -138,6 +141,12 @@ const SprintPlanning = () => {
         navigate(`/simconfigslist`);
     };
 
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const activeEdit = isEditOpen ? "is-active" : "";
+    const handleClickModalEdit = () => {
+        setIsEditOpen(!isEditOpen);
+    };
+
     return (
         <div className="hero is-fullheight">
             <EVMBar
@@ -167,7 +176,12 @@ const SprintPlanning = () => {
                             <table className="table is-bordered is-striped has-background-white-ter is-fullwidth" style={{border: `groove`}}>
                                 <thead>
                                     <tr style={{backgroundColor: `lightsteelblue`}}>
-                                        <th className="has-text-centered">Sprint {getCurrentSprint(sprintBacklog) + 1} event</th>
+                                        <th 
+                                            className="has-text-centered" 
+                                            data-tooltip-id="event-planning" 
+                                            data-tooltip-content="Event will affect your project plan, please respond by managing your project">
+                                            Sprint {getCurrentSprint(sprintBacklog) + 1} event
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,7 +206,12 @@ const SprintPlanning = () => {
                         <div className="column has-text-centered">
                             <div className="form-group">
                                 <form onSubmit={updateSimConfig}>
-                                    <h3 className="subtitle has-text-centered">Release Backlog</h3>
+                                    <h3 
+                                        className="subtitle has-text-centered" 
+                                        data-tooltip-id="release-backlog-planning" 
+                                        data-tooltip-content="Select product backlog items to be completed in this sprint">
+                                        Release Backlog
+                                    </h3>
                                     <div className="form-group mt-2 mb-5">
                                         <Select
                                             name="rbId"
@@ -215,7 +234,12 @@ const SprintPlanning = () => {
                                             }))}
                                         />
                                     </div>
-                                    <h3 className="subtitle has-text-centered">Sprint Backlog</h3>
+                                    <h3 
+                                        className="subtitle has-text-centered"
+                                        data-tooltip-id="sprint-backlog-planning" 
+                                        data-tooltip-content="Create sprint backlog and estimate the time needed to finish each sprint backlog items by filling the Hour needed field">
+                                        Sprint Backlog
+                                    </h3>
                                     {sprintBacklogItem.map((form,index) => {
                                         return (
                                             <div className="form-group mt-2">
@@ -313,10 +337,26 @@ const SprintPlanning = () => {
                                         className="button is-info is-small mr-1 ml-1 mb-1 mt-2">
                                         <strong>Add sprint backlog</strong>
                                     </button>
-                                    <div>
-                                        <button type="submit" className="button is-fullwidth is-info mt-4">
-                                            <strong>Continue</strong>
-                                        </button>
+                                    <div className="columns">
+                                        <div className="column is-one-half has-text-centered">
+                                            <button 
+                                                type="button"
+                                                className="button is-fullwidth has-background-grey-dark has-text-white mt-4" 
+                                                onClick={() => handleClickModalEdit()}
+                                                data-tooltip-id="manage-planning" 
+                                                data-tooltip-content="Respond to events by managing your project">
+                                                <strong>Manage project</strong>
+                                            </button>
+                                        </div>
+                                        <div className="column is-one-half has-text-centered">
+                                            <button 
+                                                type="submit" 
+                                                className="button is-fullwidth is-info mt-4"
+                                                data-tooltip-id="continue-planning" 
+                                                data-tooltip-content="Continue to sprint execution">
+                                                <strong>Continue</strong>
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -324,6 +364,12 @@ const SprintPlanning = () => {
                     </div>
                 </div>
             </div>
+            <EditSim active={activeEdit} handleClickModal={handleClickModalEdit} />
+            <Tooltip id="event-planning" />
+            <Tooltip id="release-backlog-planning" />
+            <Tooltip id="sprint-backlog-planning" />
+            <Tooltip id="continue-planning" />
+            <Tooltip id="manage-planning" />
         </div>
     );
 }

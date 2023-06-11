@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentSprintReview, getTotalWorkHourOfPb, isSimulationDone } from "../../../simulation-handler/Utils";
 import { doEventSprintPlanning } from "../../../simulation-handler/EventHandler";
 import { NavBarReview, EVMBar } from "../../components/NavBar";
+import { EditSim } from "../../components/ManageProject.js";
 
 const SprintReview = () => {
     const { id } = useParams();
@@ -55,6 +56,7 @@ const SprintReview = () => {
             sprintTimeSpent: Number,
             isSprintDone: false,
             eventLog: [String],
+            responseLog: [String],
         },
     ]);
 
@@ -111,6 +113,12 @@ const SprintReview = () => {
 
     window.onpopstate = () => {
         navigate(`/simconfigslist`);
+    };
+
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const activeEdit = isEditOpen ? "is-active" : "";
+    const handleClickModalEdit = () => {
+        setIsEditOpen(!isEditOpen);
     };
 
     return (
@@ -251,12 +259,13 @@ const SprintReview = () => {
                     <div className="columns">
                         <div className="column is-one-half has-text-centered">
                             <button type="submit" className="button is-fullwidth is-info" onClick={() => handleNextSprint()}>
-                                <strong>Next</strong>
+                                <strong>Next sprint</strong>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+            <EditSim active={activeEdit} handleClickModal={handleClickModalEdit} />
         </div>
     );
 }
